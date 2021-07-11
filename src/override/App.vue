@@ -5,7 +5,7 @@
     
     <div class="col-span-6 h-screen pt-8 max-h-screen">
         <div class="pb-4 h-full flex flex-col">
-        <!-- <vue-simplemde  class="flex-grow" v-model="currentNote.content"  ref="markdownEditor" :configs="configs" /> -->
+        <vue-simplemde  class="flex-grow" v-model="currentNote.content"  ref="markdownEditor" :configs="configs" />
         <div class="flex">
             <div class="flex-grow">
                 <button class="text-sm underline" v-on:click="formatNote()">Format</button>
@@ -29,12 +29,13 @@
 import NoteList from '@/components/NoteList.vue'
 import Todo from '@/components/Todo.vue'
 import "tailwindcss/tailwind.css"
+import VueSimplemde from 'vue-simplemde'
 
 
 export default {
   name: 'app',
   components: {
-    NoteList, Todo
+    NoteList, Todo, VueSimplemde
   },
   data() {
       return {
@@ -115,6 +116,7 @@ export default {
 </script>
 
 <style>
+    @import '~simplemde/dist/simplemde.min.css';
     .main {
       background: linear-gradient(0deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, .95)), url('/background.jpg');
       background-size: cover;

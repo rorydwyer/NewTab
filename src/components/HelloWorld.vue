@@ -1,8 +1,8 @@
 <template>
   <div>
-    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <!-- <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"> -->
 
-    <p>But why</p>
+    <p>But why.</p>
   </div>
 </template>
 

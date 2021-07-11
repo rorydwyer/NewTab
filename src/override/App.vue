@@ -28,6 +28,7 @@
 // import HelloWorld from '@/components/HelloWorld.vue'
 import NoteList from '@/components/NoteList.vue'
 import Todo from '@/components/Todo.vue'
+import "tailwindcss/tailwind.css"
 
 
 export default {

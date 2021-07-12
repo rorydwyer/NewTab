@@ -80,7 +80,7 @@ export default {
         document.querySelector('.editor-toolbar').classList.add('hide-toolbar');
 
         this.simplemde.codemirror.on('change', () => {
-            localStorage.setItem('myNote', JSON.stringify(this.currentNote)); // Saves content on input
+            // localStorage.setItem('myNote', JSON.stringify(this.currentNote)); // Saves content on input
             //console.log(this.currentNote);
         });
     },
@@ -129,7 +129,9 @@ export default {
 
     .CodeMirror {
         height: 88vh;
+        max-height: 88vh;
         padding-top: 0;
+        font-size: 1rem;
         /* overflow: scr; */
     }
 

@@ -1,7 +1,7 @@
 <template>
 <div class="main grid grid-cols-10 gap-4 h-screen max-h-screen overflow-hidden">
     
-    <NoteList :currentNote="currentNote" :allNotes="placeholderNotes" @loadNote="loadNote($event)" @createNote="createNote()" class="col-span-2 h-screen pt-8 max-h-screen"/> 
+    <NoteList :currentNote="currentNote" :allNotes="notes" @loadNote="loadNote($event)" @createNote="createNote()" class="col-span-2 h-screen pt-8 max-h-screen"/> 
     
     <div class="col-span-6 h-screen pt-8 max-h-screen">
         <div class="pb-4 h-full flex flex-col">
@@ -39,34 +39,18 @@ export default {
   },
   data() {
       return {
-          currentNote: {
-            content: '',
-            id: null,
-            date: new Date(),
-          },
-          configs: {
-              status: false,
-              spellChecker: false, // disable spell check
-              toolbar: ['heading-1', 'heading-2', 'heading-3', 'horizontal-rule', '|',  'bold', 'italic', 'strikethrough', '|', 'unordered-list', 'ordered-list', 'quote', 'link', 'image', 'code'],
-          },
-          placeholderNotes: [
-                                {
-                                    "id": 0,
-                                    "date": "Fri Jul 09 2021 09:26:06 GMT-0700 (Pacific Daylight Time)",
-                                    "content": "# First Note!"
-                                },
-                                {
-                                    "id": 1,
-                                    "date": "Fri Jul 09 2021 09:26:21 GMT-0700 (Pacific Daylight Time)",
-                                    "content": "Hello World"
-                                },
-                                {
-                                    "id": 2,
-                                    "date": "Fri Jul 09 2021 09:26:37 GMT-0700 (Pacific Daylight Time)",
-                                    "content": "Foo bar"
-                                }
-          ],
-          nextNoteId: 3,
+        notes: [],
+        nextNoteId: 3,
+        currentNote: {
+          content: '',
+          id: null,
+          date: new Date(),
+        },
+        configs: {
+            status: false,
+            spellChecker: false, // disable spell check
+            toolbar: ['heading-1', 'heading-2', 'heading-3', 'horizontal-rule', '|',  'bold', 'italic', 'strikethrough', '|', 'unordered-list', 'ordered-list', 'quote', 'link', 'image', 'code'],
+        },
       };
     },
     computed: {
@@ -75,14 +59,29 @@ export default {
         },
     },
     mounted() {
-        //this.currentNote = JSON.parse(localStorage.getItem('myNote')) || { content: '# NextTab', id: 1, }; //Loads current note
-        this.currentNote = this.placeholderNotes[0];
-        document.querySelector('.editor-toolbar').classList.add('hide-toolbar');
+        chrome.storage.sync.get('newtabNotes', (res) => {
+            if (!res.newtabNotes) res.newtabNotes = [
+              {
+                  "id": 0,
+                  "date": new Date(),
+                  "content": "# Your First Note!"
+              },
+            ];
+            this.notes = res.newtabNotes;
+            this.currentNote = this.notes[0];
+            chrome.storage.sync.set(res);
+        });
 
         this.simplemde.codemirror.on('change', () => {
-            // localStorage.setItem('myNote', JSON.stringify(this.currentNote)); // Saves content on input
-            //console.log(this.currentNote);
+          // localStorage.setItem('myNote', JSON.stringify(this.currentNote)); // Saves content on input
+
+          chrome.storage.sync.get('newtabNotes', (res) => {
+            res.newtabNotes = this.notes;
+            chrome.storage.sync.set(res);
+          })
         });
+        
+        document.querySelector('.editor-toolbar').classList.add('hide-toolbar');
     },
     methods: {
       loadNote: function(note) {
@@ -91,12 +90,12 @@ export default {
       },
 
       createNote: function() {
-        this.placeholderNotes.unshift({
+        this.notes.unshift({
                   id: this.nextNoteId++,
                   content: 'New note',
                   date: new Date(),
                 });
-        this.loadNote(this.placeholderNotes[0]);
+        this.loadNote(this.notes[0]);
       },
 
       formatNote: function() {
@@ -104,9 +103,9 @@ export default {
       },
 
       deleteNote: function() {
-        if (this.placeholderNotes.length > 1) {
-          this.placeholderNotes.splice(this.placeholderNotes.findIndex(note => note.id === this.currentNote.id), 1);
-          this.loadNote(this.placeholderNotes[0]);
+        if (this.notes.length > 1) {
+          this.notes.splice(this.notes.findIndex(note => note.id === this.currentNote.id), 1);
+          this.loadNote(this.notes[0]);
         } else {
           alert("You can't delete your only note.")
         }
@@ -118,7 +117,7 @@ export default {
 <style>
     @import '~simplemde/dist/simplemde.min.css';
     .main {
-      background: linear-gradient(0deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, .95)), url('/background.jpg');
+      background: linear-gradient(0deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, .95)), url('https://images.unsplash.com/photo-1527195694714-9b939fac3432?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2850&q=80');
       background-size: cover;
     }
 

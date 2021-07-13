@@ -19,27 +19,43 @@ export default {
     },
     data(){
         return {
-            todos: [
-                { id: 0, todo: 'To do item one', done: false },
-                { id: 1, todo: 'To do item two', done: false },
-                { id: 2, todo: 'To do item three', done: true }
-            ],
+            todos: [],
             nextTodoId: 3,
             newTodoText: '',
         }
     },
+    mounted() {
+            chrome.storage.sync.get('newtabToDos', (res) => {
+                if (!res.newtabToDos) res.newtabToDos = [];
+                chrome.storage.sync.set(res);
+                this.todos = res.newtabToDos;
+            });
+    },
     methods: {
         addNewTodo: function() {
-            this.todos.unshift({
-                id: this.nextTodoId++,
-                todo: this.newTodoText,
-                done: false
-            });
-            this.newTodoText = '';
+            chrome.storage.sync.get("newtabToDos", (res) => {
+                res.newtabToDos.unshift({
+                    id: this.nextTodoId++,
+                    todo: this.newTodoText,
+                    done: false
+                });
+                chrome.storage.sync.set(res);
+                this.todos = res.newtabToDos;
+                this.newTodoText = '';
+            })
         },
         removeTodo: function(index) {
-            this.todos.splice(index, 1);
+            chrome.storage.sync.get('newtabToDos', (res) => {
+                res.newtabToDos.splice(index, 1);
+                chrome.storage.sync.set(res);
+                this.todos = res.newtabToDos;
+            });
         }
     }
 }
+// { id: 0, todo: 'To do item one', done: false },
+//                 { id: 1, todo: 'To do item two', done: false },
+//                 { id: 2, todo: 'To do item three', done: true }
+
 </script>
+

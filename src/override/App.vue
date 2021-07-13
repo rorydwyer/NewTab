@@ -188,7 +188,7 @@ export default {
 }
 
 .cm-formatting {
-  color: #dd4c50;
+  color: #ff5c5c;
 }
 
 /* Scroll Bar */

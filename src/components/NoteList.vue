@@ -56,6 +56,7 @@ export default {
   },
   data() {
     return {
+      activeNote: 0,
       search: "",
       timer: "25:00",
       timerSet: true,
@@ -79,6 +80,9 @@ export default {
 
     loadNote: function(note) {
       note.date = new Date();
+      // this.activeNote = note.id;
+      // note.classList.add("active");
+
       this.notes.sort((a, b) => {
         return new Date(b.date) - new Date(a.date);
       });
@@ -173,6 +177,10 @@ export default {
 </script>
 
 <style scoped>
+.active {
+  color: red;
+}
+
 .note-single {
   display: -webkit-box;
   -webkit-line-clamp: 3;

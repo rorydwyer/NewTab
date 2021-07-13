@@ -8,7 +8,7 @@
       placeholder="Create new to do item..."
       class="w-full focus:outline-none bg-transparent text-sm border rounded border-gray-300 p-1 mb-1"
     />
-    <draggable v-model="todos" @start="drag = true" @end="drag = false">
+    <draggable v-model="todos" @end="onEnd()">
       <div v-for="(todo, index) in todos" :key="todo.id">
         <input type="checkbox" v-on:click="removeTodo(index)" />
         <span class="text-sm">{{ todo.todo }}</span>
@@ -31,6 +31,7 @@ export default {
       newTodoText: "",
     };
   },
+
   mounted() {
     chrome.storage.sync.get("newtabToDos", (res) => {
       if (!res.newtabToDos) res.newtabToDos = [];
@@ -51,6 +52,12 @@ export default {
         this.newTodoText = "";
       });
     },
+    onEnd: function() {
+      chrome.storage.sync.get("newtabTodos", (res) => {
+        res.newtabToDos = this.todos;
+        chrome.storage.sync.set(res);
+      });
+    },
     removeTodo: function(index) {
       chrome.storage.sync.get("newtabToDos", (res) => {
         res.newtabToDos.splice(index, 1);
@@ -64,3 +71,9 @@ export default {
 //                 { id: 1, todo: 'To do item two', done: false },
 //                 { id: 2, todo: 'To do item three', done: true }
 </script>
+
+<style scoped>
+.sortable-drag {
+  background-color: #fff;
+}
+</style>

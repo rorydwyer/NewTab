@@ -6,12 +6,12 @@
       type="text"
       id="newTodo"
       placeholder="Create new to do item..."
-      class="w-full focus:outline-none bg-transparent text-sm border rounded border-gray-300 p-1 mb-1"
+      class="w-full focus:outline-none bg-transparent text-sm border rounded border-gray-300 p-1 mb-2"
     />
-    <draggable v-model="todos" @end="onEnd()">
-      <div v-for="(todo, index) in todos" :key="todo.id">
+    <draggable v-model="todos" @end="onEnd()" class="draggable">
+      <div v-for="(todo, index) in todos" :key="todo.id" class="todo-item">
         <input type="checkbox" v-on:click="removeTodo(index)" />
-        <span class="text-sm">{{ todo.todo }}</span>
+        <span class="pl-1 text-sm">{{ todo.todo }}</span>
       </div>
     </draggable>
   </div>
@@ -73,7 +73,25 @@ export default {
 </script>
 
 <style scoped>
-.sortable-drag {
-  background-color: #fff;
+.todo-item > span {
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+
+.todo-item > input {
+  cursor: pointer;
+}
+
+.sortable-chosen {
+  background-color: #ddd;
+}
+
+.draggable:active,
+.todo-item:active {
+  cursor: grabbing !important;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
 }
 </style>

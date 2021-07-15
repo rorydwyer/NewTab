@@ -105,17 +105,19 @@ export default {
     loadNote: function(note) {
       this.currentNote = note;
       this.simplemde.value(this.currentNote.content);
+      // this.simplemde.codemirror.focus();
     },
     createNote: function() {
       chrome.storage.sync.get("newtabNotes", (res) => {
         res.newtabNotes.unshift({
           id: this.getNoteId(),
-          content: "New note",
+          content: "",
           date: new Date(),
         });
         chrome.storage.sync.set(res);
         this.notes = res.newtabNotes;
         this.loadNote(this.notes[0]);
+        this.simplemde.codemirror.focus();
       });
     },
     getNoteId: function() {
@@ -134,12 +136,19 @@ export default {
             1
           );
           chrome.storage.sync.set(res);
+          this.loadNote(this.notes[this.findByAttr(this.notes, "id", this.currentNote.id) - 1]);
           this.notes = res.newtabNotes;
-          this.loadNote(this.notes[0]);
         }
       });
     },
-
+    findByAttr: function(array, attr, value) {
+      for (var i = 0; i < array.length; i += 1) {
+        if (array[i][attr] === value) {
+          return i;
+        }
+      }
+      return -1;
+    },
     formatNote: function() {
       document.querySelector(".editor-toolbar").classList.toggle("hide-toolbar");
     },
@@ -150,9 +159,9 @@ export default {
 <style>
 @import "~simplemde/dist/simplemde.min.css";
 .main {
-  background: linear-gradient(0deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.95)),
+  /* background: linear-gradient(0deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.95)),
     url("https://images.unsplash.com/photo-1527195694714-9b939fac3432?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2850&q=80");
-  background-size: cover;
+  background-size: cover; */
 }
 
 .CodeMirror,

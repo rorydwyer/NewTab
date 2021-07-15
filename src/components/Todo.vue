@@ -6,7 +6,7 @@
       type="text"
       id="newTodo"
       placeholder="Create new to do item..."
-      class="w-full focus:outline-none bg-transparent text-sm border rounded border-gray-300 p-1 mb-2"
+      class="w-full focus:outline-none bg-transparent text-sm border-b  border-gray-300 p-1 mb-4"
     />
     <draggable v-model="todos" @end="onEnd()" class="draggable">
       <div v-for="(todo, index) in todos" :key="todo.id" class="todo-item">

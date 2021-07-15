@@ -1,5 +1,5 @@
 <template>
-  <div class="main grid grid-cols-10 gap-4 h-screen max-h-screen overflow-hidden">
+  <div class="main grid grid-cols-10 gap-4 h-screen max-h-screen overflow-hidden dark:bg-gray-800">
     <NoteList :currentNote="currentNote" :notes="notes" @loadNote="loadNote($event)" @createNote="createNote()" class="col-span-2 h-screen pt-8 max-h-screen" />
 
     <div class="col-span-6 h-screen pt-8 max-h-screen">
@@ -21,7 +21,6 @@
 </template>
 
 <script>
-// import HelloWorld from '@/components/HelloWorld.vue'
 import NoteList from "@/components/NoteList.vue";
 import Todo from "@/components/Todo.vue";
 import "tailwindcss/tailwind.css";
@@ -37,10 +36,10 @@ export default {
   data() {
     return {
       notes: [],
-      nextNoteId: 3,
+      nextNoteId: 0,
       currentNote: {
         content: "",
-        id: null,
+        id: 0,
         date: new Date(),
       },
       configs: {
@@ -86,7 +85,14 @@ export default {
       chrome.storage.sync.set(res);
     });
 
-    this.simplemde.codemirror.on("change", () => {
+    chrome.storage.sync.get("noteId", (res) => {
+      if (!res.noteId) res.noteId = 1;
+      this.nextNoteId = res.noteId;
+      chrome.storage.sync.set(res);
+    });
+
+    this.simplemde.codemirror.on("keyup", () => {
+      this.currentNote.date = new Date();
       chrome.storage.sync.get("newtabNotes", (res) => {
         res.newtabNotes = this.notes;
         chrome.storage.sync.set(res);
@@ -103,7 +109,7 @@ export default {
     createNote: function() {
       chrome.storage.sync.get("newtabNotes", (res) => {
         res.newtabNotes.unshift({
-          id: this.nextNoteId++,
+          id: this.getNoteId(),
           content: "New note",
           date: new Date(),
         });
@@ -111,6 +117,14 @@ export default {
         this.notes = res.newtabNotes;
         this.loadNote(this.notes[0]);
       });
+    },
+    getNoteId: function() {
+      chrome.storage.sync.get("noteId", (res) => {
+        this.nextNoteId++;
+        res.noteId = this.nextNoteId;
+        chrome.storage.sync.set(res);
+      });
+      return this.nextNoteId;
     },
     deleteNote: function() {
       chrome.storage.sync.get("newtabNotes", (res) => {
@@ -152,7 +166,12 @@ export default {
   max-height: 88vh;
   padding-top: 0;
   font-size: 1rem;
+  caret-color: #ff5c5c imo !important;
   /* overflow: scr; */
+}
+
+.CodeMirror-cursor {
+  border-color: #ff5c5c;
 }
 
 .vue-simplemde {

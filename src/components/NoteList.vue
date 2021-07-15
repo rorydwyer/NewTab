@@ -1,14 +1,14 @@
 <template>
   <div class="px-4 pb-4 flex flex-col">
     <div class="notelist flex-grow">
-      <div class="flex  mb-1">
+      <div class="flex  mb-4">
         <input
           v-model="search"
           type="text"
           name="search"
           id="searchNotes"
           placeholder="Search..."
-          class="flex-grow focus:outline-none bg-transparent border text-sm rounded border-gray-300 p-1 mr-1"
+          class="flex-grow focus:outline-none bg-transparent border-b text-sm border-gray-300 p-1 mr-1"
         />
         <button v-on:click="createNote()" class="border border-gray-300 rounded w-8 hover:bg-gray-200">+</button>
       </div>
@@ -18,7 +18,8 @@
             v-for="note in filteredNotes"
             :key="note.id"
             v-on:click="loadNote(note)"
-            class="bg-gray-50 text-sm my-2 p-1 text-gray-600 hover:bg-gray-200 note-single"
+            v-bind:class="{ activeNote: currentNote.id == note.id }"
+            class="bg-gray-50 hover:bg-gray-100 text-sm my-2 p-2 text-gray-600 note-single"
           >
             {{ note.content || "Empty note" }}
           </li>
@@ -56,7 +57,6 @@ export default {
   },
   data() {
     return {
-      activeNote: 0,
       search: "",
       timer: "25:00",
       timerSet: true,
@@ -79,13 +79,10 @@ export default {
     },
 
     loadNote: function(note) {
-      note.date = new Date();
-      // this.activeNote = note.id;
-      // note.classList.add("active");
-
       this.notes.sort((a, b) => {
         return new Date(b.date) - new Date(a.date);
       });
+      // console.log(note.date);
       this.$emit("loadNote", note);
     },
 
@@ -177,16 +174,17 @@ export default {
 </script>
 
 <style scoped>
-.active {
-  color: red;
-}
-
 .note-single {
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.activeNote {
+  border-left: 1px #ff5c5c solid;
+  margin-left: -1px;
 }
 
 .note-single:hover {

@@ -1,23 +1,19 @@
 <template>
-  <div class="main grid grid-cols-10 gap-4 h-screen max-h-screen overflow-hidden dark:bg-gray-800 relative">
+  <div class="main grid grid-cols-10 gap-6 h-screen max-h-screen overflow-hidden dark:bg-gray-800 relative">
     <NoteList :currentNote="currentNote" :notes="notes" @loadNote="loadNote($event)" @createNote="createNote()" class="col-span-2 h-screen pt-8 max-h-screen" />
 
     <div class="col-span-6 h-screen pt-8 max-h-screen">
       <div class="pb-4 h-full flex flex-col">
         <vue-simplemde class="flex-grow" v-model="currentNote.content" ref="markdownEditor" :configs="configs" />
-        <div class="flex">
-          <div class="flex-grow">
-            <button class="text-sm underline" v-on:click="formatNote()">Format</button>
-          </div>
-          <div>
-            <button class="text-sm underline hover:text-red-600" v-if="this.notes.length > 1" v-on:click="deleteNote()">Delete</button>
-          </div>
+        <div class="text-right">
+          <button class="text-sm underline pr-5" v-on:click="formatNote()">Format</button>
+          <button class="text-sm underline hover:text-red-600" v-if="this.notes.length > 1" v-on:click="deleteNote()">Delete</button>
         </div>
       </div>
     </div>
 
     <Todo @settings="settings = !settings" class="col-span-2 h-screen pt-8 max-h-screen" />
-    <Settings @settings="settings = !settings" v-bind:class="getSettings" class="absolute w-1/4 h-full transition-all bg-red-500" />
+    <Settings @settings="settings = !settings" v-bind:class="getSettings" id="settings" class="absolute w-1/4 h-full transition-all z-50 pt-8 max-h-screen" />
   </div>
 </template>
 
@@ -169,6 +165,10 @@ export default {
   /* background: linear-gradient(0deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.95)),
     url("https://images.unsplash.com/photo-1527195694714-9b939fac3432?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2850&q=80");
   background-size: cover; */
+}
+
+#settings {
+  background-color: #ff5c5c;
 }
 
 .CodeMirror,

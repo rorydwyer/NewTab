@@ -1,5 +1,5 @@
 <template>
-  <div class="main grid grid-cols-10 gap-4 h-screen max-h-screen overflow-hidden dark:bg-gray-800">
+  <div class="main grid grid-cols-10 gap-4 h-screen max-h-screen overflow-hidden dark:bg-gray-800 relative">
     <NoteList :currentNote="currentNote" :notes="notes" @loadNote="loadNote($event)" @createNote="createNote()" class="col-span-2 h-screen pt-8 max-h-screen" />
 
     <div class="col-span-6 h-screen pt-8 max-h-screen">
@@ -16,21 +16,24 @@
       </div>
     </div>
 
-    <Todo class="col-span-2 h-screen pt-8 max-h-screen" />
+    <Todo @settings="settings = !settings" class="col-span-2 h-screen pt-8 max-h-screen" />
+    <Settings @settings="settings = !settings" v-bind:class="getSettings" class="absolute w-1/4 h-full transition-all bg-red-500" />
   </div>
 </template>
 
 <script>
 import NoteList from "@/components/NoteList.vue";
 import Todo from "@/components/Todo.vue";
-import "tailwindcss/tailwind.css";
+import Settings from "@/components/Settings.vue";
 import VueSimplemde from "vue-simplemde";
+import "tailwindcss/tailwind.css";
 
 export default {
   name: "app",
   components: {
     NoteList,
     Todo,
+    Settings,
     VueSimplemde,
   },
   data() {
@@ -63,11 +66,15 @@ export default {
           "code",
         ],
       },
+      settings: 0,
     };
   },
   computed: {
     simplemde() {
       return this.$refs.markdownEditor.simplemde;
+    },
+    getSettings: function() {
+      return this.settings ? "right-0" : "-right-1/4";
     },
   },
   mounted() {

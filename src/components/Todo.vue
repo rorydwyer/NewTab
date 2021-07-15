@@ -14,6 +14,7 @@
         <span class="pl-1 text-sm">{{ todo.todo }}</span>
       </div>
     </draggable>
+    <button v-on:click="$emit('settings')">Settings</button>
   </div>
 </template>
 

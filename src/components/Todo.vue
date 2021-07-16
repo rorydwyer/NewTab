@@ -16,7 +16,9 @@
         </div>
       </draggable>
     </div>
-    <button v-on:click="$emit('settings')" class="text-sm underline text-right">Settings</button>
+    <div class="text-right">
+      <button v-on:click="$emit('settings')" class="text-sm underline text-right">Settings</button>
+    </div>
   </div>
 </template>
 
@@ -34,7 +36,6 @@ export default {
       newTodoText: "",
     };
   },
-
   mounted() {
     chrome.storage.sync.get("newtabToDos", (res) => {
       if (!res.newtabToDos) res.newtabToDos = [];

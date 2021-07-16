@@ -1,6 +1,6 @@
 <template>
-  <div class="main grid grid-cols-10 gap-6 h-screen max-h-screen overflow-hidden dark:bg-gray-800 relative">
-    <NoteList :currentNote="currentNote" :notes="notes" @loadNote="loadNote($event)" @createNote="createNote()" class="col-span-2 h-screen pt-8 max-h-screen" />
+  <div class="main grid grid-cols-12 gap-12 h-screen max-h-screen overflow-hidden dark:bg-gray-800 dark:text-white relative">
+    <NoteList :currentNote="currentNote" :notes="notes" @loadNote="loadNote($event)" @createNote="createNote()" class="col-span-3 h-screen pt-8 max-h-screen" />
 
     <div class="col-span-6 h-screen pt-8 max-h-screen">
       <div class="pb-4 h-full flex flex-col">
@@ -12,7 +12,7 @@
       </div>
     </div>
 
-    <Todo @settings="settings = !settings" class="col-span-2 h-screen pt-8 max-h-screen" />
+    <Todo @settings="settings = !settings" class="col-span-3 h-screen pt-8 max-h-screen" />
     <Settings @settings="settings = !settings" v-bind:class="getSettings" id="settings" class="absolute w-1/4 h-full transition-all z-50 pt-8 max-h-screen" />
   </div>
 </template>
@@ -106,6 +106,10 @@ export default {
   },
   methods: {
     loadNote: function(note) {
+      if (!note) {
+        alert(note);
+        note = this.notes[0];
+      }
       this.currentNote = note;
       this.simplemde.value(this.currentNote.content);
       // this.simplemde.codemirror.focus();
@@ -139,7 +143,14 @@ export default {
             1
           );
           chrome.storage.sync.set(res);
-          this.loadNote(this.notes[this.findByAttr(this.notes, "id", this.currentNote.id) - 1]);
+
+          let nextNote;
+          if (this.notes[this.findByAttr(this.notes, "id", this.currentNote.id) + 1]) {
+            nextNote = this.notes[this.findByAttr(this.notes, "id", this.currentNote.id) + 1];
+          } else {
+            nextNote = this.notes[this.findByAttr(this.notes, "id", this.currentNote.id) - 1];
+          }
+          this.loadNote(nextNote);
           this.notes = res.newtabNotes;
         }
       });
@@ -233,5 +244,11 @@ export default {
 ::-webkit-scrollbar-thumb {
   background: lightgrey;
   border-radius: 6px;
+}
+
+/* Dark Mode */
+
+.dark .CodeMirror pre {
+  color: white !important;
 }
 </style>

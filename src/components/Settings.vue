@@ -27,17 +27,16 @@
 export default {
   data() {
     return {
-      darkmode: 0,
+      darkmode: false,
     };
   },
   mounted() {
     chrome.storage.sync.get("newtabTheme", (res) => {
-      if (!res.newtabTheme) res.newtabTheme = 0;
+      if (!res.newtabTheme) res.newtabTheme = false;
       this.darkmode = res.newtabTheme;
+      this.setTheme();
       chrome.storage.sync.set(res);
     });
-
-    this.setTheme();
   },
   methods: {
     setTheme: function() {
@@ -46,7 +45,7 @@ export default {
       } else {
         document.documentElement.classList.remove("dark");
       }
-      chrome.storage.get("newtabTheme", (res) => {
+      chrome.storage.sync.get("newtabTheme", (res) => {
         res.newtabTheme = this.darkmode;
         chrome.storage.sync.set(res);
       });

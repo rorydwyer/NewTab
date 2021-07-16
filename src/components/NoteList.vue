@@ -1,7 +1,7 @@
 <template>
   <div class="px-4 pb-4 flex flex-col">
-    <div class="notelist flex-grow">
-      <div class="flex  mb-4">
+    <div class="notelist flex-grow overflow-y-scroll pr-4">
+      <div class="flex mb-4">
         <input
           v-model="search"
           type="text"
@@ -28,7 +28,7 @@
     </div>
     <div class="timer">
       <input
-        class="w-full text-6xl text-gray-400 focus:outline-none text-center bg-transparent"
+        class="w-full text-7xl text-gray-400 focus:outline-none text-center bg-transparent"
         ref="timer"
         v-model="timer"
         type="text"
@@ -173,6 +173,10 @@ export default {
 </script>
 
 <style scoped>
+.notelist {
+  padding-left: 1px;
+}
+
 .note-single {
   display: -webkit-box;
   -webkit-line-clamp: 2;

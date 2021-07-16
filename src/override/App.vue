@@ -1,5 +1,5 @@
 <template>
-  <div class="main grid grid-cols-12 gap-12 h-screen max-h-screen overflow-hidden dark:bg-gray-800 dark:text-white relative">
+  <div id="main" class="main grid grid-cols-12 gap-12 h-screen max-h-screen overflow-hidden dark:bg-gray-800 dark:text-white relative">
     <NoteList
       :currentNote="currentNote"
       :notes="notes"
@@ -133,7 +133,7 @@ export default {
         res.newtabNotes.unshift({
           id: this.getNoteId(),
           content: "",
-          date: new Date(),
+          // date: new Date(),
         });
         chrome.storage.sync.set(res);
         this.notes = res.newtabNotes;
@@ -180,16 +180,18 @@ export default {
     formatNote: function() {
       document.querySelector(".editor-toolbar").classList.toggle("hide-toolbar");
     },
+    sameDay: function(d1, d2) {
+      return d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate();
+    },
   },
 };
 </script>
 
 <style>
 @import "~simplemde/dist/simplemde.min.css";
-.main {
-  /* background: linear-gradient(0deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.95)),
-    url("https://images.unsplash.com/photo-1527195694714-9b939fac3432?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2850&q=80");
-  background-size: cover; */
+#main {
+  /* background: linear-gradient(0deg, rgba(31, 41, 55, 0.9), rgba(31, 41, 55, 0.9)), url("https://source.unsplash.com/daily?nature"); */
+  background-size: cover !important;
 }
 
 input {

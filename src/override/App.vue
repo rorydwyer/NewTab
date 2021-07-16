@@ -178,6 +178,14 @@ export default {
   background-size: cover; */
 }
 
+input {
+  caret-color: #ff5c5c;
+}
+
+::selection {
+  background-color: #ffcdcd;
+}
+
 #settings {
   background-color: #ff5c5c;
 }
@@ -244,6 +252,16 @@ export default {
 ::-webkit-scrollbar-thumb {
   background: lightgrey;
   border-radius: 6px;
+}
+
+/* MDE Styles */
+.cm-formatting-quote {
+  /* display: none; */
+  /* content: "";
+  position: relative;
+  left: 32px;
+  text-align: right;
+  border-left: solid 2px #ff5c5c; */
 }
 
 /* Dark Mode */

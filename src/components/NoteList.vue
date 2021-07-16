@@ -19,7 +19,7 @@
             :key="note.id"
             v-on:click="loadNote(note)"
             v-bind:class="{ activeNote: currentNote.id == note.id }"
-            class="bg-gray-50 hover:bg-gray-100 text-sm my-2 p-2 max-h-12 text-gray-600 note-single"
+            class="bg-gray-50 hover:bg-gray-100 dark:bg-opacity-10 dark:text-white text-sm my-2 p-2 text-gray-600 note-single"
           >
             {{ note.content || "Empty note" }}
           </li>
@@ -183,6 +183,7 @@ export default {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-height: 3.2rem;
 }
 
 .activeNote {

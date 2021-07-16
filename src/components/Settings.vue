@@ -15,6 +15,18 @@
           </div>
         </label>
 
+        <!-- Toggle To do -->
+        <label for="toggleTodo" class="flex items-center cursor-pointer pb-4">
+          <div class="mr-3 text-base">
+            Show To do list
+          </div>
+          <div class="relative">
+            <input id="toggleTodo" type="checkbox" class="sr-only" v-model="settings.toggleTodo" v-on:change="changeSettings" />
+            <div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
+            <div class="dot absolute w-6 h-6 bg-white rounded-full shadow-md -left-1 -top-1 transition"></div>
+          </div>
+        </label>
+
         <!-- Toggle Timer -->
         <label for="toggleTimer" class="flex items-center cursor-pointer pb-4">
           <div class="mr-3 text-base">
@@ -41,17 +53,16 @@ export default {
       settings: {
         darkMode: false,
         toggleTimer: true,
+        toggleTodo: true,
       },
     };
   },
   mounted() {
     chrome.storage.sync.get("newtabSettings", (res) => {
-      if (!res.newtabSettings)
-        res.newtabSettings = {
-          darkMode: false,
-          toggleTimer: true,
-        };
+      if (!res.newtabSettings) res.newtabSettings = this.settings;
+
       this.settings.darkMode = res.newtabSettings.darkMode;
+      this.settings.toggleTodo = res.newtabSettings.toggleTodo;
       this.settings.toggleTimer = res.newtabSettings.toggleTimer;
 
       this.$emit("emitSettings", this.settings);

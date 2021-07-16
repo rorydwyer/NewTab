@@ -1,20 +1,22 @@
 <template>
   <div class="px-4 pb-4 flex flex-col">
     <div class="flex-grow">
-      <input
-        v-on:keyup.enter="addNewTodo"
-        v-model="newTodoText"
-        type="text"
-        id="newTodo"
-        placeholder="Create new to do item..."
-        class="w-full focus:outline-none bg-transparent text-sm border-b  border-gray-300 p-1 mb-4"
-      />
-      <draggable v-model="todos" @end="onEnd()" class="draggable">
-        <div v-for="(todo, index) in todos" :key="todo.id" class="todo-item">
-          <input type="checkbox" v-on:click="removeTodo(index)" />
-          <span class="pl-1 text-sm">{{ todo.todo }}</span>
-        </div>
-      </draggable>
+      <div v-if="newTabSettings.toggleTodo">
+        <input
+          v-on:keyup.enter="addNewTodo"
+          v-model="newTodoText"
+          type="text"
+          id="newTodo"
+          placeholder="Create new to do item..."
+          class="w-full focus:outline-none bg-transparent text-sm border-b  border-gray-300 p-1 mb-4"
+        />
+        <draggable v-model="todos" @end="onEnd()" class="draggable">
+          <div v-for="(todo, index) in todos" :key="todo.id" class="todo-item">
+            <input type="checkbox" v-on:click="removeTodo(index)" />
+            <span class="pl-1 text-sm">{{ todo.todo }}</span>
+          </div>
+        </draggable>
+      </div>
     </div>
     <div class="text-right">
       <button v-on:click="$emit('settings')" class="text-sm underline text-right">Settings</button>
@@ -28,6 +30,9 @@ import draggable from "vuedraggable";
 export default {
   components: {
     draggable,
+  },
+  props: {
+    newTabSettings: Object,
   },
   data() {
     return {

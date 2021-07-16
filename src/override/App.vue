@@ -19,7 +19,7 @@
       </div>
     </div>
 
-    <Todo @settings="settings = !settings" class="col-span-3 h-screen pt-8 max-h-screen" />
+    <Todo @settings="settings = !settings" :newTabSettings="newTabSettings" class="col-span-3 h-screen pt-8 max-h-screen" />
     <Settings
       @settings="settings = !settings"
       @emitSettings="newTabSettings = $event"

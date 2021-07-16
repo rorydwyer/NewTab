@@ -26,7 +26,7 @@
         </ul>
       </div>
     </div>
-    <div class="timer">
+    <div v-if="newTabSettings.toggleTimer" class="timer">
       <input
         class="w-full text-7xl text-gray-400 focus:outline-none text-center bg-transparent"
         ref="timer"
@@ -54,6 +54,7 @@ export default {
       id: Number,
     },
     notes: Array,
+    newTabSettings: Object,
   },
   data() {
     return {

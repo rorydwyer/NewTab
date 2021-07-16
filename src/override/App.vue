@@ -1,6 +1,13 @@
 <template>
   <div class="main grid grid-cols-12 gap-12 h-screen max-h-screen overflow-hidden dark:bg-gray-800 dark:text-white relative">
-    <NoteList :currentNote="currentNote" :notes="notes" @loadNote="loadNote($event)" @createNote="createNote()" class="col-span-3 h-screen pt-8 max-h-screen" />
+    <NoteList
+      :currentNote="currentNote"
+      :notes="notes"
+      :newTabSettings="newTabSettings"
+      @loadNote="loadNote($event)"
+      @createNote="createNote()"
+      class="col-span-3 h-screen pt-8 max-h-screen"
+    />
 
     <div class="col-span-6 h-screen pt-8 max-h-screen">
       <div class="pb-4 h-full flex flex-col">
@@ -13,7 +20,13 @@
     </div>
 
     <Todo @settings="settings = !settings" class="col-span-3 h-screen pt-8 max-h-screen" />
-    <Settings @settings="settings = !settings" v-bind:class="getSettings" id="settings" class="absolute w-1/4 h-full transition-all z-50 pt-8 max-h-screen" />
+    <Settings
+      @settings="settings = !settings"
+      @emitSettings="newTabSettings = $event"
+      v-bind:class="getSettings"
+      id="settings"
+      class="absolute w-1/4 h-full transition-all z-50 pt-8 max-h-screen"
+    />
   </div>
 </template>
 
@@ -36,6 +49,7 @@ export default {
     return {
       notes: [],
       nextNoteId: 0,
+      newTabSettings: {},
       currentNote: {
         content: "",
         id: 0,
@@ -241,10 +255,6 @@ input {
   opacity: 0 !important;
 }
 
-.cm-formatting {
-  color: #ff5c5c;
-}
-
 /* Scroll Bar */
 ::-webkit-scrollbar {
   width: 6px;
@@ -255,6 +265,48 @@ input {
 }
 
 /* MDE Styles */
+.cm-formatting {
+  color: #ff5c5c;
+  /* position: relative;
+    width: 0px !important;
+    max-width: 0px !important;
+    float: right;
+    left: 10%; */
+}
+
+.CodeMirror-scroll,
+.CodeMirror {
+  /* overflow: visible !important; */
+}
+
+.cm-formatting-header-1,
+.cm-formatting-header-2,
+.cm-formatting-header-3 {
+  /* font-size: 0px !important; */
+  /* text-align: right; */
+  /* left: -1.5rem; */
+  /* position: relative; */
+  /* position: absolute; */
+  /* top: 50%; */
+  /* transform: translateX(-50%); */
+}
+
+.cm-formatting-header-1::before {
+  /* content: "H1"; */
+  /* font-size: 1rem; */
+  /* bottom: 20%; */
+}
+
+.cm-formatting-header-2::before {
+  /* content: "H2"; */
+  /* font-size: 1rem; */
+}
+
+.cm-formatting-header-3::before {
+  /* content: "H3"; */
+  /* font-size: 1rem; */
+}
+
 .cm-formatting-quote {
   /* display: none; */
   /* content: "";

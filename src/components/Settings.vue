@@ -80,7 +80,7 @@ export default {
         bgImage: true,
         bgImageTheme: "nature",
         bgImageURL: "",
-        bgImageDate: "",
+        bgImageDate: new Date().toDateString(),
       },
     };
   },
@@ -96,33 +96,38 @@ export default {
       this.settings.bgImageURL = res.newtabSettings.bgImageURL;
       this.settings.bgImageDate = res.newtabSettings.bgImageDate;
 
-      this.$emit("emitSettings", this.settings);
-      chrome.storage.sync.set(res);
-
-      this.setTheme();
-      this.backgroundImage();
-    });
-  },
-  methods: {
-    setTheme: function() {
       if (this.settings.darkMode) {
         document.documentElement.classList.add("dark");
       } else {
         document.documentElement.classList.remove("dark");
       }
 
+      this.backgroundImage();
+
+      this.$emit("emitSettings", this.settings);
+      chrome.storage.sync.set(res);
+    });
+  },
+  methods: {
+    setTheme: function() {
       if (this.settings.bgImage) this.backgroundImage();
 
+      if (this.settings.darkMode) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+
       chrome.storage.sync.get("newtabSettings", (res) => {
+        // Error when first launching here
         res.newtabSettings.darkMode = this.settings.darkMode;
         chrome.storage.sync.set(res);
       });
     },
     backgroundImage: function() {
-      if (this.settings.bgImageURL == "") {
-        // || !this.sameDay(this.settings.bgImageDate, new Date())
+      if (this.settings.bgImageURL == "" || this.settings.bgImageDate !== new Date().toDateString()) {
         fetch(`https://source.unsplash.com/daily?nature`).then((response) => {
-          this.settings.bgImageDate = new Date();
+          this.settings.bgImageDate = new Date().toDateString();
           this.settings.bgImageURL = response.url;
 
           chrome.storage.sync.get("newtabSettings", (res) => {

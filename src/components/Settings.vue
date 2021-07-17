@@ -56,6 +56,7 @@
           <input
             id="bgTheme"
             v-model="settings.bgImageTheme"
+            v-on:keyup="changeBgTheme()"
             type="text"
             placeholder="Nature"
             class="color-white w-full focus:outline-none bg-transparent text-sm border border-white placeholder-gray-100 placeholder-opacity-50 p-1 mb-4"
@@ -78,10 +79,11 @@ export default {
         toggleTimer: true,
         toggleTodo: true,
         bgImage: true,
-        bgImageTheme: "nature",
+        bgImageTheme: "Nature",
         bgImageURL: "",
         bgImageDate: new Date().toDateString(),
       },
+      timeout: null,
     };
   },
   mounted() {
@@ -124,16 +126,17 @@ export default {
         chrome.storage.sync.set(res);
       });
     },
-    backgroundImage: function() {
+    backgroundImage: function(changeBgTheme) {
       if (this.settings.bgImage) {
-        if (this.settings.bgImageURL == "" || this.settings.bgImageDate !== new Date().toDateString()) {
-          fetch(`https://source.unsplash.com/daily?nature`).then((response) => {
+        if (changeBgTheme || this.settings.bgImageURL == "" || this.settings.bgImageDate !== new Date().toDateString()) {
+          fetch(`https://source.unsplash.com/1920x1080/?${this.settings.bgImageTheme}`).then((response) => {
             this.settings.bgImageDate = new Date().toDateString();
             this.settings.bgImageURL = response.url;
 
             chrome.storage.sync.get("newtabSettings", (res) => {
               res.newtabSettings.bgImageDate = this.settings.bgImageDate;
               res.newtabSettings.bgImageURL = this.settings.bgImageURL;
+              res.newtabSettings.bgImageTheme = this.settings.bgImageTheme;
               chrome.storage.sync.set(res);
             });
 
@@ -161,6 +164,13 @@ export default {
       } else {
         document.getElementById("main").style.background = "";
       }
+    },
+    changeBgTheme: function() {
+      if (this.timeout) {
+        clearTimeout(this.timeout);
+        this.timeout = null;
+      }
+      this.timeout = setTimeout(() => this.backgroundImage(true), 800);
     },
     changeSettings: function() {
       chrome.storage.sync.get("newtabSettings", (res) => {

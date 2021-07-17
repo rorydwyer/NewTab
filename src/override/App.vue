@@ -117,6 +117,7 @@ export default {
     });
 
     document.querySelector(".editor-toolbar").classList.add("hide-toolbar");
+    document.querySelector(".main").style.opacity = "1";
   },
   methods: {
     loadNote: function(note) {
@@ -203,6 +204,16 @@ input {
   background-color: #ff5c5c;
 }
 
+/* Scroll Bar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: lightgrey;
+  border-radius: 6px;
+}
+
+/* MDE Styles */
 .CodeMirror,
 .editor-toolbar {
   border: none !important;
@@ -224,6 +235,10 @@ input {
 
 .vue-simplemde {
   position: relative;
+}
+
+.cm-formatting {
+  color: #ff5c5c;
 }
 
 .editor-toolbar {
@@ -252,67 +267,6 @@ input {
 
 .hide-toolbar:hover {
   opacity: 0 !important;
-}
-
-/* Scroll Bar */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-thumb {
-  background: lightgrey;
-  border-radius: 6px;
-}
-
-/* MDE Styles */
-.cm-formatting {
-  color: #ff5c5c;
-  /* position: relative;
-    width: 0px !important;
-    max-width: 0px !important;
-    float: right;
-    left: 10%; */
-}
-
-.CodeMirror-scroll,
-.CodeMirror {
-  /* overflow: visible !important; */
-}
-
-.cm-formatting-header-1,
-.cm-formatting-header-2,
-.cm-formatting-header-3 {
-  /* font-size: 0px !important; */
-  /* text-align: right; */
-  /* left: -1.5rem; */
-  /* position: relative; */
-  /* position: absolute; */
-  /* top: 50%; */
-  /* transform: translateX(-50%); */
-}
-
-.cm-formatting-header-1::before {
-  /* content: "H1"; */
-  /* font-size: 1rem; */
-  /* bottom: 20%; */
-}
-
-.cm-formatting-header-2::before {
-  /* content: "H2"; */
-  /* font-size: 1rem; */
-}
-
-.cm-formatting-header-3::before {
-  /* content: "H3"; */
-  /* font-size: 1rem; */
-}
-
-.cm-formatting-quote {
-  /* display: none; */
-  /* content: "";
-  position: relative;
-  left: 32px;
-  text-align: right;
-  border-left: solid 2px #ff5c5c; */
 }
 
 /* Dark Mode */

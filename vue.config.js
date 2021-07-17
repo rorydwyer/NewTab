@@ -3,7 +3,7 @@ module.exports = {
     popup: {
       template: "public/browser-extension.html",
       entry: "./src/popup/main.js",
-      title: "Popup",
+      title: "# NewTab",
     },
     override: {
       template: "public/browser-extension.html",

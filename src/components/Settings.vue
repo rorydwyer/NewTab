@@ -45,7 +45,7 @@
             Background Image
           </div>
           <div class="relative">
-            <input id="bgImage" type="checkbox" class="sr-only" v-model="settings.bgImage" v-on:change="changeSettings" />
+            <input id="bgImage" type="checkbox" class="sr-only" v-model="settings.bgImage" v-on:change="backgroundImage()" />
             <div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
             <div class="dot absolute w-6 h-6 bg-white rounded-full shadow-md -left-1 -top-1 transition"></div>
           </div>
@@ -96,13 +96,15 @@ export default {
       this.settings.bgImageURL = res.newtabSettings.bgImageURL;
       this.settings.bgImageDate = res.newtabSettings.bgImageDate;
 
+      // Dark Mode
       if (this.settings.darkMode) {
         document.documentElement.classList.add("dark");
       } else {
         document.documentElement.classList.remove("dark");
       }
 
-      this.backgroundImage();
+      // Background Image
+      if (this.settings.bgImage) this.backgroundImage();
 
       this.$emit("emitSettings", this.settings);
       chrome.storage.sync.set(res);
@@ -110,32 +112,42 @@ export default {
   },
   methods: {
     setTheme: function() {
-      if (this.settings.bgImage) this.backgroundImage();
-
       if (this.settings.darkMode) {
         document.documentElement.classList.add("dark");
       } else {
         document.documentElement.classList.remove("dark");
       }
+      if (this.settings.bgImage) this.backgroundImage();
 
       chrome.storage.sync.get("newtabSettings", (res) => {
-        // Error when first launching here
         res.newtabSettings.darkMode = this.settings.darkMode;
         chrome.storage.sync.set(res);
       });
     },
     backgroundImage: function() {
-      if (this.settings.bgImageURL == "" || this.settings.bgImageDate !== new Date().toDateString()) {
-        fetch(`https://source.unsplash.com/daily?nature`).then((response) => {
-          this.settings.bgImageDate = new Date().toDateString();
-          this.settings.bgImageURL = response.url;
+      if (this.settings.bgImage) {
+        if (this.settings.bgImageURL == "" || this.settings.bgImageDate !== new Date().toDateString()) {
+          fetch(`https://source.unsplash.com/daily?nature`).then((response) => {
+            this.settings.bgImageDate = new Date().toDateString();
+            this.settings.bgImageURL = response.url;
 
-          chrome.storage.sync.get("newtabSettings", (res) => {
-            res.newtabSettings.bgImageDate = this.settings.bgImageDate;
-            res.newtabSettings.bgImageURL = this.settings.bgImageURL;
-            chrome.storage.sync.set(res);
+            chrome.storage.sync.get("newtabSettings", (res) => {
+              res.newtabSettings.bgImageDate = this.settings.bgImageDate;
+              res.newtabSettings.bgImageURL = this.settings.bgImageURL;
+              chrome.storage.sync.set(res);
+            });
+
+            if (document.documentElement.classList.contains("dark")) {
+              document.getElementById(
+                "main"
+              ).style.background = `linear-gradient(0deg, rgba(31, 41, 55, 0.9), rgba(31, 41, 55, 0.9)), url(${this.settings.bgImageURL})`;
+            } else {
+              document.getElementById(
+                "main"
+              ).style.background = `linear-gradient(0deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url(${this.settings.bgImageURL})`;
+            }
           });
-
+        } else {
           if (document.documentElement.classList.contains("dark")) {
             document.getElementById(
               "main"
@@ -145,17 +157,9 @@ export default {
               "main"
             ).style.background = `linear-gradient(0deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url(${this.settings.bgImageURL})`;
           }
-        });
-      } else {
-        if (document.documentElement.classList.contains("dark")) {
-          document.getElementById(
-            "main"
-          ).style.background = `linear-gradient(0deg, rgba(31, 41, 55, 0.9), rgba(31, 41, 55, 0.9)), url(${this.settings.bgImageURL})`;
-        } else {
-          document.getElementById(
-            "main"
-          ).style.background = `linear-gradient(0deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url(${this.settings.bgImageURL})`;
         }
+      } else {
+        document.getElementById("main").style.background = "";
       }
     },
     changeSettings: function() {

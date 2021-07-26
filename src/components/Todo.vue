@@ -1,7 +1,7 @@
 <template>
   <div class="px-4 pb-4 flex flex-col">
     <div class="flex-grow">
-      <div v-if="newTabSettings.toggleTodo">
+      <div v-if="settings.toggleTodo">
         <input
           v-on:keyup.enter="addNewTodo"
           v-model="newTodoText"
@@ -32,10 +32,11 @@ export default {
     draggable,
   },
   props: {
-    newTabSettings: Object,
+    settings: Object,
   },
   data() {
     return {
+      // Refactor to use App.vue
       todos: [],
       nextTodoId: 3,
       newTodoText: "",

@@ -18,7 +18,7 @@
             v-for="note in filteredNotes"
             :key="note.id"
             v-on:click="loadNote(note)"
-            v-bind:class="{ activeNote: currentNote.id == note.id }"
+            v-bind:class="{ activeNote: notes.current.id == note.id }"
             class="bg-gray-50 hover:bg-gray-100 dark:bg-opacity-10 dark:text-white text-sm my-2 p-2 text-gray-600 note-single"
           >
             {{ note.content || "Empty note" }}
@@ -26,7 +26,7 @@
         </ul>
       </div>
     </div>
-    <div v-if="newTabSettings.toggleTimer" class="timer">
+    <div v-if="settings.toggleTimer" class="timer">
       <input
         class="w-full text-7xl text-gray-400 focus:outline-none text-center bg-transparent"
         ref="timer"
@@ -49,16 +49,14 @@
 export default {
   components: {},
   props: {
-    currentNote: {
-      content: String,
-      id: Number,
-    },
-    notes: Array,
-    newTabSettings: Object,
+    notes: Object,
+    settings: Object,
   },
   data() {
     return {
       search: "",
+
+      // Timer
       timer: "25:00",
       timerSet: true,
       timerOn: false,
@@ -66,14 +64,14 @@ export default {
     };
   },
   computed: {
+    // Filtered notes from search bar
     filteredNotes() {
-      return this.notes.filter((note) => note.content.toLowerCase().includes(this.search.toLowerCase()));
+      return this.notes.collection.filter((note) => note.content.toLowerCase().includes(this.search.toLowerCase()));
     },
   },
   mounted() {
-    this.notes.sort((a, b) => (a.date > b.date ? 1 : b.date > a.date ? -1 : 0));
-    // console.log("timer: " + this.newTabSettings.timerDefault);
-    // this.timer = this.newTabSettings.timerDefault;
+    // Sort notes by date
+    this.notes.collection.sort((a, b) => (a.date > b.date ? 1 : b.date > a.date ? -1 : 0));
   },
   methods: {
     // Notelist Methods

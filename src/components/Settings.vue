@@ -28,7 +28,7 @@
         </label>
 
         <!-- Toggle Timer -->
-        <label for="toggleTimer" class="flex border-b border-white justify-between cursor-pointer w-full py-4">
+        <label for="toggleTimer" class="flex justify-between cursor-pointer w-full pt-4">
           <div class="mr-3 text-base">
             Show Timer
           </div>
@@ -39,13 +39,25 @@
           </div>
         </label>
 
+        <div v-if="settings.toggleTimer" class="w-full border-b border-white">
+          <label for="timerDefault">Timer Default (Minutes)</label>
+          <input
+            id="timerDefault"
+            v-model="settings.timerDefault"
+            v-on:keyup="changeSettings"
+            type="text"
+            placeholder="25"
+            class="color-white w-full focus:outline-none bg-transparent text-sm border border-white placeholder-gray-100 placeholder-opacity-50 p-1 mb-4"
+          />
+        </div>
+
         <!-- Background Image -->
         <label for="bgImage" class="flex justify-between cursor-pointer w-full pt-4 pb-2">
           <div class="mr-3 text-base">
             Background Image
           </div>
           <div class="relative">
-            <input id="bgImage" type="checkbox" class="sr-only" v-model="settings.bgImage" v-on:change="backgroundImage()" />
+            <input id="bgImage" type="checkbox" class="sr-only" v-model="settings.bgImage" v-on:change="backgroundImage(true)" />
             <div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
             <div class="dot absolute w-6 h-6 bg-white rounded-full shadow-md -left-1 -top-1 transition"></div>
           </div>
@@ -77,6 +89,7 @@ export default {
       settings: {
         darkMode: false,
         toggleTimer: true,
+        timerDefault: "15:00",
         toggleTodo: true,
         bgImage: true,
         bgImageTheme: "Nature",
@@ -93,10 +106,13 @@ export default {
       this.settings.darkMode = res.newtabSettings.darkMode;
       this.settings.toggleTodo = res.newtabSettings.toggleTodo;
       this.settings.toggleTimer = res.newtabSettings.toggleTimer;
+      this.settings.timerDefault = res.newtabSettings.timerDefault;
       this.settings.bgImage = res.newtabSettings.bgImage;
       this.settings.bgImageTheme = res.newtabSettings.bgImageTheme;
       this.settings.bgImageURL = res.newtabSettings.bgImageURL;
       this.settings.bgImageDate = res.newtabSettings.bgImageDate;
+
+      chrome.storage.sync.set(res);
 
       // Dark Mode
       if (this.settings.darkMode) {
@@ -108,8 +124,9 @@ export default {
       // Background Image
       if (this.settings.bgImage) this.backgroundImage();
 
+      console.log("settings emit");
+
       this.$emit("emitSettings", this.settings);
-      chrome.storage.sync.set(res);
     });
   },
   methods: {
@@ -134,6 +151,8 @@ export default {
             this.settings.bgImageURL = response.url;
 
             chrome.storage.sync.get("newtabSettings", (res) => {
+              console.log("foo");
+              res.newtabSettings.bgImage = this.settings.bgImage;
               res.newtabSettings.bgImageDate = this.settings.bgImageDate;
               res.newtabSettings.bgImageURL = this.settings.bgImageURL;
               res.newtabSettings.bgImageTheme = this.settings.bgImageTheme;
@@ -160,9 +179,20 @@ export default {
               "main"
             ).style.background = `linear-gradient(0deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url(${this.settings.bgImageURL})`;
           }
+          document.getElementById("main").style.background = "";
+          chrome.storage.sync.get("newtabSettings", (res) => {
+            console.log("bar");
+            res.newtabSettings.bgImage = this.settings.bgImage;
+            chrome.storage.sync.set(res);
+          });
         }
       } else {
         document.getElementById("main").style.background = "";
+        chrome.storage.sync.get("newtabSettings", (res) => {
+          console.log("bar");
+          res.newtabSettings.bgImage = this.settings.bgImage;
+          chrome.storage.sync.set(res);
+        });
       }
     },
     changeBgTheme: function() {

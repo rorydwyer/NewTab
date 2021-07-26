@@ -72,6 +72,8 @@ export default {
   },
   mounted() {
     this.notes.sort((a, b) => (a.date > b.date ? 1 : b.date > a.date ? -1 : 0));
+    // console.log("timer: " + this.newTabSettings.timerDefault);
+    // this.timer = this.newTabSettings.timerDefault;
   },
   methods: {
     // Notelist Methods

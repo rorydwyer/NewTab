@@ -3,12 +3,12 @@ module.exports = {
     popup: {
       template: "public/browser-extension.html",
       entry: "./src/popup/main.js",
-      title: "# NewTab",
+      title: "NewTab",
     },
     override: {
       template: "public/browser-extension.html",
       entry: "./src/override/main.js",
-      title: "# NewTab",
+      title: "NewTab",
     },
   },
   pluginOptions: {

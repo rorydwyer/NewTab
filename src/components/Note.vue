@@ -1,6 +1,6 @@
 <template>
   <div class="pb-4 h-full flex flex-col">
-    <vue-simplemde class="flex-grow" v-model="currentNote.content" ref="markdownEditor" :configs="configs" />
+    <vue-simplemde class="flex-grow" ref="markdownEditor" v-model="notes.collection[notes.currentId].content" :configs="configs" />
     <div class="text-right">
       <button class="text-sm underline pr-5" v-on:click="formatNote()">Format</button>
       <button class="text-sm underline hover:text-red-600" v-if="this.notes.length > 1" v-on:click="deleteNote()">Delete</button>
@@ -12,7 +12,7 @@
 import VueSimplemde from "vue-simplemde";
 
 export default {
-  name: "Note",
+  name: "note",
   components: {
     VueSimplemde,
   },
@@ -21,14 +21,14 @@ export default {
   },
   data() {
     return {
-      currentNote: {
+      note: {
         content: "",
+        date: "",
         id: 0,
-        date: new Date(),
       },
       configs: {
         status: false,
-        spellChecker: false, // disable spell check
+        spellChecker: false,
         toolbar: [
           "heading-1",
           "heading-2",
@@ -43,7 +43,6 @@ export default {
           "ordered-list",
           "quote",
           "link",
-          "image",
           "code",
         ],
       },
@@ -55,47 +54,25 @@ export default {
     },
   },
   mounted() {
-    chrome.storage.sync.get("newtabNotes", (res) => {
-      if (!res.newtabNotes)
-        res.newtabNotes = [
-          {
-            id: 0,
-            date: new Date(),
-            content: "# Your First Note!",
-          },
-        ];
-      this.notes = res.newtabNotes;
-      this.currentNote = this.notes[0];
-      chrome.storage.sync.set(res);
-    });
-
-    chrome.storage.sync.get("noteId", (res) => {
-      if (!res.noteId) res.noteId = 1;
-      this.nextNoteId = res.noteId;
-      chrome.storage.sync.set(res);
-    });
-
     this.simplemde.codemirror.on("keyup", () => {
-      this.currentNote.date = new Date();
-      chrome.storage.sync.get("newtabNotes", (res) => {
-        res.newtabNotes = this.notes;
-        chrome.storage.sync.set(res);
-      });
+      this.$emit("updateNotes", this.simplemde.value());
     });
 
+    // Styles
     document.querySelector(".editor-toolbar").classList.add("hide-toolbar");
     document.querySelector(".main").style.opacity = "1";
   },
+  unmounted() {
+    console.log("UnMounted: " + this.notes.collection[0].content);
+    this.note = this.notes.collection[this.notes.currentId]; // Load current note
+    this.simplemde.value(this.note.content);
+  },
   methods: {
-    loadNote: function(note) {
-      if (!note) {
-        alert(note);
-        note = this.notes[0];
-      }
-      this.currentNote = note;
-      this.simplemde.value(this.currentNote.content);
-      // this.simplemde.codemirror.focus();
+    loadNote: function() {
+      // this.note = this.notes.collection[0];
+      // this.simplemde.value(this.currentNote);
     },
+
     createNote: function() {
       chrome.storage.sync.get("newtabNotes", (res) => {
         res.newtabNotes.unshift({
@@ -121,16 +98,16 @@ export default {
       chrome.storage.sync.get("newtabNotes", (res) => {
         if (this.notes.length > 1) {
           res.newtabNotes.splice(
-            this.notes.findIndex((note) => note.id === this.currentNote.id),
+            this.notes.findIndex((note) => note.id === this.notes.current.id),
             1
           );
           chrome.storage.sync.set(res);
 
           let nextNote;
-          if (this.notes[this.findByAttr(this.notes, "id", this.currentNote.id) + 1]) {
-            nextNote = this.notes[this.findByAttr(this.notes, "id", this.currentNote.id) + 1];
+          if (this.notes[this.findByAttr(this.notes, "id", this.notes.current.id) + 1]) {
+            nextNote = this.notes[this.findByAttr(this.notes, "id", this.notes.current.id) + 1];
           } else {
-            nextNote = this.notes[this.findByAttr(this.notes, "id", this.currentNote.id) - 1];
+            nextNote = this.notes[this.findByAttr(this.notes, "id", this.notes.current.id) - 1];
           }
           this.loadNote(nextNote);
           this.notes = res.newtabNotes;

@@ -124,8 +124,6 @@ export default {
       // Background Image
       if (this.settings.bgImage) this.backgroundImage();
 
-      console.log("settings emit");
-
       this.$emit("emitSettings", this.settings);
     });
   },
@@ -151,7 +149,6 @@ export default {
             this.settings.bgImageURL = response.url;
 
             chrome.storage.sync.get("newtabSettings", (res) => {
-              console.log("foo");
               res.newtabSettings.bgImage = this.settings.bgImage;
               res.newtabSettings.bgImageDate = this.settings.bgImageDate;
               res.newtabSettings.bgImageURL = this.settings.bgImageURL;
@@ -181,7 +178,6 @@ export default {
           }
           document.getElementById("main").style.background = "";
           chrome.storage.sync.get("newtabSettings", (res) => {
-            console.log("bar");
             res.newtabSettings.bgImage = this.settings.bgImage;
             chrome.storage.sync.set(res);
           });

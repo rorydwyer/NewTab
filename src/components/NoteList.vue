@@ -18,7 +18,7 @@
             v-for="note in filteredNotes"
             :key="note.id"
             v-on:click="loadNote(note)"
-            v-bind:class="{ activeNote: notes.current.id == note.id }"
+            v-bind:class="{ activeNote: notes.currentId == note.id }"
             class="bg-gray-50 hover:bg-gray-100 dark:bg-opacity-10 dark:text-white text-sm my-2 p-2 text-gray-600 note-single"
           >
             {{ note.content || "Empty note" }}

@@ -142,54 +142,55 @@ export default {
       });
     },
     backgroundImage: function(changeBgTheme) {
-      if (this.settings.bgImage) {
-        if (changeBgTheme || this.settings.bgImageURL == "" || this.settings.bgImageDate !== new Date().toDateString()) {
-          fetch(`https://source.unsplash.com/1920x1080/?${this.settings.bgImageTheme}`).then((response) => {
-            this.settings.bgImageDate = new Date().toDateString();
-            this.settings.bgImageURL = response.url;
+      changeBgTheme;
+      // if (this.settings.bgImage) {
+      //   if (changeBgTheme || this.settings.bgImageURL == "" || this.settings.bgImageDate !== new Date().toDateString()) {
+      //     fetch(`https://source.unsplash.com/1920x1080/?${this.settings.bgImageTheme}`).then((response) => {
+      //       this.settings.bgImageDate = new Date().toDateString();
+      //       this.settings.bgImageURL = response.url;
 
-            chrome.storage.sync.get("newtabSettings", (res) => {
-              res.newtabSettings.bgImage = this.settings.bgImage;
-              res.newtabSettings.bgImageDate = this.settings.bgImageDate;
-              res.newtabSettings.bgImageURL = this.settings.bgImageURL;
-              res.newtabSettings.bgImageTheme = this.settings.bgImageTheme;
-              chrome.storage.sync.set(res);
-            });
+      //       chrome.storage.sync.get("newtabSettings", (res) => {
+      //         res.newtabSettings.bgImage = this.settings.bgImage;
+      //         res.newtabSettings.bgImageDate = this.settings.bgImageDate;
+      //         res.newtabSettings.bgImageURL = this.settings.bgImageURL;
+      //         res.newtabSettings.bgImageTheme = this.settings.bgImageTheme;
+      //         chrome.storage.sync.set(res);
+      //       });
 
-            if (document.documentElement.classList.contains("dark")) {
-              document.getElementById(
-                "main"
-              ).style.background = `linear-gradient(0deg, rgba(31, 41, 55, 0.9), rgba(31, 41, 55, 0.9)), url(${this.settings.bgImageURL})`;
-            } else {
-              document.getElementById(
-                "main"
-              ).style.background = `linear-gradient(0deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url(${this.settings.bgImageURL})`;
-            }
-          });
-        } else {
-          if (document.documentElement.classList.contains("dark")) {
-            document.getElementById(
-              "main"
-            ).style.background = `linear-gradient(0deg, rgba(31, 41, 55, 0.9), rgba(31, 41, 55, 0.9)), url(${this.settings.bgImageURL})`;
-          } else {
-            document.getElementById(
-              "main"
-            ).style.background = `linear-gradient(0deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url(${this.settings.bgImageURL})`;
-          }
-          document.getElementById("main").style.background = "";
-          chrome.storage.sync.get("newtabSettings", (res) => {
-            res.newtabSettings.bgImage = this.settings.bgImage;
-            chrome.storage.sync.set(res);
-          });
-        }
-      } else {
-        document.getElementById("main").style.background = "";
-        chrome.storage.sync.get("newtabSettings", (res) => {
-          console.log("bar");
-          res.newtabSettings.bgImage = this.settings.bgImage;
-          chrome.storage.sync.set(res);
-        });
-      }
+      //       if (document.documentElement.classList.contains("dark")) {
+      //         document.getElementById(
+      //           "main"
+      //         ).style.background = `linear-gradient(0deg, rgba(31, 41, 55, 0.9), rgba(31, 41, 55, 0.9)), url(${this.settings.bgImageURL})`;
+      //       } else {
+      //         document.getElementById(
+      //           "main"
+      //         ).style.background = `linear-gradient(0deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url(${this.settings.bgImageURL})`;
+      //       }
+      //     });
+      //   } else {
+      //     if (document.documentElement.classList.contains("dark")) {
+      //       document.getElementById(
+      //         "main"
+      //       ).style.background = `linear-gradient(0deg, rgba(31, 41, 55, 0.9), rgba(31, 41, 55, 0.9)), url(${this.settings.bgImageURL})`;
+      //     } else {
+      //       document.getElementById(
+      //         "main"
+      //       ).style.background = `linear-gradient(0deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url(${this.settings.bgImageURL})`;
+      //     }
+      //     document.getElementById("main").style.background = "";
+      //     chrome.storage.sync.get("newtabSettings", (res) => {
+      //       res.newtabSettings.bgImage = this.settings.bgImage;
+      //       chrome.storage.sync.set(res);
+      //     });
+      //   }
+      // } else {
+      //   document.getElementById("main").style.background = "";
+      //   chrome.storage.sync.get("newtabSettings", (res) => {
+      //     console.log("bar");
+      //     res.newtabSettings.bgImage = this.settings.bgImage;
+      //     chrome.storage.sync.set(res);
+      //   });
+      // }
     },
     changeBgTheme: function() {
       if (this.timeout) {

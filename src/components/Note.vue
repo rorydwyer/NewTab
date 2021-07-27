@@ -1,9 +1,9 @@
 <template>
   <div class="pb-4 h-full flex flex-col">
-    <vue-simplemde class="flex-grow" ref="markdownEditor" v-model="notes.collection[notes.currentId].content" :configs="configs" />
+    <vue-simplemde class="flex-grow" ref="markdownEditor" v-model="note.content" :configs="configs" />
     <div class="text-right">
       <button class="text-sm underline pr-5" v-on:click="formatNote()">Format</button>
-      <button class="text-sm underline hover:text-red-600" v-if="this.notes.length > 1" v-on:click="deleteNote()">Delete</button>
+      <button class="text-sm underline hover:text-red-600" v-if="this.notes.collection.length > 1" v-on:click="deleteNote()">Delete</button>
     </div>
   </div>
 </template>
@@ -21,11 +21,7 @@ export default {
   },
   data() {
     return {
-      note: {
-        content: "",
-        date: "",
-        id: 0,
-      },
+      timeout: null,
       configs: {
         status: false,
         spellChecker: false,
@@ -52,76 +48,66 @@ export default {
     simplemde() {
       return this.$refs.markdownEditor.simplemde;
     },
+    note: {
+      get: function() {
+        return this.notes.collection[this.currentNoteIndex()];
+      },
+      set: function(content) {
+        this.notes.collection[this.currentNoteIndex()].date = new Date();
+        this.notes.collection[this.currentNoteIndex()].content = content;
+      },
+    },
   },
   mounted() {
     this.simplemde.codemirror.on("keyup", () => {
-      this.$emit("updateNotes", this.simplemde.value());
+      this.autoSave();
     });
 
     // Styles
     document.querySelector(".editor-toolbar").classList.add("hide-toolbar");
     document.querySelector(".main").style.opacity = "1";
   },
-  unmounted() {
-    console.log("UnMounted: " + this.notes.collection[0].content);
-    this.note = this.notes.collection[this.notes.currentId]; // Load current note
-    this.simplemde.value(this.note.content);
-  },
   methods: {
     loadNote: function() {
-      // this.note = this.notes.collection[0];
-      // this.simplemde.value(this.currentNote);
+      this.simplemde.value(this.note.content);
+      this.simplemde.codemirror.focus();
     },
 
-    createNote: function() {
-      chrome.storage.sync.get("newtabNotes", (res) => {
-        res.newtabNotes.unshift({
-          id: this.getNoteId(),
-          content: "",
-          // date: new Date(),
-        });
-        chrome.storage.sync.set(res);
-        this.notes = res.newtabNotes;
-        this.loadNote(this.notes[0]);
-        this.simplemde.codemirror.focus();
-      });
+    autoSave: function() {
+      if (this.timeout) {
+        clearTimeout(this.timeout);
+        this.timeout = null;
+      }
+      this.timeout = setTimeout(() => this.$emit("updateNotes", { notes: this.notes, load: false }), 1500);
     },
-    getNoteId: function() {
-      chrome.storage.sync.get("noteId", (res) => {
-        this.nextNoteId++;
-        res.noteId = this.nextNoteId;
-        chrome.storage.sync.set(res);
-      });
-      return this.nextNoteId;
-    },
+
     deleteNote: function() {
-      chrome.storage.sync.get("newtabNotes", (res) => {
-        if (this.notes.length > 1) {
-          res.newtabNotes.splice(
-            this.notes.findIndex((note) => note.id === this.notes.current.id),
-            1
-          );
-          chrome.storage.sync.set(res);
+      if (this.notes.collection.length > 1) {
+        let nextNote;
 
-          let nextNote;
-          if (this.notes[this.findByAttr(this.notes, "id", this.notes.current.id) + 1]) {
-            nextNote = this.notes[this.findByAttr(this.notes, "id", this.notes.current.id) + 1];
-          } else {
-            nextNote = this.notes[this.findByAttr(this.notes, "id", this.notes.current.id) - 1];
-          }
-          this.loadNote(nextNote);
-          this.notes = res.newtabNotes;
+        if (this.notes.collection[this.currentNoteIndex() + 1]) {
+          nextNote = this.notes.collection[this.currentNoteIndex() + 1].id;
+        } else {
+          nextNote = this.notes.collection[this.currentNoteIndex() - 1].id;
         }
-      });
+
+        this.notes.collection.splice(this.currentNoteIndex(), 1);
+        this.notes.currentId = nextNote;
+
+        this.$emit("updateNotes", { notes: this.notes, load: true });
+      }
     },
-    findByAttr: function(array, attr, value) {
-      for (var i = 0; i < array.length; i += 1) {
-        if (array[i][attr] === value) {
-          return i;
+
+    currentNoteIndex: function() {
+      let noteIndex;
+      for (let i = 0; i < this.notes.collection.length; i += 1) {
+        if (this.notes.collection[i]["id"] === this.notes.currentId) {
+          noteIndex = i;
         }
       }
-      return -1;
+      return noteIndex;
     },
+
     formatNote: function() {
       document.querySelector(".editor-toolbar").classList.toggle("hide-toolbar");
     },

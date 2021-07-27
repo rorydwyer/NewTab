@@ -1,12 +1,6 @@
 <template>
   <div id="main" class="main grid grid-cols-12 gap-12 h-screen max-h-screen overflow-hidden dark:bg-gray-800 dark:text-white relative">
-    <NoteList
-      :notes="newTab.notes"
-      :settings="newTab.settings"
-      @loadNote="loadNote($event)"
-      @createNote="createNote()"
-      class="col-span-3 h-screen pt-8 max-h-screen"
-    />
+    <NoteList :notes="newTab.notes" :settings="newTab.settings" @updateNotes="updateNotes($event)" class="col-span-3 h-screen pt-8 max-h-screen" />
 
     <Note ref="note" :notes="newTab.notes" :settings="newTab.settings" @updateNotes="updateNotes($event)" class="col-span-6 h-screen pt-8 max-h-screen" />
 
@@ -45,7 +39,7 @@ export default {
             {
               id: 0,
               date: new Date(),
-              content: "# Your First Note!",
+              content: "",
             },
           ],
           currentId: 0,
@@ -81,20 +75,27 @@ export default {
     // On load, get notes, todos, and settings from Chrome
     chrome.storage.sync.get("newTab", (res) => {
       // If very first load:
-      if (!res.newTab) res.newTab = this.newTab;
+      if (!res.newTab) this.init(res);
       this.newTab = res.newTab;
     });
   },
   methods: {
     // Run on very first load
-    init: function() {},
+    init: function(res) {
+      this.newTab.notes.collection[0].content = "# Your First Note";
+      res.newTab = this.newTab;
+    },
     // Update Notes
-    updateNotes: function(content) {
-      console.log(content);
-      this.newTab.notes.collection[this.newTab.notes.currentId].content = content;
-      this.newTab.notes.collection[this.newTab.notes.currentId].date = new Date();
-
+    updateNotes: function({ notes, load }) {
       chrome.storage.sync.get("newTab", (res) => {
+        this.newTab.notes = notes;
+        // NEEDS WORK to sort notes by latest edited
+        this.newTab.notes.collection.sort((a, b) => {
+          return new Date(b.date) - new Date(a.date);
+        });
+
+        if (load) this.$refs.note.loadNote();
+
         res.newTab = this.newTab;
         chrome.storage.sync.set(res);
       });

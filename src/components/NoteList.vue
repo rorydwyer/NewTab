@@ -74,23 +74,21 @@ export default {
     this.notes.collection.sort((a, b) => (a.date > b.date ? 1 : b.date > a.date ? -1 : 0));
   },
   methods: {
-    // Notelist Methods
     createNote: function() {
-      this.$emit("createNote");
+      this.notes.newId++;
+      this.notes.currentId = this.notes.newId;
+      this.notes.collection.unshift({
+        id: this.notes.newId,
+        content: "",
+        date: new Date(),
+      });
+
+      this.$emit("updateNotes", { notes: this.notes, load: true });
     },
 
     loadNote: function(note) {
-      this.notes.sort((a, b) => {
-        return new Date(b.date) - new Date(a.date);
-      });
-      this.$emit("loadNote", note);
-    },
-
-    getTime: function() {
-      const d = new Date();
-      const date = d.toISOString().split("T")[0];
-      const time = d.toTimeString().split(" ")[0];
-      return `${date}${time}`;
+      this.notes.currentId = note.id;
+      this.$emit("updateNotes", { notes: this.notes, load: true });
     },
 
     // Timer Methods #################################

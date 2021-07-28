@@ -1,11 +1,14 @@
 <template>
   <div id="main" class="main grid grid-cols-12 gap-12 h-screen max-h-screen overflow-hidden dark:bg-gray-800 dark:text-white relative">
     <NoteList :notes="newTab.notes" :settings="newTab.settings" @updateNotes="updateNotes($event)" class="col-span-3 h-screen pt-8 max-h-screen" />
-
     <Note ref="note" :notes="newTab.notes" :settings="newTab.settings" @updateNotes="updateNotes($event)" class="col-span-6 h-screen pt-8 max-h-screen" />
-
-    <Todo :todos="newTab.todos" :settings="newTab.settings" @settings="showSettings = !showSettings" class="col-span-3 h-screen pt-8 max-h-screen" />
-
+    <Todo
+      :todos="newTab.todos"
+      :settings="newTab.settings"
+      @updateTodos="updateTodos($event)"
+      @settings="showSettings = !showSettings"
+      class="col-span-3 h-screen pt-8 max-h-screen"
+    />
     <Settings
       @settings="showSettings = !showSettings"
       @emitSettings="settings = $event"
@@ -47,17 +50,22 @@ export default {
         },
         todos: {
           // NewTab Todos
-          collection: [],
+          collection: [
+            {
+              id: 0,
+              content: "first",
+            },
+          ],
           newText: "",
           newId: 0,
         },
         settings: {
           // NewTab Settings
           darkMode: false,
-          toggleTimer: true,
-          timerDefault: "15:00",
-          toggleTodo: true,
+          timer: true,
+          todo: true,
           bgImage: true,
+          timerDefault: "25:00",
           bgImageTheme: "Nature",
           bgImageURL: "",
           bgImageDate: new Date().toDateString(),
@@ -73,22 +81,22 @@ export default {
   },
   mounted() {
     // On load, get notes, todos, and settings from Chrome
-    chrome.storage.sync.get("newTab", (res) => {
+    chrome.storage.local.get("newTab", (res) => {
       // If very first load:
       if (!res.newTab) this.init(res);
       this.newTab = res.newTab;
     });
   },
   methods: {
-    // Run on very first load
     init: function(res) {
       this.newTab.notes.collection[0].content = "# Your First Note";
       res.newTab = this.newTab;
     },
-    // Update Notes
+
     updateNotes: function({ notes, load }) {
-      chrome.storage.sync.get("newTab", (res) => {
+      chrome.storage.local.get("newTab", (res) => {
         this.newTab.notes = notes;
+
         // NEEDS WORK to sort notes by latest edited
         this.newTab.notes.collection.sort((a, b) => {
           return new Date(b.date) - new Date(a.date);
@@ -97,7 +105,15 @@ export default {
         if (load) this.$refs.note.loadNote();
 
         res.newTab = this.newTab;
-        chrome.storage.sync.set(res);
+        chrome.storage.local.set(res);
+      });
+    },
+
+    updateTodos: function(todos) {
+      chrome.storage.local.get("newTab", (res) => {
+        this.newTab.todos = todos;
+        res.newTab = this.newTab;
+        chrome.storage.local.set(res);
       });
     },
   },

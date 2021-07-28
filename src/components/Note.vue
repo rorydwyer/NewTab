@@ -63,7 +63,7 @@ export default {
       this.autoSave();
     });
 
-    // Styles
+    // Styles for toolbar
     document.querySelector(".editor-toolbar").classList.add("hide-toolbar");
     document.querySelector(".main").style.opacity = "1";
   },

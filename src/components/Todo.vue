@@ -3,17 +3,17 @@
     <div class="flex-grow">
       <div v-if="settings.toggleTodo">
         <input
-          v-on:keyup.enter="addNewTodo"
-          v-model="newTodoText"
+          v-on:keyup.enter="addTodo"
+          v-model="todos.newText"
           type="text"
           id="newTodo"
           placeholder="Create new to do item..."
           class="w-full focus:outline-none bg-transparent text-sm border-b  border-gray-300 p-1 mb-4"
         />
-        <draggable v-model="todos" @end="onEnd()" class="draggable">
-          <div v-for="(todo, index) in todos" :key="todo.id" class="todo-item">
-            <input type="checkbox" v-on:click="removeTodo(index)" />
-            <span class="pl-1 text-sm">{{ todo.todo }}</span>
+        <draggable v-model="todos.collection" @end="moveTodo()" class="draggable">
+          <div v-for="(todo, index) in todos.collection" :key="todo.id" class="todo-item">
+            <input type="checkbox" v-on:click="deleteTodo(index)" />
+            <span class="pl-1 text-sm">{{ todo.content }}</span>
           </div>
         </draggable>
       </div>
@@ -32,54 +32,33 @@ export default {
     draggable,
   },
   props: {
+    todos: Object,
     settings: Object,
   },
-  data() {
-    return {
-      // Refactor to use App.vue
-      todos: [],
-      nextTodoId: 3,
-      newTodoText: "",
-    };
-  },
-  mounted() {
-    chrome.storage.sync.get("newtabToDos", (res) => {
-      if (!res.newtabToDos) res.newtabToDos = [];
-      chrome.storage.sync.set(res);
-      this.todos = res.newtabToDos;
-    });
-  },
   methods: {
-    addNewTodo: function() {
-      chrome.storage.sync.get("newtabToDos", (res) => {
-        res.newtabToDos.unshift({
-          id: this.nextTodoId++,
-          todo: this.newTodoText,
-          done: false,
+    addTodo: function() {
+      if (this.todos.newText.length > 0) {
+        this.todos.newId++;
+        this.todos.collection.unshift({
+          id: this.todos.newId,
+          content: this.todos.newText,
         });
-        chrome.storage.sync.set(res);
-        this.todos = res.newtabToDos;
-        this.newTodoText = "";
-      });
+
+        this.todos.newText = "";
+        this.$emit("updateTodos", this.todos);
+      }
     },
-    onEnd: function() {
-      chrome.storage.sync.get("newtabTodos", (res) => {
-        res.newtabToDos = this.todos;
-        chrome.storage.sync.set(res);
-      });
+
+    deleteTodo: function(index) {
+      this.todos.collection.splice(index, 1);
+      this.$emit("updateTodos", this.todos);
     },
-    removeTodo: function(index) {
-      chrome.storage.sync.get("newtabToDos", (res) => {
-        res.newtabToDos.splice(index, 1);
-        chrome.storage.sync.set(res);
-        this.todos = res.newtabToDos;
-      });
+
+    moveTodo: function() {
+      this.$emit("updateTodos", this.todos);
     },
   },
 };
-// { id: 0, todo: 'To do item one', done: false },
-//                 { id: 1, todo: 'To do item two', done: false },
-//                 { id: 2, todo: 'To do item three', done: true }
 </script>
 
 <style scoped>

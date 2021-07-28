@@ -1,5 +1,5 @@
 <template>
-  <div id="main" class="main grid grid-cols-12 gap-12 h-screen max-h-screen overflow-hidden dark:bg-gray-800 dark:text-white relative">
+  <div id="main" class="main grid grid-cols-12 gap-12 h-screen max-h-screen overflow-hidden dark:text-white relative">
     <NoteList :notes="newTab.notes" :settings="newTab.settings" @updateNotes="updateNotes($event)" class="col-span-3 h-screen pt-8 max-h-screen" />
     <Note ref="note" :notes="newTab.notes" :settings="newTab.settings" @updateNotes="updateNotes($event)" class="col-span-6 h-screen pt-8 max-h-screen" />
     <Todo
@@ -10,8 +10,10 @@
       class="col-span-3 h-screen pt-8 max-h-screen"
     />
     <Settings
+      ref="settings"
+      :settings="newTab.settings"
       @settings="showSettings = !showSettings"
-      @emitSettings="settings = $event"
+      @updateSettings="updateSettings($event)"
       v-bind:class="toggleSettings"
       class="absolute w-1/4 h-full transition-all z-50 pt-8 max-h-screen"
     />
@@ -37,7 +39,6 @@ export default {
     return {
       newTab: {
         notes: {
-          // NewTab Notes
           collection: [
             {
               id: 0,
@@ -49,26 +50,19 @@ export default {
           newId: 0,
         },
         todos: {
-          // NewTab Todos
-          collection: [
-            {
-              id: 0,
-              content: "first",
-            },
-          ],
+          collection: [],
           newText: "",
           newId: 0,
         },
         settings: {
-          // NewTab Settings
           darkMode: false,
           timer: true,
           todo: true,
-          bgImage: true,
+          bgImage: false,
           timerDefault: "25:00",
           bgImageTheme: "Nature",
           bgImageURL: "",
-          bgImageDate: new Date().toDateString(),
+          bgImageDate: "",
         },
       },
       showSettings: 0,
@@ -80,11 +74,29 @@ export default {
     },
   },
   mounted() {
-    // On load, get notes, todos, and settings from Chrome
     chrome.storage.local.get("newTab", (res) => {
-      // If very first load:
-      if (!res.newTab) this.init(res);
+      if (!res.newTab) this.init(res); // If very first load:
       this.newTab = res.newTab;
+
+      // Load Settings
+      // Dark Mode
+      if (this.newTab.settings.darkMode) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+
+      // Background Image
+      if (this.newTab.settings.bgImage) {
+        const root = document.querySelector(":root");
+        // If image is from current day
+        if (this.newTab.settings.bgImageURL.length > 0) {
+          console.log("Yahoo!");
+          root.style.setProperty("--bgImage", `url(${this.newTab.settings.bgImageURL})`);
+        } else {
+          this.$refs.settings.backgroundImage(true);
+        }
+      }
     });
   },
   methods: {
@@ -116,13 +128,42 @@ export default {
         chrome.storage.local.set(res);
       });
     },
+
+    updateSettings: function(settings) {
+      chrome.storage.local.get("newTab", (res) => {
+        this.newTab.settings = settings;
+        res.newTab = this.newTab;
+        chrome.storage.local.set(res);
+      });
+    },
   },
 };
 </script>
 
 <style>
+:root {
+  --bgImage: "";
+}
+
 #main {
   background-size: cover !important;
+}
+
+.dark > body {
+  background-color: rgba(31, 41, 55, 1);
+}
+
+#main::before {
+  content: "";
+  background-image: var(--bgImage);
+  background-size: cover;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  opacity: 0.15;
+  z-index: -1;
 }
 
 input {
@@ -131,10 +172,6 @@ input {
 
 ::selection {
   background-color: #ffcdcd;
-}
-
-#settings {
-  background-color: #ff5c5c;
 }
 
 /* Scroll Bar */

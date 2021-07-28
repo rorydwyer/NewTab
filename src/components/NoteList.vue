@@ -26,7 +26,7 @@
         </ul>
       </div>
     </div>
-    <div v-if="settings.toggleTimer" class="timer">
+    <div v-if="settings.timer" class="timer">
       <input
         class="w-full text-7xl text-gray-400 focus:outline-none text-center bg-transparent"
         ref="timer"

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col px-4 pb-4 text-white">
+  <div id="settings" class="flex flex-col px-4 pb-4 text-white">
     <h2 class="text-xl text-center font-bold"># NewTab Settings</h2>
     <div class="flex-grow py-8 px-4">
       <div class="flex flex-col items-center justify-center w-full mb-6">
@@ -9,7 +9,7 @@
             Dark Mode
           </div>
           <div class="relative">
-            <input id="darkMode" type="checkbox" class="sr-only" v-model="settings.darkMode" v-on:change="setTheme()" />
+            <input id="darkMode" type="checkbox" class="sr-only" v-model="settings.darkMode" v-on:change="darkMode()" />
             <div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
             <div class="dot absolute w-6 h-6 bg-white rounded-full shadow-md -left-1 -top-1 transition"></div>
           </div>
@@ -21,7 +21,7 @@
             Show To Do List
           </div>
           <div class="relative">
-            <input id="toggleTodo" type="checkbox" class="sr-only" v-model="settings.toggleTodo" v-on:change="changeSettings" />
+            <input id="toggleTodo" type="checkbox" class="sr-only" v-model="settings.todo" v-on:change="updateSettings" />
             <div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
             <div class="dot absolute w-6 h-6 bg-white rounded-full shadow-md -left-1 -top-1 transition"></div>
           </div>
@@ -33,18 +33,18 @@
             Show Timer
           </div>
           <div class="relative">
-            <input id="toggleTimer" type="checkbox" class="sr-only" v-model="settings.toggleTimer" v-on:change="changeSettings" />
+            <input id="toggleTimer" type="checkbox" class="sr-only" v-model="settings.timer" v-on:change="updateSettings" />
             <div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
             <div class="dot absolute w-6 h-6 bg-white rounded-full shadow-md -left-1 -top-1 transition"></div>
           </div>
         </label>
 
-        <div v-if="settings.toggleTimer" class="w-full border-b border-white">
+        <div v-if="settings.timer" class="w-full border-b border-white">
           <label for="timerDefault">Timer Default (Minutes)</label>
           <input
             id="timerDefault"
             v-model="settings.timerDefault"
-            v-on:keyup="changeSettings"
+            v-on:keyup="updateSettings()"
             type="text"
             placeholder="25"
             class="color-white w-full focus:outline-none bg-transparent text-sm border border-white placeholder-gray-100 placeholder-opacity-50 p-1 mb-4"
@@ -68,7 +68,7 @@
           <input
             id="bgTheme"
             v-model="settings.bgImageTheme"
-            v-on:keyup="changeBgTheme()"
+            v-on:keyup="backgroundTheme()"
             type="text"
             placeholder="Nature"
             class="color-white w-full focus:outline-none bg-transparent text-sm border border-white placeholder-gray-100 placeholder-opacity-50 p-1 mb-4"
@@ -84,133 +84,61 @@
 
 <script>
 export default {
+  props: {
+    settings: Object,
+  },
   data() {
     return {
-      settings: {
-        darkMode: false,
-        toggleTimer: true,
-        timerDefault: "15:00",
-        toggleTodo: true,
-        bgImage: true,
-        bgImageTheme: "Nature",
-        bgImageURL: "",
-        bgImageDate: new Date().toDateString(),
-      },
       timeout: null,
     };
   },
-  mounted() {
-    chrome.storage.sync.get("newtabSettings", (res) => {
-      if (!res.newtabSettings) res.newtabSettings = this.settings;
-
-      this.settings.darkMode = res.newtabSettings.darkMode;
-      this.settings.toggleTodo = res.newtabSettings.toggleTodo;
-      this.settings.toggleTimer = res.newtabSettings.toggleTimer;
-      this.settings.timerDefault = res.newtabSettings.timerDefault;
-      this.settings.bgImage = res.newtabSettings.bgImage;
-      this.settings.bgImageTheme = res.newtabSettings.bgImageTheme;
-      this.settings.bgImageURL = res.newtabSettings.bgImageURL;
-      this.settings.bgImageDate = res.newtabSettings.bgImageDate;
-
-      chrome.storage.sync.set(res);
-
-      // Dark Mode
-      if (this.settings.darkMode) {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
-
-      // Background Image
-      if (this.settings.bgImage) this.backgroundImage();
-
-      this.$emit("emitSettings", this.settings);
-    });
-  },
   methods: {
-    setTheme: function() {
+    updateSettings: function() {
+      this.$emit("updateSettings", this.settings);
+    },
+    darkMode: function() {
       if (this.settings.darkMode) {
         document.documentElement.classList.add("dark");
       } else {
         document.documentElement.classList.remove("dark");
       }
-      if (this.settings.bgImage) this.backgroundImage();
-
-      chrome.storage.sync.get("newtabSettings", (res) => {
-        res.newtabSettings.darkMode = this.settings.darkMode;
-        chrome.storage.sync.set(res);
-      });
+      this.updateSettings();
     },
-    backgroundImage: function(changeBgTheme) {
-      changeBgTheme;
-      // if (this.settings.bgImage) {
-      //   if (changeBgTheme || this.settings.bgImageURL == "" || this.settings.bgImageDate !== new Date().toDateString()) {
-      //     fetch(`https://source.unsplash.com/1920x1080/?${this.settings.bgImageTheme}`).then((response) => {
-      //       this.settings.bgImageDate = new Date().toDateString();
-      //       this.settings.bgImageURL = response.url;
 
-      //       chrome.storage.sync.get("newtabSettings", (res) => {
-      //         res.newtabSettings.bgImage = this.settings.bgImage;
-      //         res.newtabSettings.bgImageDate = this.settings.bgImageDate;
-      //         res.newtabSettings.bgImageURL = this.settings.bgImageURL;
-      //         res.newtabSettings.bgImageTheme = this.settings.bgImageTheme;
-      //         chrome.storage.sync.set(res);
-      //       });
+    backgroundImage: function(load = false) {
+      const root = document.querySelector(":root");
+      if (this.settings.bgImage) {
+        console.log("foo");
+        fetch(`https://source.unsplash.com/1920x1080/?${this.settings.bgImageTheme}`).then((response) => {
+          this.settings.bgImageDate = new Date();
+          this.settings.bgImageURL = response.url;
 
-      //       if (document.documentElement.classList.contains("dark")) {
-      //         document.getElementById(
-      //           "main"
-      //         ).style.background = `linear-gradient(0deg, rgba(31, 41, 55, 0.9), rgba(31, 41, 55, 0.9)), url(${this.settings.bgImageURL})`;
-      //       } else {
-      //         document.getElementById(
-      //           "main"
-      //         ).style.background = `linear-gradient(0deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url(${this.settings.bgImageURL})`;
-      //       }
-      //     });
-      //   } else {
-      //     if (document.documentElement.classList.contains("dark")) {
-      //       document.getElementById(
-      //         "main"
-      //       ).style.background = `linear-gradient(0deg, rgba(31, 41, 55, 0.9), rgba(31, 41, 55, 0.9)), url(${this.settings.bgImageURL})`;
-      //     } else {
-      //       document.getElementById(
-      //         "main"
-      //       ).style.background = `linear-gradient(0deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url(${this.settings.bgImageURL})`;
-      //     }
-      //     document.getElementById("main").style.background = "";
-      //     chrome.storage.sync.get("newtabSettings", (res) => {
-      //       res.newtabSettings.bgImage = this.settings.bgImage;
-      //       chrome.storage.sync.set(res);
-      //     });
-      //   }
-      // } else {
-      //   document.getElementById("main").style.background = "";
-      //   chrome.storage.sync.get("newtabSettings", (res) => {
-      //     console.log("bar");
-      //     res.newtabSettings.bgImage = this.settings.bgImage;
-      //     chrome.storage.sync.set(res);
-      //   });
-      // }
+          root.style.setProperty("--bgImage", `url(${this.settings.bgImageURL})`);
+        });
+      } else {
+        console.log("bar");
+        root.style.setProperty("--bgImage", "url()");
+      }
+
+      if (!load) this.updateSettings();
     },
-    changeBgTheme: function() {
+
+    backgroundTheme: function() {
       if (this.timeout) {
         clearTimeout(this.timeout);
         this.timeout = null;
       }
       this.timeout = setTimeout(() => this.backgroundImage(true), 800);
     },
-    changeSettings: function() {
-      chrome.storage.sync.get("newtabSettings", (res) => {
-        this.$emit("emitSettings", this.settings);
-        res.newtabSettings = this.settings;
-        chrome.storage.sync.set(res);
-      });
-    },
   },
 };
 </script>
 
 <style>
+#settings {
+  background-color: #ff5c5c;
+}
+
 input:checked ~ .dot {
   transform: translateX(100%);
   background-color: #5cff8a;

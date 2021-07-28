@@ -1,7 +1,7 @@
 <template>
   <div class="px-4 pb-4 flex flex-col">
     <div class="flex-grow">
-      <div v-if="settings.toggleTodo">
+      <div v-if="settings.todo">
         <input
           v-on:keyup.enter="addTodo"
           v-model="todos.newText"

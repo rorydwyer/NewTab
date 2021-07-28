@@ -92,6 +92,11 @@ export default {
       timeout: null,
     };
   },
+  computed: {
+    searchTerm: function() {
+      return this.settings.bgImageTheme.replace(" ", "-");
+    },
+  },
   methods: {
     updateSettings: function() {
       this.$emit("updateSettings", this.settings);
@@ -105,22 +110,25 @@ export default {
       this.updateSettings();
     },
 
-    backgroundImage: function(load = false) {
+    backgroundImage: function() {
       const root = document.querySelector(":root");
+
       if (this.settings.bgImage) {
-        console.log("foo");
-        fetch(`https://source.unsplash.com/1920x1080/?${this.settings.bgImageTheme}`).then((response) => {
-          this.settings.bgImageDate = new Date();
+        // NEED TO CREATE FALLBACK IMAGE IF  NOT CONNECTED TO INTERNET
+        fetch(`https://source.unsplash.com/1920x1080/?${this.searchTerm}`).then((response) => {
+          this.settings.bgImageDate = new Date().toDateString();
           this.settings.bgImageURL = response.url;
 
           root.style.setProperty("--bgImage", `url(${this.settings.bgImageURL})`);
+          this.updateSettings();
         });
       } else {
-        console.log("bar");
-        root.style.setProperty("--bgImage", "url()");
-      }
+        // Remove Background Image
+        this.settings.bgImageURL = "";
 
-      if (!load) this.updateSettings();
+        root.style.setProperty("--bgImage", "url()");
+        this.updateSettings();
+      }
     },
 
     backgroundTheme: function() {
@@ -128,7 +136,7 @@ export default {
         clearTimeout(this.timeout);
         this.timeout = null;
       }
-      this.timeout = setTimeout(() => this.backgroundImage(true), 800);
+      this.timeout = setTimeout(() => this.backgroundImage(), 800);
     },
   },
 };

@@ -58,11 +58,11 @@ export default {
           darkMode: false,
           timer: true,
           todo: true,
-          bgImage: false,
-          timerDefault: "25:00",
+          bgImage: true,
           bgImageTheme: "Nature",
           bgImageURL: "",
           bgImageDate: "",
+          timerDefault: "25:00",
         },
       },
       showSettings: 0,
@@ -75,7 +75,7 @@ export default {
   },
   mounted() {
     chrome.storage.local.get("newTab", (res) => {
-      if (!res.newTab) this.init(res); // If very first load:
+      if (!res.newTab) this.init(res); // If very first load
       this.newTab = res.newTab;
 
       // Load Settings
@@ -89,14 +89,18 @@ export default {
       // Background Image
       if (this.newTab.settings.bgImage) {
         const root = document.querySelector(":root");
-        // If image is from current day
-        if (this.newTab.settings.bgImageURL.length > 0) {
-          console.log("Yahoo!");
+        const today = new Date();
+
+        // If image is set and from current day
+        if (this.newTab.settings.bgImageURL.length && this.newTab.settings.bgImageDate == today.toDateString()) {
           root.style.setProperty("--bgImage", `url(${this.newTab.settings.bgImageURL})`);
         } else {
-          this.$refs.settings.backgroundImage(true);
+          // Get a new background image
+          this.$refs.settings.backgroundImage();
         }
       }
+
+      // chrome.storage.local.set(res);
     });
   },
   methods: {

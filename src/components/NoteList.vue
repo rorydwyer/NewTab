@@ -1,6 +1,6 @@
 <template>
   <div class="px-4 pb-4 flex flex-col">
-    <div class="notelist flex-grow overflow-y-scroll pr-4">
+    <div class="notelist flex-grow overflow-y-scroll">
       <div class="flex mb-4">
         <input
           v-model="search"
@@ -10,7 +10,7 @@
           placeholder="Search..."
           class="flex-grow focus:outline-none bg-transparent border-b text-sm border-gray-300 p-1 mr-1"
         />
-        <button v-on:click="createNote()" class="border border-gray-300 rounded w-8 hover:bg-gray-200">+</button>
+        <button v-on:click="createNote()" class="border border-gray-300 rounded w-8 hover:bg-gray-200 dark:hover:text-gray-800 ">+</button>
       </div>
       <div>
         <ul>
@@ -47,7 +47,6 @@
 
 <script>
 export default {
-  components: {},
   props: {
     notes: Object,
     settings: Object,

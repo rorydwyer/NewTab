@@ -83,13 +83,17 @@
 </template>
 
 <script>
+// import Slider from "@fouita/slider";
+
 export default {
+  components: {},
   props: {
     settings: Object,
   },
   data() {
     return {
       timeout: null,
+      slider: 0,
     };
   },
   computed: {

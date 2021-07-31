@@ -4,83 +4,91 @@
     <div class="flex-grow py-8 px-4">
       <div class="flex flex-col items-center justify-center w-full mb-6">
         <!-- Dark Mode -->
-        <label for="darkMode" class="flex border-b border-white justify-between cursor-pointer w-full py-4">
-          <div class="mr-3 text-base">
-            Dark Mode
-          </div>
-          <div class="relative">
-            <input id="darkMode" type="checkbox" class="sr-only" v-model="settings.darkMode" v-on:change="darkMode()" />
-            <div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
-            <div class="dot absolute w-6 h-6 bg-white rounded-full shadow-md -left-1 -top-1 transition"></div>
-          </div>
-        </label>
+        <div class="border-b border-white w-full py-4">
+          <label for="darkMode" class="flex justify-between cursor-pointer">
+            <div class="mr-3 text-base">
+              Dark Mode
+            </div>
+            <div class="relative">
+              <input id="darkMode" type="checkbox" class="sr-only" v-model="settings.darkMode" v-on:change="darkMode()" />
+              <div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
+              <div class="dot absolute w-6 h-6 bg-white rounded-full shadow-md -left-1 -top-1 transition"></div>
+            </div>
+          </label>
+        </div>
 
         <!-- Toggle To do -->
-        <label for="toggleTodo" class="flex border-b border-white justify-between cursor-pointer w-full py-4">
-          <div class="mr-3 text-base">
-            Show To Do List
-          </div>
-          <div class="relative">
-            <input id="toggleTodo" type="checkbox" class="sr-only" v-model="settings.todo" v-on:change="updateSettings" />
-            <div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
-            <div class="dot absolute w-6 h-6 bg-white rounded-full shadow-md -left-1 -top-1 transition"></div>
-          </div>
-        </label>
+        <div class="border-b border-white w-full py-4">
+          <label for="toggleTodo" class="flex justify-between cursor-pointer">
+            <div class="mr-3 text-base">
+              Show To Do List
+            </div>
+            <div class="relative">
+              <input id="toggleTodo" type="checkbox" class="sr-only" v-model="settings.todo" v-on:change="updateSettings" />
+              <div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
+              <div class="dot absolute w-6 h-6 bg-white rounded-full shadow-md -left-1 -top-1 transition"></div>
+            </div>
+          </label>
+        </div>
 
         <!-- Toggle Timer -->
-        <label for="toggleTimer" class="flex justify-between cursor-pointer w-full pt-4">
-          <div class="mr-3 text-base">
-            Show Timer
-          </div>
-          <div class="relative">
-            <input id="toggleTimer" type="checkbox" class="sr-only" v-model="settings.timer" v-on:change="updateSettings" />
-            <div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
-            <div class="dot absolute w-6 h-6 bg-white rounded-full shadow-md -left-1 -top-1 transition"></div>
-          </div>
-        </label>
+        <div class="border-b border-white w-full py-4">
+          <label for="toggleTimer" class="flex justify-between cursor-pointer">
+            <div class="mr-3 text-base">
+              Show Timer
+            </div>
+            <div class="relative">
+              <input id="toggleTimer" type="checkbox" class="sr-only" v-model="settings.timer" v-on:change="updateSettings" />
+              <div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
+              <div class="dot absolute w-6 h-6 bg-white rounded-full shadow-md -left-1 -top-1 transition"></div>
+            </div>
+          </label>
 
-        <div v-if="settings.timer" class="w-full border-b border-white">
-          <label for="timerDefault">Timer Default</label>
-          <input
-            id="timerDefault"
-            v-model="settings.timerDefault"
-            v-on:change="updateSettings()"
-            v-on:blur="timerBlur()"
-            @keypress="timerInput"
-            type="text"
-            placeholder="25:00"
-            class="color-white w-full focus:outline-none bg-transparent text-sm border border-white placeholder-gray-100 placeholder-opacity-50 p-1 mb-4"
-          />
+          <div v-if="settings.timer" class="w-full">
+            <label for="timerDefault">Timer Default</label>
+            <input
+              id="timerDefault"
+              v-model="settings.timerDefault"
+              v-on:change="updateSettings()"
+              v-on:blur="timerBlur()"
+              @keypress="timerInput"
+              type="text"
+              placeholder="25:00"
+              class="color-white w-full focus:outline-none bg-transparent text-sm border border-white placeholder-gray-100 placeholder-opacity-50 p-1 mb-4"
+            />
+          </div>
         </div>
 
         <!-- Background Image -->
-        <label for="bgImage" class="flex justify-between cursor-pointer w-full pt-4 pb-2">
-          <div class="mr-3 text-base">
-            Background Image
-          </div>
-          <div class="relative">
-            <input id="bgImage" type="checkbox" class="sr-only" v-model="settings.bgImage" v-on:change="backgroundImage(true)" />
-            <div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
-            <div class="dot absolute w-6 h-6 bg-white rounded-full shadow-md -left-1 -top-1 transition"></div>
-          </div>
-        </label>
+        <div class="border-b border-white w-full py-4">
+          <label for="bgImage" class="flex justify-between cursor-pointer pb-2">
+            <div class="mr-3 text-base">
+              Background Image
+            </div>
+            <div class="relative">
+              <input id="bgImage" type="checkbox" class="sr-only" v-model="settings.bgImage" v-on:change="backgroundImage(true)" />
+              <div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
+              <div class="dot absolute w-6 h-6 bg-white rounded-full shadow-md -left-1 -top-1 transition"></div>
+            </div>
+          </label>
 
-        <div v-if="settings.bgImage" class="w-full border-b border-white">
-          <label for="bgTheme">Background Image Theme</label>
-          <input
-            id="bgTheme"
-            v-model="settings.bgImageTheme"
-            v-on:keyup="backgroundTheme()"
-            type="text"
-            placeholder="Nature"
-            class="capitalize color-white w-full focus:outline-none bg-transparent text-sm border border-white placeholder-gray-100 placeholder-opacity-50 p-1 mb-4"
-          />
-          <label for="bgOpacity"
-            >Background Image Opacity
-            <span id="bgImageOpacityReset" class="underline float-right" v-on:click="backgroundOpacity({ reset: true })">Reset</span></label
-          >
-          <range-slider class="slider block w-full p-1 mb-4" min="0" max="99" step="1" v-on:change="backgroundOpacity()" v-model="settings.bgImageOpacity">
-          </range-slider>
+          <div v-if="settings.bgImage" class="w-full ">
+            <label for="bgTheme">Background Image Theme</label>
+            <input
+              id="bgTheme"
+              v-model="settings.bgImageTheme"
+              v-on:keyup="backgroundTheme()"
+              type="text"
+              placeholder="Nature"
+              class="capitalize color-white w-full focus:outline-none bg-transparent text-sm border border-white placeholder-gray-100 placeholder-opacity-50 p-1 mb-4"
+            />
+            <label for="bgOpacity"
+              >Background Image Opacity
+              <span id="bgImageOpacityReset" class="underline float-right" v-on:click="backgroundOpacity({ reset: true })">Reset</span></label
+            >
+            <range-slider class="slider block w-full p-1" min="0" max="99" step="1" v-on:change="backgroundOpacity()" v-model="settings.bgImageOpacity">
+            </range-slider>
+          </div>
         </div>
       </div>
     </div>
@@ -200,5 +208,20 @@ input:checked ~ .dot {
 
 #bgImageOpacityReset:hover {
   cursor: pointer;
+}
+
+/* Slider */
+.range-slider-knob {
+  width: 24px;
+  height: 24px;
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.range-slider-fill {
+  background-color: #5cff8a;
+}
+
+.range-slider-rail {
+  /* background-color: #9ca3af; */
 }
 </style>

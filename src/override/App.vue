@@ -3,13 +3,14 @@
     <div v-if="showSettings" v-on:click="showSettings = !showSettings" class="absolute top-0 left-0 w-screen h-screen z-10"></div>
     <NoteList :notes="newTab.notes" :settings="newTab.settings" @updateNotes="updateNotes($event)" class="col-span-3 h-screen pt-8 max-h-screen" />
     <Note ref="note" :notes="newTab.notes" :settings="newTab.settings" @updateNotes="updateNotes($event)" class="col-span-6 h-screen pt-8 max-h-screen" />
-    <Todo
-      :todos="newTab.todos"
-      :settings="newTab.settings"
-      @updateTodos="updateTodos($event)"
-      @settings="showSettings = !showSettings"
-      class="col-span-3 h-screen pt-8 max-h-screen"
-    />
+    <div class="col-span-3 h-screen pt-8 max-h-screen px-4 pb-4 flex flex-col">
+      <Todo :todos="newTab.todos" :settings="newTab.settings" @updateTodos="updateTodos($event)" />
+      <Quote />
+      <div class="text-right">
+        <button v-on:click="showSettings = !showSetting" class="text-sm underline text-right">Settings</button>
+      </div>
+    </div>
+
     <Settings
       ref="settings"
       :settings="newTab.settings"
@@ -26,6 +27,7 @@ import NoteList from "@/components/NoteList.vue";
 import Note from "@/components/Note.vue";
 import Todo from "@/components/Todo.vue";
 import Settings from "@/components/Settings.vue";
+import Quote from "@/components/Quote.vue";
 import "tailwindcss/tailwind.css";
 
 export default {
@@ -35,6 +37,7 @@ export default {
     Note,
     Todo,
     Settings,
+    Quote,
   },
   data() {
     return {
@@ -152,6 +155,7 @@ export default {
 :root {
   --bgImage: "";
   --bgOpacity: 0.15;
+  --tw-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 #main {

@@ -1,6 +1,6 @@
 <template>
-  <div class="px-4 pb-4 flex flex-col">
-    <div class="flex-grow">
+  <div class="flex-grow">
+    <div>
       <div v-if="settings.todo">
         <input
           v-on:keyup.enter="addTodo"
@@ -17,9 +17,6 @@
           </div>
         </draggable>
       </div>
-    </div>
-    <div class="text-right">
-      <button v-on:click="$emit('settings')" class="text-sm underline text-right">Settings</button>
     </div>
   </div>
 </template>

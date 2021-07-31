@@ -62,6 +62,7 @@ export default {
           bgImageTheme: "Nature",
           bgImageURL: "",
           bgImageDate: "",
+          bgImageOpacity: 15,
           timerDefault: "25:00",
         },
       },
@@ -90,6 +91,8 @@ export default {
       if (this.newTab.settings.bgImage) {
         const root = document.querySelector(":root");
         const today = new Date();
+
+        root.style.setProperty("--bgOpacity", `0.${this.newTab.settings.bgImageOpacity}`);
 
         // If image is set and from current day
         if (this.newTab.settings.bgImageURL.length && this.newTab.settings.bgImageDate == today.toDateString()) {
@@ -147,6 +150,7 @@ export default {
 <style>
 :root {
   --bgImage: "";
+  --bgOpacity: 0.15;
 }
 
 #main {
@@ -166,7 +170,7 @@ export default {
   right: 0px;
   bottom: 0px;
   left: 0px;
-  opacity: 0.15;
+  opacity: var(--bgOpacity);
   z-index: -1;
 }
 

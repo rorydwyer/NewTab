@@ -29,6 +29,8 @@ export default {
       handler(newValue, oldValue) {
         if (newValue.timerDefault != oldValue.timerDefault);
         this.timer = this.settings.timerDefault;
+        this.timerOn = false;
+        this.timerSet = false;
       },
     },
   },

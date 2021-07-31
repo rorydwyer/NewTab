@@ -40,11 +40,13 @@
         </label>
 
         <div v-if="settings.timer" class="w-full border-b border-white">
-          <label for="timerDefault">Timer Default (Minutes)</label>
+          <label for="timerDefault">Timer Default</label>
           <input
             id="timerDefault"
             v-model="settings.timerDefault"
             v-on:change="updateSettings()"
+            v-on:blur="timerBlur()"
+            @keypress="timerInput"
             type="text"
             placeholder="25:00"
             class="color-white w-full focus:outline-none bg-transparent text-sm border border-white placeholder-gray-100 placeholder-opacity-50 p-1 mb-4"
@@ -71,8 +73,14 @@
             v-on:keyup="backgroundTheme()"
             type="text"
             placeholder="Nature"
-            class="color-white w-full focus:outline-none bg-transparent text-sm border border-white placeholder-gray-100 placeholder-opacity-50 p-1 mb-4"
+            class="capitalize color-white w-full focus:outline-none bg-transparent text-sm border border-white placeholder-gray-100 placeholder-opacity-50 p-1 mb-4"
           />
+          <label for="bgOpacity"
+            >Background Image Opacity
+            <span id="bgImageOpacityReset" class="underline float-right" v-on:click="backgroundOpacity({ reset: true })">Reset</span></label
+          >
+          <range-slider class="slider block w-full p-1 mb-4" min="0" max="100" step="1" v-on:change="backgroundOpacity()" v-model="settings.bgImageOpacity">
+          </range-slider>
         </div>
       </div>
     </div>
@@ -83,18 +91,23 @@
 </template>
 
 <script>
-// import Slider from "@fouita/slider";
+import RangeSlider from "vue-range-slider";
+// you probably need to import built-in style
+import "vue-range-slider/dist/vue-range-slider.css";
 
 export default {
-  components: {},
+  components: { RangeSlider },
   props: {
     settings: Object,
   },
   data() {
     return {
       timeout: null,
-      slider: 0,
     };
+  },
+  created() {
+    // this.min = 0;
+    // this.max = 100;
   },
   computed: {
     searchTerm: function() {
@@ -105,6 +118,8 @@ export default {
     updateSettings: function() {
       this.$emit("updateSettings", this.settings);
     },
+
+    // Dark Mode
     darkMode: function() {
       if (this.settings.darkMode) {
         document.documentElement.classList.add("dark");
@@ -114,6 +129,25 @@ export default {
       this.updateSettings();
     },
 
+    // Timer
+    timerInput: function(e) {
+      if ((e.charCode == 8 && e.charCode != 0) || !(e.charCode >= 48 && e.charCode <= 58)) {
+        // Only allow numbers, backspace, colon or arrows
+        e.preventDefault();
+      }
+    },
+
+    timerBlur: function() {
+      // If timer was not set
+      if (this.settings.timerDefault == "") {
+        this.settings.timerDefault = "25:00";
+      } else if (!this.settings.timerDefault.includes(":")) {
+        this.settings.timerDefault += ":00";
+      }
+      this.updateSettings();
+    },
+
+    // Background Image
     backgroundImage: function() {
       const root = document.querySelector(":root");
 
@@ -142,6 +176,14 @@ export default {
       }
       this.timeout = setTimeout(() => this.backgroundImage(), 800);
     },
+
+    backgroundOpacity: function(reset = false) {
+      if (reset) this.settings.bgImageOpacity = 15;
+
+      const root = document.querySelector(":root");
+      root.style.setProperty("--bgOpacity", `0.${this.settings.bgImageOpacity}`);
+      this.updateSettings();
+    },
   },
 };
 </script>
@@ -158,5 +200,9 @@ input:checked ~ .dot {
 
 #settings input {
   caret-color: white !important;
+}
+
+#bgImageOpacityReset:hover {
+  cursor: pointer;
 }
 </style>

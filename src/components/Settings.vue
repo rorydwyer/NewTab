@@ -44,9 +44,9 @@
           <input
             id="timerDefault"
             v-model="settings.timerDefault"
-            v-on:keyup="updateSettings()"
+            v-on:change="updateSettings()"
             type="text"
-            placeholder="25"
+            placeholder="25:00"
             class="color-white w-full focus:outline-none bg-transparent text-sm border border-white placeholder-gray-100 placeholder-opacity-50 p-1 mb-4"
           />
         </div>
@@ -156,7 +156,7 @@ input:checked ~ .dot {
   background-color: #5cff8a;
 }
 
-#bgTheme {
-  caret-color: white;
+#settings input {
+  caret-color: white !important;
 }
 </style>

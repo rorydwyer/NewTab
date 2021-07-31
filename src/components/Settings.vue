@@ -79,7 +79,7 @@
             >Background Image Opacity
             <span id="bgImageOpacityReset" class="underline float-right" v-on:click="backgroundOpacity({ reset: true })">Reset</span></label
           >
-          <range-slider class="slider block w-full p-1 mb-4" min="0" max="100" step="1" v-on:change="backgroundOpacity()" v-model="settings.bgImageOpacity">
+          <range-slider class="slider block w-full p-1 mb-4" min="0" max="99" step="1" v-on:change="backgroundOpacity()" v-model="settings.bgImageOpacity">
           </range-slider>
         </div>
       </div>
@@ -104,10 +104,6 @@ export default {
     return {
       timeout: null,
     };
-  },
-  created() {
-    // this.min = 0;
-    // this.max = 100;
   },
   computed: {
     searchTerm: function() {

@@ -5,7 +5,7 @@
     <Note ref="note" :notes="newTab.notes" :settings="newTab.settings" @updateNotes="updateNotes($event)" class="col-span-6 h-screen pt-8 max-h-screen" />
     <div class="col-span-3 h-screen pt-8 max-h-screen px-4 pb-4 flex flex-col">
       <Todo :todos="newTab.todos" :settings="newTab.settings" @updateTodos="updateTodos($event)" />
-      <Quote />
+      <Quote :settings="newTab.settings" />
       <div class="text-right">
         <button v-on:click="showSettings = !showSetting" class="text-sm underline text-right">Settings</button>
       </div>
@@ -62,6 +62,7 @@ export default {
           darkMode: false,
           timer: true,
           todo: true,
+          quote: true,
           bgImage: true,
           bgImageTheme: "Nature",
           bgImageURL: "",

@@ -1,23 +1,19 @@
 <template>
-  <div class="flex-grow">
-    <div>
-      <div v-if="settings.todo">
-        <input
-          v-on:keyup.enter="addTodo"
-          v-model="todos.newText"
-          type="text"
-          id="newTodo"
-          placeholder="Create new to do item..."
-          class="w-full focus:outline-none bg-transparent text-sm border-b  border-gray-300 p-1 mb-4"
-        />
-        <draggable v-model="todos.collection" @end="moveTodo()" class="draggable">
-          <div v-for="(todo, index) in todos.collection" :key="todo.id" class="todo-item">
-            <input type="checkbox" v-on:click="deleteTodo(index)" />
-            <span class="pl-1 text-sm">{{ todo.content }}</span>
-          </div>
-        </draggable>
+  <div v-if="settings.todo" class="flex-grow">
+    <input
+      v-on:keyup.enter="addTodo"
+      v-model="todos.newText"
+      type="text"
+      id="newTodo"
+      placeholder="Create new to do item..."
+      class="w-full focus:outline-none bg-transparent text-sm border-b  border-gray-300 p-1 mb-4"
+    />
+    <draggable v-model="todos.collection" @end="moveTodo()" class="draggable">
+      <div v-for="(todo, index) in todos.collection" :key="todo.id" class="todo-item">
+        <input type="checkbox" v-on:click="deleteTodo(index)" />
+        <span class="pl-1 text-sm">{{ todo.content }}</span>
       </div>
-    </div>
+    </draggable>
   </div>
 </template>
 

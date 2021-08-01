@@ -31,6 +31,20 @@
           </label>
         </div>
 
+        <!-- Toggle To do -->
+        <div class="border-b border-white w-full py-4">
+          <label for="toggleQuote" class="flex justify-between cursor-pointer">
+            <div class="mr-3 text-base">
+              Show Quote
+            </div>
+            <div class="relative">
+              <input id="toggleQuote" type="checkbox" class="sr-only" v-model="settings.quote" v-on:change="updateSettings" />
+              <div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
+              <div class="dot absolute w-6 h-6 bg-white rounded-full shadow-md -left-1 -top-1 transition"></div>
+            </div>
+          </label>
+        </div>
+
         <!-- Toggle Timer -->
         <div class="border-b border-white w-full py-4">
           <label for="toggleTimer" class="flex justify-between cursor-pointer">
@@ -86,7 +100,7 @@
               >Background Image Opacity
               <span id="bgImageOpacityReset" class="underline float-right" v-on:click="backgroundOpacity({ reset: true })">Reset</span></label
             >
-            <range-slider class="slider block w-full p-1" min="0" max="99" step="1" v-on:change="backgroundOpacity()" v-model="settings.bgImageOpacity">
+            <range-slider class="slider block w-full p-1" min="1" max="99" step="1" v-on:change="backgroundOpacity()" v-model="settings.bgImageOpacity">
             </range-slider>
           </div>
         </div>
@@ -116,6 +130,9 @@ export default {
   computed: {
     searchTerm: function() {
       return this.settings.bgImageTheme.replace(" ", "-");
+    },
+    bgCssOpacity: function() {
+      return `0.${this.settings.bgImageOpacity.toString().padStart(2, "0")}`;
     },
   },
   methods: {
@@ -185,7 +202,7 @@ export default {
       if (reset) this.settings.bgImageOpacity = 15;
 
       const root = document.querySelector(":root");
-      root.style.setProperty("--bgOpacity", `0.${this.settings.bgImageOpacity}`);
+      root.style.setProperty("--bgOpacity", this.bgCssOpacity);
       this.updateSettings();
     },
   },

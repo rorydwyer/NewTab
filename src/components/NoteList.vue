@@ -7,7 +7,7 @@
           type="text"
           name="search"
           id="searchNotes"
-          placeholder="Search..."
+          placeholder="Search notes..."
           class="flex-grow focus:outline-none bg-transparent border-b text-sm border-gray-300 p-1 mr-1"
         />
         <button v-on:click="createNote()" class="border border-gray-300 rounded w-8 hover:bg-gray-200 dark:hover:text-gray-800 ">+</button>

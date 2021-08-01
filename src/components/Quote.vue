@@ -26,7 +26,6 @@ export default {
         this.settings.today = new Date().toDateString();
 
         this.$emit("updateSettings", this.settings);
-        console.log(data[0].q);
       }
     },
   },

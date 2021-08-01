@@ -51,6 +51,9 @@ export default {
     filteredNotes() {
       return this.notes.collection.filter((note) => note.content.toLowerCase().includes(this.search.toLowerCase()));
     },
+    dateString() {
+      return new Date().getTime();
+    },
   },
   mounted() {
     // Sort notes by date
@@ -63,7 +66,7 @@ export default {
       this.notes.collection.unshift({
         id: this.notes.newId,
         content: "",
-        date: new Date(),
+        date: new Date().getTime(),
       });
 
       this.$emit("updateNotes", { notes: this.notes, load: true });

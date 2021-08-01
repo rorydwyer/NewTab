@@ -48,7 +48,7 @@ export default {
           collection: [
             {
               id: 0,
-              date: new Date(),
+              date: new Date().getTime(),
               content: "",
             },
           ],
@@ -61,7 +61,7 @@ export default {
           newId: 0,
         },
         settings: {
-          darkMode: false,
+          darkMode: true,
           timer: true,
           todo: true,
           quote: true,
@@ -128,16 +128,13 @@ export default {
     },
 
     updateNotes: function({ notes, load }) {
+      notes.collection.sort((a, b) => {
+        return b.date - a.date;
+      });
+
       chrome.storage.local.get("newTab", (res) => {
         this.newTab.notes = notes;
-
-        // NEEDS WORK to sort notes by latest edited
-        this.newTab.notes.collection.sort((a, b) => {
-          return new Date(b.date) - new Date(a.date);
-        });
-
         if (load) this.$refs.note.loadNote();
-
         res.newTab = this.newTab;
         chrome.storage.local.set(res);
       });

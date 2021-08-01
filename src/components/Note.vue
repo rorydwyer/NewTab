@@ -25,11 +25,19 @@ export default {
       configs: {
         status: false,
         spellChecker: false,
+        // toolbar: [
+        //   {
+        //     name: "heading1",
+        //     action: VueSimplemde.toggleHeading1,
+        //     className: "fa fa-header fa-header-x fa-header-1",
+        //     title: "#Heading 1",
+        //   },
+        // ],
         toolbar: [
           "heading-1",
           "heading-2",
           "heading-3",
-          "horizontal-rule",
+          // "horizontal-rule",
           "|",
           "bold",
           "italic",
@@ -51,10 +59,6 @@ export default {
     note: {
       get: function() {
         return this.notes.collection[this.currentNoteIndex()];
-      },
-      set: function(content) {
-        this.notes.collection[this.currentNoteIndex()].date = new Date();
-        this.notes.collection[this.currentNoteIndex()].content = content;
       },
     },
   },
@@ -78,7 +82,10 @@ export default {
         clearTimeout(this.timeout);
         this.timeout = null;
       }
-      this.timeout = setTimeout(() => this.$emit("updateNotes", { notes: this.notes, load: false }), 1500);
+      this.timeout = setTimeout(() => {
+        this.notes.collection[this.currentNoteIndex()].date = new Date().getTime();
+        this.$emit("updateNotes", { notes: this.notes, load: false });
+      }, 1500);
     },
 
     deleteNote: function() {

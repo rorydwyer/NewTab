@@ -175,7 +175,7 @@ export default {
       if (this.settings.bgImage) {
         // NEED TO CREATE FALLBACK IMAGE IF  NOT CONNECTED TO INTERNET
         fetch(`https://source.unsplash.com/1920x1080/?${this.searchTerm}`).then((response) => {
-          this.settings.bgImageDate = new Date().toDateString();
+          this.settings.today = new Date().toDateString();
           this.settings.bgImageURL = response.url;
 
           root.style.setProperty("--bgImage", `url(${this.settings.bgImageURL})`);

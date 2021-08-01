@@ -1,5 +1,5 @@
 <template>
-  <div v-if="settings.todo" class="flex-grow">
+  <div v-if="settings.todo">
     <input
       v-on:keyup.enter="addTodo"
       v-model="todos.newText"

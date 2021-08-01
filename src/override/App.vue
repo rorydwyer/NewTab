@@ -4,8 +4,10 @@
     <NoteList :notes="newTab.notes" :settings="newTab.settings" @updateNotes="updateNotes($event)" class="col-span-3 h-screen pt-8 max-h-screen" />
     <Note ref="note" :notes="newTab.notes" :settings="newTab.settings" @updateNotes="updateNotes($event)" class="col-span-6 h-screen pt-8 max-h-screen" />
     <div class="col-span-3 h-screen pt-8 max-h-screen px-4 pb-4 flex flex-col">
-      <Todo :todos="newTab.todos" :settings="newTab.settings" @updateTodos="updateTodos($event)" />
-      <Quote :settings="newTab.settings" />
+      <div class="flex-grow">
+        <Todo :todos="newTab.todos" :settings="newTab.settings" @updateTodos="updateTodos($event)" />
+      </div>
+      <Quote ref="quote" :settings="newTab.settings" @updateSettings="updateSettings($event)" />
       <div class="text-right">
         <button v-on:click="showSettings = !showSetting" class="text-sm underline text-right">Settings</button>
       </div>
@@ -64,10 +66,13 @@ export default {
           todo: true,
           quote: true,
           bgImage: true,
+          today: "",
           bgImageTheme: "Nature",
           bgImageURL: "",
-          bgImageDate: "",
           bgImageOpacity: 15,
+          quoteContent: "",
+          quoteAuthor: "",
+          quoteDate: "",
           timerDefault: "25:00",
         },
       },
@@ -80,6 +85,7 @@ export default {
     },
   },
   mounted() {
+    const today = new Date();
     chrome.storage.local.get("newTab", (res) => {
       if (!res.newTab) this.init(res); // If very first load
       this.newTab = res.newTab;
@@ -95,17 +101,21 @@ export default {
       // Background Image
       if (this.newTab.settings.bgImage) {
         const root = document.querySelector(":root");
-        const today = new Date();
-
         root.style.setProperty("--bgOpacity", `0.${this.newTab.settings.bgImageOpacity}`);
 
         // If image is set and from current day
-        if (this.newTab.settings.bgImageURL.length && this.newTab.settings.bgImageDate == today.toDateString()) {
+        if (this.newTab.settings.bgImageURL.length && this.newTab.settings.today == today.toDateString()) {
           root.style.setProperty("--bgImage", `url(${this.newTab.settings.bgImageURL})`);
         } else {
           // Get a new background image
           this.$refs.settings.backgroundImage();
         }
+      }
+
+      // Quote
+      if (this.newTab.settings.quote && (!this.newTab.settings.quoteContent.length || this.newTab.settings.today != today.toDateString())) {
+        console.log("foo");
+        this.$refs.quote.getQuote();
       }
 
       // chrome.storage.local.set(res);

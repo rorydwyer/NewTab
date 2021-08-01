@@ -1,10 +1,9 @@
 <template>
   <div v-if="settings.quote" class="border-r border-white text-right pr-4 mb-6">
     <p class="italic">
-      The law of harvest is to reap more than you sow. Sow an act, and you reap a habit. Sow a habit and you reap a character. Sow a character and you reap a
-      destiny.
+      {{ settings.quoteContent }}
     </p>
-    <p class="pt-2">- James Allen</p>
+    <p class="pt-2">&#8212; {{ settings.quoteAuthor }}</p>
   </div>
 </template>
 
@@ -19,9 +18,16 @@ export default {
   },
   methods: {
     getQuote: async function() {
-      const response = await fetch("https://zenquotes.io/api/today");
-      var data = await response.json();
-      console.log(data[0].q);
+      if (this.settings.quote) {
+        const response = await fetch("https://zenquotes.io/api/today");
+        var data = await response.json();
+        this.settings.quoteContent = data[0].q;
+        this.settings.quoteAuthor = data[0].a;
+        this.settings.today = new Date().toDateString();
+
+        this.$emit("updateSettings", this.settings);
+        console.log(data[0].q);
+      }
     },
   },
 };

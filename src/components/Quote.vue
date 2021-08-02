@@ -1,9 +1,9 @@
 <template>
-  <div v-if="settings.quote" class="border-r border-white text-right pr-4 mb-6">
-    <p class="italic">
+  <div id="quote" v-if="settings.quote" class="text-right mb-3">
+    <p id="qContent" class="italic border-r border-white pr-4">
       {{ settings.quoteContent }}
     </p>
-    <p class="pt-2">&#8212; {{ settings.quoteAuthor }}</p>
+    <p id="qAuthor" class="pt-2 border-r border-white pr-4">&#8212; {{ settings.quoteAuthor }}</p>
   </div>
 </template>
 
@@ -31,3 +31,17 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+#qAuthor {
+  position: relative;
+  opacity: 0;
+  transition: all 0.2s;
+  transition-delay: 0.2s;
+}
+
+#quote:hover #qAuthor {
+  /* top: 0px; */
+  opacity: 1;
+}
+</style>

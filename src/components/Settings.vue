@@ -108,7 +108,11 @@
     </div>
     <div class="text-right">
       <p><a href="https://rory-dwyer.com" target="_blank" class="underline">About the developer</a></p>
-      <p><a href="#" target="_blank" class="underline">Donate (Buy me a beer)</a></p>
+      <p>
+        <a href="https://www.paypal.com/donate?business=AHBCN7RUN39R4&no_recurring=0&currency_code=USD" target="_blank" class="underline"
+          >Donate (Buy me a beer)</a
+        >
+      </p>
       <div class="w-full flex justify-between mt-4">
         <button v-on:click="reset()" class="text-sm underline">Reset all</button>
         <button v-on:click="$emit('settings')" class="text-sm underline">Close settings</button>

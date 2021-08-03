@@ -133,8 +133,17 @@
               >Background Image Opacity
               <span id="bgImageOpacityReset" class="underline float-right" v-on:click="backgroundOpacity({ reset: true })">Reset</span></label
             >
-            <range-slider class="slider block w-full p-1" min="1" max="99" step="1" v-on:change="backgroundOpacity()" v-model="settings.bgImageOpacity">
-            </range-slider>
+
+            <vue-slider
+              class="w-full p-1 mx-1"
+              :process-style="{ backgroundColor: '#5cff8a' }"
+              :tooltip-style="{ backgroundColor: 'rgb(75, 85, 99)' }"
+              :dotSize="18"
+              :min="1"
+              :max="99"
+              v-model="settings.bgImageOpacity"
+              v-on:change="backgroundOpacity()"
+            />
           </div>
         </div>
       </div>
@@ -155,12 +164,11 @@
 </template>
 
 <script>
-import RangeSlider from "vue-range-slider";
-// you probably need to import built-in style
-import "vue-range-slider/dist/vue-range-slider.css";
+import VueSlider from "vue-slider-component";
+import "vue-slider-component/theme/default.css";
 
 export default {
-  components: { RangeSlider },
+  components: { VueSlider },
   props: {
     settings: Object,
   },
@@ -295,26 +303,21 @@ input:checked ~ .dot {
 }
 
 /* Slider */
-.range-slider-knob {
-  width: 24px;
-  height: 24px;
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+.vue-slider-dot {
+  border: none;
 }
 
-.range-slider-fill {
-  background-color: #5cff8a;
+.vue-slider-dot-tooltip-inner-top::after {
+  border-top-color: rgb(75, 85, 99);
 }
 
+/* Radio */
 input[type="radio"] + label span {
   transition: all 0.2s, transform 0.2s;
 }
 
 input[type="radio"]:checked + label span {
   background-color: #5cff8a;
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
-
-/* input[type="radio"]:checked + label {
-  color: #;
-} */
 </style>

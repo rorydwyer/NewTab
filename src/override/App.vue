@@ -63,7 +63,7 @@ export default {
         },
         settings: {
           darkMode: true,
-          timer: true,
+          timerClock: "",
           todo: true,
           quote: true,
           bgImage: true,

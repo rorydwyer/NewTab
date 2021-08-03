@@ -1,7 +1,7 @@
 <template>
-  <div id="settings" class="flex flex-col px-4 pb-4 text-white">
+  <div id="settings" class="flex flex-col px-4 pb-4 text-white max-h-screen">
     <h2 class="text-xl text-center font-bold"># NewTab Settings</h2>
-    <div class="flex-grow py-8 px-4">
+    <div class="flex-grow my-8 px-4 overflow-y-scroll">
       <div class="flex flex-col items-center justify-center w-full mb-6">
         <!-- Spellcheck -->
         <div class="border-b border-white w-full py-4">
@@ -63,16 +63,35 @@
         <div class="border-b border-white w-full py-4">
           <label for="toggleTimer" class="flex justify-between cursor-pointer">
             <div class="mr-3 text-base">
-              Show Timer
+              Show Timer / Clock
             </div>
             <div class="relative">
-              <input id="toggleTimer" type="checkbox" class="sr-only" v-model="settings.timer" v-on:change="updateSettings" />
+              <input id="toggleTimer" type="checkbox" class="sr-only" v-model="settings.timerClock" v-on:change="timerClock()" />
               <div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
               <div class="dot absolute w-6 h-6 bg-white rounded-full shadow-md -left-1 -top-1 transition"></div>
             </div>
           </label>
 
-          <div v-if="settings.timer" class="w-full">
+          <!-- RADIO -->
+          <div v-if="settings.timerClock" class="mb-2">
+            <div class="flex items-center mr-4 my-2">
+              <input id="radio1" type="radio" name="radio" class="hidden" value="clock" v-model="settings.timerClock" v-on:change="updateSettings" />
+              <label for="radio1" class="flex items-center cursor-pointer">
+                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-grey flex-no-shrink"></span>
+                Clock</label
+              >
+            </div>
+
+            <div class="flex items-center mr-4 my-2">
+              <input id="radio2" type="radio" name="radio" class="hidden" value="timer" v-model="settings.timerClock" v-on:change="updateSettings" />
+              <label for="radio2" class="flex items-center cursor-pointer">
+                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-grey flex-no-shrink"></span>
+                Timer</label
+              >
+            </div>
+          </div>
+
+          <div v-if="settings.timerClock == 'timer'" class="w-full">
             <label for="timerDefault">Timer Default</label>
             <input
               id="timerDefault"
@@ -166,6 +185,12 @@ export default {
   methods: {
     updateSettings: function() {
       this.$emit("updateSettings", this.settings);
+    },
+
+    //Timer Clock
+    timerClock: function() {
+      if (this.settings.timerClock === true) this.settings.timerClock = "clock";
+      this.updateSettings();
     },
 
     // Dark Mode
@@ -279,4 +304,17 @@ input:checked ~ .dot {
 .range-slider-fill {
   background-color: #5cff8a;
 }
+
+input[type="radio"] + label span {
+  transition: all 0.2s, transform 0.2s;
+}
+
+input[type="radio"]:checked + label span {
+  background-color: #5cff8a;
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+/* input[type="radio"]:checked + label {
+  color: #;
+} */
 </style>

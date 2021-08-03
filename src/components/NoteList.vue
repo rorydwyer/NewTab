@@ -31,16 +31,21 @@
         </ul>
       </div>
     </div>
-    <Timer :settings="settings" v-if="settings.timer" />
+    <div v-if="settings.timerClock">
+      <Timer :settings="settings" v-if="settings.timerClock == 'timer'" />
+      <Clock v-if="settings.timerClock == 'clock'" />
+    </div>
   </div>
 </template>
 
 <script>
 import Timer from "@/components/Timer.vue";
+import Clock from "@/components/Clock.vue";
 
 export default {
   components: {
     Timer,
+    Clock,
   },
   props: {
     notes: Object,

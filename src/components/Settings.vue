@@ -3,6 +3,20 @@
     <h2 class="text-xl text-center font-bold"># NewTab Settings</h2>
     <div class="flex-grow py-8 px-4">
       <div class="flex flex-col items-center justify-center w-full mb-6">
+        <!-- Spellcheck -->
+        <div class="border-b border-white w-full py-4">
+          <label for="spellCheck" class="flex justify-between cursor-pointer">
+            <div class="mr-3 text-base">
+              Spellcheck
+            </div>
+            <div class="relative">
+              <input id="spellCheck" type="checkbox" class="sr-only" v-model="settings.spellChecker" v-on:change="updateSettings" />
+              <div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
+              <div class="dot absolute w-6 h-6 bg-white rounded-full shadow-md -left-1 -top-1 transition"></div>
+            </div>
+          </label>
+        </div>
+
         <!-- Dark Mode -->
         <div class="border-b border-white w-full py-4">
           <label for="darkMode" class="flex justify-between cursor-pointer">

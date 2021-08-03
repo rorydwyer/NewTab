@@ -66,6 +66,7 @@ export default {
           todo: true,
           quote: true,
           bgImage: true,
+          spellChecker: true,
           today: "",
           bgImageTheme: "Nature",
           bgImageURL: "",

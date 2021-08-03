@@ -1,6 +1,6 @@
 <template>
   <div class="pb-4 h-full flex flex-col">
-    <vue-simplemde class="flex-grow" ref="markdownEditor" v-model="note.content" :configs="configs" />
+    <vue-simplemde class="flex-grow" ref="markdownEditor" v-model="note.content" :configs="configs" v-bind:class="spellChecker" />
     <div class="text-right">
       <button class="text-sm underline pr-5" v-on:click="formatNote()">Format</button>
       <button class="text-sm underline hover:text-red-600" v-if="this.notes.collection.length > 1" v-on:click="deleteNote()">Delete</button>
@@ -18,13 +18,14 @@ export default {
   },
   props: {
     notes: Object,
+    settings: Object,
   },
   data() {
     return {
       timeout: null,
       configs: {
         status: false,
-        spellChecker: false,
+        spellChecker: true,
         // toolbar: [
         //   {
         //     name: "heading1",
@@ -60,6 +61,9 @@ export default {
       get: function() {
         return this.notes.collection[this.currentNoteIndex()];
       },
+    },
+    spellChecker() {
+      return this.settings.spellChecker ? "" : "disable-spell-error";
     },
   },
   mounted() {
@@ -124,6 +128,10 @@ export default {
 
 <style>
 @import "~simplemde/dist/simplemde.min.css";
+
+.disable-spell-error .cm-spell-error {
+  background: none !important;
+}
 
 /* MDE Styles */
 .CodeMirror,

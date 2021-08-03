@@ -8,9 +8,14 @@
           name="search"
           id="searchNotes"
           placeholder="Search notes..."
-          class="flex-grow focus:outline-none bg-transparent border-b text-sm border-gray-300 p-1 mr-1"
+          class="flex-grow focus:outline-none bg-transparent border-b text-sm border-gray-400 dark:border-gray-500 p-1 mr-1"
         />
-        <button v-on:click="createNote()" class="border border-gray-300 rounded w-8 hover:bg-gray-200 dark:hover:text-gray-800 ">+</button>
+        <button
+          v-on:click="createNote()"
+          class="border border-gray-400 dark:border-gray-500 rounded w-8 hover:bg-gray-400 hover:dark:bg-gray-100 hover:bg-opacity-10 text-gray-600 dark:text-gray-300"
+        >
+          +
+        </button>
       </div>
       <div>
         <ul>
@@ -19,7 +24,7 @@
             :key="note.id"
             v-on:click="loadNote(note)"
             v-bind:class="{ activeNote: notes.currentId == note.id }"
-            class="bg-gray-50 hover:bg-gray-100 dark:bg-opacity-10 dark:text-white text-sm my-2 p-2 text-gray-600 note-single"
+            class="bg-gray-400 hover:bg-opacity-20 bg-opacity-10 dark:text-gray-300 text-sm my-2 p-2 text-gray-600 note-single"
           >
             {{ note.content || "Empty note" }}
           </li>

@@ -1,7 +1,7 @@
 <template>
   <div class="timer">
     <input
-      class="w-full text-7xl text-gray-400 focus:outline-none text-center bg-transparent"
+      class="w-full text-7xl text-gray-600 dark:text-gray-200 focus:outline-none text-center bg-transparent"
       ref="timer"
       v-model="timer"
       type="text"
@@ -10,7 +10,10 @@
       v-on:click="clearTime"
       v-on:blur="timerBlur"
     />
-    <button v-on:click="startTimer" class="w-full py-1 border border-gray-300 rounded hover:bg-gray-200 text-sm text-center">
+    <button
+      v-on:click="startTimer"
+      class="w-full py-1 border border-gray-400 dark:border-gray-500 rounded hover:bg-gray-400 hover:dark:bg-gray-100 hover:bg-opacity-10 text-sm text-center text-gray-600 dark:text-gray-300"
+    >
       <span v-if="timerOn">Stop Timer</span>
       <span v-else>Start Timer</span>
     </button>

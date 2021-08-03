@@ -9,7 +9,7 @@
       </div>
       <Quote ref="quote" :settings="newTab.settings" @updateSettings="updateSettings($event)" />
       <div class="text-right">
-        <button v-on:click="showSettings = !showSetting" class="text-sm underline text-right">Settings</button>
+        <button v-on:click="showSettings = !showSettings" class="text-sm underline text-right">Settings</button>
       </div>
     </div>
 
@@ -19,7 +19,7 @@
       @settings="showSettings = !showSettings"
       @updateSettings="updateSettings($event)"
       v-bind:class="toggleSettings"
-      class="absolute w-1/4 h-full transition-all z-50 pt-8 max-h-screen z-20"
+      class="absolute w-1/4 h-full transition-all z-50 pt-8 max-h-screen"
     />
   </div>
 </template>
@@ -43,6 +43,7 @@ export default {
   },
   data() {
     return {
+      showSettings: false,
       newTab: {
         notes: {
           collection: [
@@ -77,7 +78,6 @@ export default {
           timerDefault: "25:00",
         },
       },
-      showSettings: 0,
     };
   },
   computed: {

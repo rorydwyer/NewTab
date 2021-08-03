@@ -279,8 +279,4 @@ input:checked ~ .dot {
 .range-slider-fill {
   background-color: #5cff8a;
 }
-
-.range-slider-rail {
-  /* background-color: #9ca3af; */
-}
 </style>

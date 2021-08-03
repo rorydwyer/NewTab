@@ -19,13 +19,24 @@ export default {
   methods: {
     getQuote: async function() {
       if (this.settings.quote) {
-        const response = await fetch("https://zenquotes.io/api/today");
-        var data = await response.json();
-        this.settings.quoteContent = data[0].q;
-        this.settings.quoteAuthor = data[0].a;
-        this.settings.today = new Date().toDateString();
-
-        this.$emit("updateSettings", this.settings);
+        let q;
+        let a;
+        fetch("https://quotes.rest/qod?language=en")
+          .then((response) => response.json())
+          .then((data) => {
+            q = data.contents.quotes[0].quote;
+            a = data.contents.quotes[0].author;
+          })
+          .catch(() => {
+            q = "The adventure doesn't start until something goes wrong.";
+            a = "Rory Dwyer";
+          })
+          .then(() => {
+            this.settings.quoteContent = q;
+            this.settings.quoteAuthor = a;
+            this.settings.today = new Date().toDateString();
+            this.$emit("updateSettings", this.settings);
+          });
       }
     },
   },

@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     timerInput: function(e) {
-      if ((e.charCode == 8 && e.charCode != 0) || !(e.charCode >= 48 && e.charCode <= 58)) {
+      if ((e.charCode == 8 && e.charCode != 0) || !(e.charCode >= 48 && e.charCode <= 58) || this.timer.length >= 5) {
         // Only allow numbers, backspace, colon or arrows
         e.preventDefault();
       }

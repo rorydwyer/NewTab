@@ -139,6 +139,11 @@ export default {
     bgCssOpacity: function() {
       return `0.${this.settings.bgImageOpacity.toString().padStart(2, "0")}`;
     },
+    fallbackBg: function() {
+      let imgNum = Math.floor(Math.random() * 5);
+
+      return `/images/bgImage-${imgNum}.jpg`;
+    },
   },
   methods: {
     updateSettings: function() {
@@ -179,13 +184,19 @@ export default {
 
       if (this.settings.bgImage) {
         // NEED TO CREATE FALLBACK IMAGE IF  NOT CONNECTED TO INTERNET
-        fetch(`https://source.unsplash.com/1920x1080/?${this.searchTerm}`).then((response) => {
-          this.settings.today = new Date().toDateString();
-          this.settings.bgImageURL = response.url;
 
-          root.style.setProperty("--bgImage", `url(${this.settings.bgImageURL})`);
-          this.updateSettings();
-        });
+        fetch(`https://source.unsplash.com/1920x1080/?${this.searchTerm}`)
+          .then((response) => {
+            this.settings.bgImageURL = response.url;
+          })
+          .catch(() => {
+            this.settings.bgImageURL = this.fallbackBg;
+          })
+          .then(() => {
+            this.settings.today = new Date().toDateString();
+            root.style.setProperty("--bgImage", `url(${this.settings.bgImageURL})`);
+            this.updateSettings();
+          });
       } else {
         // Remove Background Image
         this.settings.bgImageURL = "";

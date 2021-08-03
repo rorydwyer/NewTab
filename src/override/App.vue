@@ -114,7 +114,6 @@ export default {
 
       // Quote
       if (this.newTab.settings.quote && (!this.newTab.settings.quoteContent.length || this.newTab.settings.today != today.toDateString())) {
-        console.log("foo");
         this.$refs.quote.getQuote();
       }
 

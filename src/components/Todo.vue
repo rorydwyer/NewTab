@@ -9,10 +9,12 @@
       class="w-full focus:outline-none bg-transparent text-sm border-b  border-gray-400 dark:border-gray-500 p-1 mb-4"
     />
     <draggable v-model="todos.collection" @end="moveTodo()" class="draggable">
-      <div v-for="(todo, index) in todos.collection" :key="todo.id" class="todo-item">
-        <input type="checkbox" v-on:click="deleteTodo(index)" />
-        <span class="pl-1 text-sm">{{ todo.content }}</span>
-      </div>
+      <transition-group name="flip-list">
+        <div v-for="(todo, index) in todos.collection" :key="todo.id" class="todo-item">
+          <input type="checkbox" v-on:click="deleteTodo(index)" />
+          <span class="pl-1 text-sm">{{ todo.content }}</span>
+        </div>
+      </transition-group>
     </draggable>
   </div>
 </template>

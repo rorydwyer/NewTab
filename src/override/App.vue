@@ -221,4 +221,10 @@ input {
   background: lightgrey;
   border-radius: 6px;
 }
+
+.flip-list-move {
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
 </style>

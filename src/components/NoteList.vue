@@ -12,28 +12,30 @@
         />
         <button
           v-on:click="createNote()"
-          class="border border-gray-400 dark:border-gray-500 rounded w-8 hover:bg-gray-400 hover:dark:bg-gray-100 hover:bg-opacity-10 text-gray-600 dark:text-gray-300"
+          class="border border-gray-400 dark:border-gray-500 rounded w-8 hover:bg-gray-400 hover:dark:bg-gray-100 hover:bg-opacity-10 text-gray-600 dark:text-gray-300 transition"
         >
           +
         </button>
       </div>
       <div>
         <ul>
-          <li
-            v-for="note in filteredNotes"
-            :key="note.id"
-            v-on:click="loadNote(note)"
-            v-bind:class="{ activeNote: notes.currentId == note.id }"
-            class="bg-gray-400 hover:bg-opacity-20 bg-opacity-10 dark:text-gray-300 text-sm my-2 p-2 text-gray-600 note-single relative"
-          >
-            <font-awesome-icon
-              icon="star"
-              class="absolute top-1 right-1 opacity-0 transition text-gray-300 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-100 w-3 h-3"
-              v-bind:class="{ pinned: note.pinned }"
-              v-on:click="pinNote(note)"
-            />
-            {{ note.content || "Empty note" }}
-          </li>
+          <transition-group name="flip-list" tag="ul">
+            <li
+              v-for="note in filteredNotes"
+              :key="note.id"
+              v-on:click="loadNote(note)"
+              v-bind:class="{ activeNote: notes.currentId == note.id }"
+              class="bg-gray-400 hover:bg-opacity-20 bg-opacity-10 dark:text-gray-300 text-sm my-2 p-2 text-gray-600 note-single relative transition"
+            >
+              <font-awesome-icon
+                icon="star"
+                class="absolute top-1 right-1 opacity-0 transition text-gray-300 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-100 w-3 h-3"
+                v-bind:class="{ pinned: note.pinned }"
+                v-on:click="pinNote(note)"
+              />
+              {{ note.content || "Empty note" }}
+            </li>
+          </transition-group>
         </ul>
       </div>
     </div>
@@ -47,6 +49,8 @@
 <script>
 import Timer from "@/components/Timer.vue";
 import Clock from "@/components/Clock.vue";
+
+// var _ = require('lodash');
 
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";

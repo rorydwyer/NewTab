@@ -1,18 +1,20 @@
 <template>
-  <div class="timer">
-    <input
-      class="w-full text-7xl text-gray-600 dark:text-gray-200 focus:outline-none text-center bg-transparent"
-      ref="timer"
-      v-model="timer"
-      type="text"
-      id="timer"
-      @keypress="timerInput"
-      v-on:click="clearTime"
-      v-on:blur="timerBlur"
-    />
+  <div>
+    <div class="timer">
+      <input
+        class="w-full text-7xl text-gray-600 dark:text-gray-200 focus:outline-none text-center bg-transparent"
+        ref="timer"
+        v-model="timer"
+        type="text"
+        id="timer"
+        @keypress="timerInput"
+        v-on:click="clearTime"
+        v-on:blur="timerBlur"
+      />
+    </div>
     <button
       v-on:click="startTimer"
-      class="w-full py-1 border border-gray-400 dark:border-gray-500 rounded hover:bg-gray-400 hover:dark:bg-gray-100 hover:bg-opacity-10 text-sm text-center text-gray-600 dark:text-gray-300"
+      class="w-full py-1 border border-gray-400 dark:border-gray-500 rounded hover:bg-gray-400 hover:dark:bg-gray-100 hover:bg-opacity-10 text-sm text-center text-gray-600 dark:text-gray-300 transition"
     >
       <span v-if="timerOn">Stop Timer</span>
       <span v-else>Start Timer</span>

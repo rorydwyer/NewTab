@@ -63,7 +63,7 @@
         <div class="border-b border-white w-full py-4">
           <label for="toggleTimer" class="flex justify-between cursor-pointer">
             <div class="mr-3 text-base">
-              Show Timer / Clock
+              Show Clock
             </div>
             <div class="relative">
               <input id="toggleTimer" type="checkbox" class="sr-only" v-model="settings.timerClock" v-on:change="timerClock()" />
@@ -83,8 +83,16 @@
             </div>
 
             <div class="flex items-center mr-4 my-2">
-              <input id="radio2" type="radio" name="radio" class="hidden" value="timer" v-model="settings.timerClock" v-on:change="updateSettings" />
+              <input id="radio2" type="radio" name="radio" class="hidden" value="stopwatch" v-model="settings.timerClock" v-on:change="updateSettings" />
               <label for="radio2" class="flex items-center cursor-pointer">
+                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-grey flex-no-shrink"></span>
+                Stopwatch</label
+              >
+            </div>
+
+            <div class="flex items-center mr-4 my-2">
+              <input id="radio3" type="radio" name="radio" class="hidden" value="timer" v-model="settings.timerClock" v-on:change="updateSettings" />
+              <label for="radio3" class="flex items-center cursor-pointer">
                 <span class="w-5 h-5 inline-block mr-2 rounded-full border border-grey flex-no-shrink"></span>
                 Timer</label
               >

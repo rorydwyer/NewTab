@@ -41,6 +41,7 @@
     </div>
     <div v-if="settings.timerClock">
       <Timer :settings="settings" v-if="settings.timerClock == 'timer'" />
+      <Stopwatch v-if="settings.timerClock == 'stopwatch'" />
       <Clock v-if="settings.timerClock == 'clock'" />
     </div>
   </div>
@@ -48,6 +49,7 @@
 
 <script>
 import Timer from "@/components/Timer.vue";
+import Stopwatch from "@/components/Stopwatch.vue";
 import Clock from "@/components/Clock.vue";
 
 // var _ = require('lodash');
@@ -60,6 +62,7 @@ library.add(faStar);
 export default {
   components: {
     Timer,
+    Stopwatch,
     Clock,
     FontAwesomeIcon,
   },

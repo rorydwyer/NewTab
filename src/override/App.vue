@@ -51,6 +51,7 @@ export default {
               id: 0,
               date: new Date().getTime(),
               content: "",
+              pinned: false,
             },
           ],
           currentId: 0,
@@ -123,14 +124,31 @@ export default {
   },
   methods: {
     init: function(res) {
-      this.newTab.notes.collection[0].content = "# Your First Note";
+      this.newTab.notes.collection[0].content = `# First Note
+Go ahead, play around with the editor! Be sure to check out **bold**, *italic*  and ~~strikethrough~~ styling. You can type using Markdown syntax, by toggling the Format tool bar below, or using shortcuts like \`cmd-b\` or \`ctrl-b\`.
+
+## Lists
+Unordered lists can be started using the tool bar or by typing \`* \`, \`- \`, or \`+ \`. Ordered lists can be started by typing \`1. \`.
+
+#### Unordered
+* Lists are a piece of cake
+* They even auto continue as you type
+* A double enter will end them
+
+#### Ordered
+1. Numbered lists...
+2. ...work too!`;
       res.newTab = this.newTab;
     },
 
     updateNotes: function({ notes, load }) {
-      notes.collection.sort((a, b) => {
-        return b.date - a.date;
-      });
+      notes.collection
+        .sort((a, b) => {
+          return b.date - a.date;
+        })
+        .sort((a, b) => {
+          return b.pinned - a.pinned;
+        });
 
       chrome.storage.local.get("newTab", (res) => {
         this.newTab.notes = notes;

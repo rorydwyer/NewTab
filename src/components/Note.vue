@@ -3,6 +3,7 @@
     <vue-simplemde class="flex-grow" ref="markdownEditor" v-model="note.content" :configs="configs" v-bind:class="spellChecker" />
     <div class="text-right">
       <button class="text-sm underline pr-5" v-on:click="formatNote()">Format</button>
+      <button class="text-sm underline pr-5" v-on:click="note.pinned = true">Pin</button>
       <button class="text-sm underline hover:text-red-600" v-if="this.notes.collection.length > 1" v-on:click="deleteNote()">Delete</button>
     </div>
   </div>
@@ -194,4 +195,6 @@ export default {
 .dark .CodeMirror pre {
   color: white !important;
 }
+
+/* Quote */
 </style>

@@ -47,18 +47,21 @@
       <div id="clockIconMenu" class="absolute -bottom-2 left-full w-0 pl-4">
         <font-awesome-icon
           :icon="['far', 'clock']"
+          title="Clock"
           class="clockIcon transition-all opacity-0 w-0"
           v-bind:class="{ activeClockTimer: settings.timerClock == 'clock' }"
           v-on:click="updateClockTimer('clock')"
         />
         <font-awesome-icon
           :icon="['fas', 'stopwatch']"
+          title="Stopwatch"
           class="clockIcon transition-all opacity-0 w-0"
           v-bind:class="{ activeClockTimer: settings.timerClock == 'stopwatch' }"
           v-on:click="updateClockTimer('stopwatch')"
         />
         <font-awesome-icon
           :icon="['fas', 'hourglass-start']"
+          title="Timer"
           class="clockIcon transition-all opacity-0 w-0"
           v-bind:class="{ activeClockTimer: settings.timerClock == 'timer' }"
           v-on:click="updateClockTimer('timer')"

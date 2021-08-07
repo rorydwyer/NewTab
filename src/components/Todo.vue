@@ -13,9 +13,9 @@
     </div>
     <draggable v-model="todos.collection" @end="moveTodo()" class="draggable">
       <transition-group name="flip-list">
-        <div v-for="(todo, index) in todos.collection" :key="todo.id" class="todo-item mb-1">
-          <input type="checkbox" v-on:click="deleteTodo(index)" />
-          <span class="pl-1 text-sm">{{ todo.content }}</span>
+        <div v-for="(todo, index) in todos.collection" :key="todo.id" class="todo-item my-1 flex">
+          <input class="checkbox relative" type="checkbox" v-on:click="deleteTodo(index)" />
+          <span class="ml-3 text-sm flex-grow">{{ todo.content }}</span>
         </div>
       </transition-group>
     </draggable>
@@ -67,12 +67,26 @@ export default {
   cursor: -webkit-grab;
 }
 
+.checkbox {
+  bottom: -2px;
+}
+
 .todo-item > input {
   cursor: pointer;
 }
 
 .sortable-chosen {
   background-color: #ddd;
+  padding: 2px;
+  margin: -2px;
+  color: black !important;
+  border-radius: 4px;
+}
+
+.sortable-chosen:hover {
+  cursor: grabbing !important;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
 }
 
 .draggable:active,

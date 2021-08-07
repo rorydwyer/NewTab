@@ -281,7 +281,7 @@ export default {
     },
 
     backgroundOpacity: function(reset = false) {
-      if (reset) this.settings.bgImageOpacity = 15;
+      if (reset) this.settings.bgImageOpacity = 30;
 
       const root = document.querySelector(":root");
       root.style.setProperty("--bgOpacity", this.bgCssOpacity);

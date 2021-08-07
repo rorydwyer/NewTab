@@ -43,10 +43,30 @@
         </ul>
       </div>
     </div>
-    <div v-if="settings.timerClock">
-      <Timer :settings="settings" v-if="settings.timerClock == 'timer'" />
-      <Stopwatch v-if="settings.timerClock == 'stopwatch'" />
+    <div id="clockTimer" class="relative" v-if="settings.timerClock">
+      <div id="clockIconMenu" class="absolute -bottom-2 left-full w-0 pl-4">
+        <font-awesome-icon
+          :icon="['far', 'clock']"
+          class="clockIcon transition-all opacity-0 w-0"
+          v-bind:class="{ activeClockTimer: settings.timerClock == 'clock' }"
+          v-on:click="updateClockTimer('clock')"
+        />
+        <font-awesome-icon
+          :icon="['fas', 'stopwatch']"
+          class="clockIcon transition-all opacity-0 w-0"
+          v-bind:class="{ activeClockTimer: settings.timerClock == 'stopwatch' }"
+          v-on:click="updateClockTimer('stopwatch')"
+        />
+        <font-awesome-icon
+          :icon="['fas', 'hourglass-start']"
+          class="clockIcon transition-all opacity-0 w-0"
+          v-bind:class="{ activeClockTimer: settings.timerClock == 'timer' }"
+          v-on:click="updateClockTimer('timer')"
+        />
+      </div>
       <Clock v-if="settings.timerClock == 'clock'" />
+      <Stopwatch v-if="settings.timerClock == 'stopwatch'" />
+      <Timer :settings="settings" v-if="settings.timerClock == 'timer'" />
     </div>
   </div>
 </template>
@@ -57,11 +77,11 @@ import Stopwatch from "@/components/Stopwatch.vue";
 import Clock from "@/components/Clock.vue";
 
 // Font Awesome
-import { faStar } from "@fortawesome/free-solid-svg-icons";
-import { faEdit } from "@fortawesome/free-regular-svg-icons";
+import { faStar, faStopwatch, faHourglassStart } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faClock } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
-library.add(faStar, faEdit);
+library.add(faStar, faEdit, faClock, faStopwatch, faHourglassStart);
 
 export default {
   components: {
@@ -113,6 +133,11 @@ export default {
     pinNote: function(note) {
       note.pinned = !note.pinned;
       this.$emit("updateNotes", { notes: this.notes, load: true });
+    },
+
+    updateClockTimer: function(selection) {
+      this.settings.timerClock = selection;
+      this.$emit("updateSettings", this.settings);
     },
   },
 };
@@ -176,5 +201,38 @@ export default {
   color: #ff5c5c !important;
   opacity: 1;
   cursor: pointer;
+}
+
+.clockIcon {
+  height: 18px;
+  width: auto;
+  margin: 6px;
+  display: none;
+}
+
+#clockTimer:hover .clockIcon {
+  opacity: 0.4;
+}
+
+#clockTimer:hover #clockIconMenu {
+  z-index: 50;
+  /* margin-left: 16px; */
+  width: 200px;
+}
+
+#clockIconMenu:hover .clockIcon {
+  display: inline;
+}
+
+.clockIcon:hover {
+  opacity: 1 !important;
+  cursor: pointer;
+}
+
+.activeClockTimer {
+  display: inline;
+}
+#clockIconMenu:hover .activeClockTimer {
+  color: #ff5c5c;
 }
 </style>

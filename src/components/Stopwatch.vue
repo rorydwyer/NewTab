@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="stopwatch text-center">
+    <div class="stopwatch text-center mb-2">
       <span id="time" class="text-7xl w-full text-gray-600 dark:text-gray-200 focus:outline-none text-center bg-transparent">{{ hmStopwatch }}</span>
       <span>{{ sStopwatch }}</span>
     </div>

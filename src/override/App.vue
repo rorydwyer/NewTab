@@ -1,7 +1,13 @@
 <template>
   <div id="main" class="main grid grid-cols-12 gap-12 h-screen max-h-screen overflow-hidden dark:text-white relative">
     <div v-if="showSettings" v-on:click="showSettings = !showSettings" class="absolute top-0 left-0 w-screen h-screen z-10"></div>
-    <NoteList :notes="newTab.notes" :settings="newTab.settings" @updateNotes="updateNotes($event)" class="col-span-3 h-screen pt-8 max-h-screen" />
+    <NoteList
+      :notes="newTab.notes"
+      :settings="newTab.settings"
+      @updateNotes="updateNotes($event)"
+      @updateSettings="updateSettings($event)"
+      class="col-span-3 h-screen pt-8 max-h-screen"
+    />
     <Note ref="note" :notes="newTab.notes" :settings="newTab.settings" @updateNotes="updateNotes($event)" class="col-span-6 h-screen pt-8 max-h-screen" />
     <div class="col-span-3 h-screen pt-8 max-h-screen px-4 pb-4 flex flex-col">
       <div class="flex-grow">

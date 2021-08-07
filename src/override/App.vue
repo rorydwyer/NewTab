@@ -9,8 +9,13 @@
       </div>
       <Quote ref="quote" :settings="newTab.settings" @updateSettings="updateSettings($event)" />
       <div class="text-right">
-        <font-awesome-icon icon="cog" id="settingsIcon" class="transition text-gray-500 dark:text-gray-300" v-on:click="showSettings = !showSettings" />
-        <!-- <button v-on:click="showSettings = !showSettings" class="text-sm underline text-right">Settings</button> -->
+        <font-awesome-icon
+          icon="cog"
+          id="settingsIcon"
+          class="transition text-gray-500 dark:text-gray-300"
+          v-on:click="showSettings = !showSettings"
+          title="Settings"
+        />
       </div>
     </div>
 

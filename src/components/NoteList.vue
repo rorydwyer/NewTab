@@ -2,21 +2,24 @@
   <div class="px-4 pb-4 flex flex-col">
     <div class="notelist flex-grow overflow-y-scroll">
       <div class="flex mb-4">
-        <input
-          v-model="search"
-          type="text"
-          name="search"
-          id="searchNotes"
-          placeholder="Search notes..."
-          class="flex-grow focus:outline-none bg-transparent border-b text-sm border-gray-400 dark:border-gray-500 p-1 mr-1"
-        />
-        <font-awesome-icon :icon="['far', 'edit']" id="createNote" class="transition text-gray-500 dark:text-gray-300" v-on:click="createNote()" />
-        <!-- <button
+        <div class="flex-grow relative">
+          <input
+            v-model="search"
+            type="text"
+            name="search"
+            id="searchNotes"
+            placeholder="Search notes..."
+            class="w-full focus:outline-none bg-transparent border-b text-sm border-gray-400 dark:border-gray-500 p-1 mr-1"
+          />
+          <span class="focus-border absolute left-0 bottom-0 w-0 bg-gray-800 dark:bg-gray-200 transition"></span>
+        </div>
+        <font-awesome-icon
+          :icon="['far', 'edit']"
+          id="createNote"
+          class="transition text-gray-500 dark:text-gray-300"
           v-on:click="createNote()"
-          class="border border-gray-400 dark:border-gray-500 rounded w-8 hover:bg-gray-400 hover:dark:bg-gray-100 hover:bg-opacity-10 text-gray-600 dark:text-gray-300 transition"
-        >
-          +
-        </button> -->
+          title="Create note"
+        />
       </div>
       <div>
         <ul>
@@ -118,6 +121,16 @@ export default {
 <style scoped>
 .notelist {
   padding-left: 1px;
+}
+
+.focus-border {
+  height: 1px;
+  transition: all cubic-bezier(0.4, 0, 0.2, 1) 150ms;
+}
+
+#searchNotes:focus ~ .focus-border {
+  width: 100%;
+  transition: all cubic-bezier(0.4, 0, 0.2, 1) 150ms;
 }
 
 .note-single {

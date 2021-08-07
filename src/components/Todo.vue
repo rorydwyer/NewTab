@@ -1,13 +1,16 @@
 <template>
   <div v-if="settings.todo">
-    <input
-      v-on:keyup.enter="addTodo"
-      v-model="todos.newText"
-      type="text"
-      id="newTodo"
-      placeholder="Create new to do item..."
-      class="w-full focus:outline-none bg-transparent text-sm border-b  border-gray-400 dark:border-gray-500 p-1 mb-4"
-    />
+    <div class="w-full relative mb-4">
+      <input
+        v-on:keyup.enter="addTodo"
+        v-model="todos.newText"
+        type="text"
+        id="newTodo"
+        placeholder="Create new to do item..."
+        class="w-full focus:outline-none bg-transparent text-sm border-b  border-gray-400 dark:border-gray-500 p-1"
+      />
+      <span class="focus-border absolute left-0 bottom-0 w-0 bg-gray-800 dark:bg-gray-200 transition"></span>
+    </div>
     <draggable v-model="todos.collection" @end="moveTodo()" class="draggable">
       <transition-group name="flip-list">
         <div v-for="(todo, index) in todos.collection" :key="todo.id" class="todo-item mb-1">
@@ -77,5 +80,15 @@ export default {
   cursor: grabbing !important;
   cursor: -moz-grabbing;
   cursor: -webkit-grabbing;
+}
+
+.focus-border {
+  height: 1px;
+  transition: all cubic-bezier(0.4, 0, 0.2, 1) 150ms;
+}
+
+#newTodo:focus ~ .focus-border {
+  width: 100%;
+  transition: all cubic-bezier(0.4, 0, 0.2, 1) 150ms;
 }
 </style>

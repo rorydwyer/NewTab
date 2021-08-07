@@ -2,10 +2,8 @@
   <div class="pb-4 h-full flex flex-col">
     <vue-simplemde class="flex-grow" ref="markdownEditor" v-model="note.content" :configs="configs" v-bind:class="spellChecker" />
     <div class="text-right">
-      <font-awesome-icon icon="paragraph" id="formatIcon" v-on:click="formatNote()" class="transition text-gray-500 dark:text-gray-300" />
-      <font-awesome-icon icon="trash" id="deleteIcon" v-on:click="deleteNote()" class="transition text-gray-500 dark:text-gray-300" />
-      <!-- <button class="text-sm underline pr-5" v-on:click="formatNote()">Format</button> -->
-      <!-- <button class="text-sm underline hover:text-red-600" v-if="this.notes.collection.length > 1" v-on:click="deleteNote()">Delete</button> -->
+      <font-awesome-icon icon="paragraph" id="formatIcon" v-on:click="formatNote()" class="transition text-gray-500 dark:text-gray-300" title="Format" />
+      <font-awesome-icon icon="trash" id="deleteIcon" v-on:click="deleteNote()" class="transition text-gray-500 dark:text-gray-300" title="Delete" />
     </div>
   </div>
 </template>

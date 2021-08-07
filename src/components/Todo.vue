@@ -10,7 +10,7 @@
     />
     <draggable v-model="todos.collection" @end="moveTodo()" class="draggable">
       <transition-group name="flip-list">
-        <div v-for="(todo, index) in todos.collection" :key="todo.id" class="todo-item">
+        <div v-for="(todo, index) in todos.collection" :key="todo.id" class="todo-item mb-1">
           <input type="checkbox" v-on:click="deleteTodo(index)" />
           <span class="pl-1 text-sm">{{ todo.content }}</span>
         </div>

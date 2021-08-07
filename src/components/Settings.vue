@@ -159,7 +159,8 @@
     <div class="text-right">
       <p><a href="https://rory-dwyer.com" target="_blank" class="underline">About the developer</a></p>
       <p>
-        <a href="https://www.paypal.com/donate?business=AHBCN7RUN39R4&no_recurring=0&currency_code=USD" target="_blank" class="underline"
+        <font-awesome-icon icon="heart" />
+        <a href="https://www.paypal.com/donate?business=AHBCN7RUN39R4&no_recurring=0&currency_code=USD" target="_blank" class="underline ml-2"
           >Donate (Buy me a beer)</a
         >
       </p>
@@ -175,8 +176,14 @@
 import VueSlider from "vue-slider-component";
 import "vue-slider-component/theme/default.css";
 
+// Font Awesome
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+library.add(faHeart);
+
 export default {
-  components: { VueSlider },
+  components: { VueSlider, FontAwesomeIcon },
   props: {
     settings: Object,
   },

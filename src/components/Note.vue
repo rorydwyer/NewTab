@@ -2,8 +2,10 @@
   <div class="pb-4 h-full flex flex-col">
     <vue-simplemde class="flex-grow" ref="markdownEditor" v-model="note.content" :configs="configs" v-bind:class="spellChecker" />
     <div class="text-right">
-      <button class="text-sm underline pr-5" v-on:click="formatNote()">Format</button>
-      <button class="text-sm underline hover:text-red-600" v-if="this.notes.collection.length > 1" v-on:click="deleteNote()">Delete</button>
+      <font-awesome-icon icon="paragraph" id="formatIcon" v-on:click="formatNote()" class="transition text-gray-500 dark:text-gray-300" />
+      <font-awesome-icon icon="trash" id="deleteIcon" v-on:click="deleteNote()" class="transition text-gray-500 dark:text-gray-300" />
+      <!-- <button class="text-sm underline pr-5" v-on:click="formatNote()">Format</button> -->
+      <!-- <button class="text-sm underline hover:text-red-600" v-if="this.notes.collection.length > 1" v-on:click="deleteNote()">Delete</button> -->
     </div>
   </div>
 </template>
@@ -11,10 +13,17 @@
 <script>
 import VueSimplemde from "vue-simplemde";
 
+// Font Awesome
+import { faParagraph, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+library.add(faParagraph, faTrash);
+
 export default {
   name: "note",
   components: {
     VueSimplemde,
+    FontAwesomeIcon,
   },
   props: {
     notes: Object,
@@ -128,6 +137,24 @@ export default {
 
 <style>
 @import "~simplemde/dist/simplemde.min.css";
+
+#formatIcon,
+#deleteIcon {
+  opacity: 0.4;
+  width: auto;
+  height: 18px;
+  margin-left: 24px;
+}
+
+#formatIcon:hover,
+#deleteIcon:hover {
+  opacity: 1;
+  cursor: pointer;
+}
+
+#deleteIcon:hover {
+  color: red;
+}
 
 .disable-spell-error .cm-spell-error {
   background: none !important;

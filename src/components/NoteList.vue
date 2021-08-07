@@ -10,12 +10,13 @@
           placeholder="Search notes..."
           class="flex-grow focus:outline-none bg-transparent border-b text-sm border-gray-400 dark:border-gray-500 p-1 mr-1"
         />
-        <button
+        <font-awesome-icon :icon="['far', 'edit']" id="createNote" class="transition text-gray-500 dark:text-gray-300" v-on:click="createNote()" />
+        <!-- <button
           v-on:click="createNote()"
           class="border border-gray-400 dark:border-gray-500 rounded w-8 hover:bg-gray-400 hover:dark:bg-gray-100 hover:bg-opacity-10 text-gray-600 dark:text-gray-300 transition"
         >
           +
-        </button>
+        </button> -->
       </div>
       <div>
         <ul>
@@ -52,12 +53,12 @@ import Timer from "@/components/Timer.vue";
 import Stopwatch from "@/components/Stopwatch.vue";
 import Clock from "@/components/Clock.vue";
 
-// var _ = require('lodash');
-
+// Font Awesome
 import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { faEdit } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
-library.add(faStar);
+library.add(faStar, faEdit);
 
 export default {
   components: {
@@ -148,5 +149,19 @@ export default {
 .pinned {
   color: #ff5c5c !important;
   opacity: 0.5;
+}
+
+#createNote {
+  position: relative;
+  width: auto !important;
+  height: 18px !important;
+  bottom: -10px;
+  padding-left: 8px;
+}
+
+#createNote:hover {
+  color: #ff5c5c !important;
+  opacity: 1;
+  cursor: pointer;
 }
 </style>

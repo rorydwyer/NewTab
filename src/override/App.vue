@@ -9,7 +9,8 @@
       </div>
       <Quote ref="quote" :settings="newTab.settings" @updateSettings="updateSettings($event)" />
       <div class="text-right">
-        <button v-on:click="showSettings = !showSettings" class="text-sm underline text-right">Settings</button>
+        <font-awesome-icon icon="cog" id="settingsIcon" class="transition text-gray-500 dark:text-gray-300" v-on:click="showSettings = !showSettings" />
+        <!-- <button v-on:click="showSettings = !showSettings" class="text-sm underline text-right">Settings</button> -->
       </div>
     </div>
 
@@ -32,6 +33,12 @@ import Settings from "@/components/Settings.vue";
 import Quote from "@/components/Quote.vue";
 import "tailwindcss/tailwind.css";
 
+// Font Awesome
+import { faCog } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+library.add(faCog);
+
 export default {
   name: "app",
   components: {
@@ -40,6 +47,7 @@ export default {
     Todo,
     Settings,
     Quote,
+    FontAwesomeIcon,
   },
   data() {
     return {
@@ -226,5 +234,16 @@ input {
   transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
+}
+
+#settingsIcon {
+  width: auto;
+  height: 18px;
+  opacity: 0.4;
+}
+
+#settingsIcon:hover {
+  opacity: 1;
+  cursor: pointer;
 }
 </style>

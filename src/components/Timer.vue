@@ -1,15 +1,23 @@
 <template>
   <div>
-    <div class="timer">
+    <div class="timer w-full text-center">
+      <span v-on:click="focusInput" ref="timerInput" class="w-full text-7xl text-gray-600 dark:text-gray-200 focus:outline-none text-center bg-transparent">
+        <span v-if="timer.h">{{ formatTimer.h }}:</span>
+        <span>{{ formatTimer.m }}:</span>
+        <span>{{ formatTimer.s }}</span>
+        <span v-if="inputFocus">|</span>
+      </span>
       <input
-        class="w-full text-7xl text-gray-600 dark:text-gray-200 focus:outline-none text-center bg-transparent"
         ref="timer"
-        v-model="timer"
-        type="text"
+        class="opacity-0 w-0 h-0 overflow-hidden"
+        type="number"
         id="timer"
         @keypress="timerInput"
-        v-on:click="clearTime"
-        v-on:blur="timerBlur"
+        @focus="inputFocus = true"
+        v-on:blur="
+          timerBlur;
+          inputFocus = false;
+        "
       />
     </div>
     <button
@@ -41,29 +49,65 @@ export default {
   },
   data() {
     return {
-      timer: "",
+      timer: {
+        h: 0,
+        m: 0,
+        s: 0,
+      },
+      timerRaw: [0, 0, 0, 0, 0],
+      inputFocus: false,
+      startTime: "",
       timerSet: true, // Makes sure the input does clear if the user clicks on a spot to edit
       timerOn: false,
       timerOver: false,
     };
   },
+  computed: {
+    formatTimer: function() {
+      let formatTimer;
+
+      formatTimer = this.timer;
+
+      return {
+        h: formatTimer.h,
+        m: formatTimer.m.toString().padStart(2, "0"),
+        s: formatTimer.s.toString().padStart(2, "0"),
+      };
+    },
+  },
   mounted() {
-    this.timer = this.settings.timerDefault;
+    // this.timer = this.settings.timerDefault;
   },
   methods: {
+    focusInput: function() {
+      this.clearTime();
+      this.$refs.timer.focus();
+    },
+
     timerInput: function(e) {
       if ((e.charCode == 8 && e.charCode != 0) || !(e.charCode >= 48 && e.charCode <= 58) || this.timer.length >= 5) {
         // Only allow numbers, backspace, colon or arrows
         e.preventDefault();
       }
+
+      this.timerRaw.unshift(e.key);
+      this.timerRaw = this.timerRaw.slice(0, 6);
+
+      this.timer.h = this.timerRaw[5] + this.timerRaw[4];
+      this.timer.m = this.timerRaw[3] + this.timerRaw[2];
+      this.timer.s = this.timerRaw[1] + this.timerRaw[0];
     },
 
     clearTime: function() {
-      if (this.timerSet) {
-        this.timer = "";
-        this.timerOn = false;
-        this.timerSet = false;
-      }
+      this.timer = {
+        h: 0,
+        m: 0,
+        s: 0,
+      };
+      this.timerRaw = [0, 0, 0, 0, 0];
+      this.timerOn = false;
+      this.timerSet = false;
+      document.title = `NewTab`;
     },
 
     timerBlur: function() {
@@ -80,6 +124,12 @@ export default {
       if (this.timerOver) {
         this.timer = this.timerDefault;
         this.timerOver = false;
+
+        // Set timer in Date()
+        this.startTime = new Date();
+        this.startTime.setHours(this.startTime.getHours + 0);
+        this.startTime.setMinutes(this.startTime.getMinutes + 0);
+        this.startTime.setSeconds(this.startTime.getSeconds + 0);
       }
 
       this.timerOn = !this.timerOn;
@@ -103,6 +153,7 @@ export default {
               this.timerDone();
             }
             this.timer = `${minutes}:${seconds}`;
+            document.title = `${this.timer}`;
           } else {
             clearInterval(timer);
           }

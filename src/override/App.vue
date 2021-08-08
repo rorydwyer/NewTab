@@ -157,6 +157,8 @@ Unordered lists can be started using the tool bar or by typing \`* \`, \`- \`, o
 #### Ordered
 1. Numbered lists...
 2. ...work too!`;
+      this.newTab.notes.collection[0].pinned = true;
+      this.newTab.settings.timerClock = "clock";
       res.newTab = this.newTab;
     },
 

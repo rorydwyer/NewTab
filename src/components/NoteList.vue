@@ -33,6 +33,7 @@
             >
               <font-awesome-icon
                 icon="star"
+                title="Favorite note"
                 class="absolute top-1 right-1 opacity-0 transition text-gray-300 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-100 w-3 h-3"
                 v-bind:class="{ pinned: note.pinned }"
                 v-on:click="pinNote(note)"
@@ -48,21 +49,21 @@
         <font-awesome-icon
           :icon="['far', 'clock']"
           title="Clock"
-          class="clockIcon transition-all opacity-0 w-0"
+          class="clockIcon transition-all opacity-0 w-0 text-gray-500 dark:text-gray-300"
           v-bind:class="{ activeClockTimer: settings.timerClock == 'clock' }"
           v-on:click="updateClockTimer('clock')"
         />
         <font-awesome-icon
           :icon="['fas', 'stopwatch']"
           title="Stopwatch"
-          class="clockIcon transition-all opacity-0 w-0"
+          class="clockIcon transition-all opacity-0 w-0 text-gray-500 dark:text-gray-300"
           v-bind:class="{ activeClockTimer: settings.timerClock == 'stopwatch' }"
           v-on:click="updateClockTimer('stopwatch')"
         />
         <font-awesome-icon
           :icon="['fas', 'hourglass-start']"
           title="Timer"
-          class="clockIcon transition-all opacity-0 w-0"
+          class="clockIcon transition-all opacity-0 w-0 text-gray-500 dark:text-gray-300"
           v-bind:class="{ activeClockTimer: settings.timerClock == 'timer' }"
           v-on:click="updateClockTimer('timer')"
         />

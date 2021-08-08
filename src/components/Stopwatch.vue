@@ -59,6 +59,7 @@ export default {
 
       this.hmStopwatch = `${hours}:${minutes.toString().padStart(2, "0")}`;
       this.sStopwatch = seconds.toString().padStart(2, "0");
+      document.title = `${this.hmStopwatch}:${this.sStopwatch}`;
     },
 
     start: function() {
@@ -87,6 +88,7 @@ export default {
       this.pause();
       this.elapsedTime = 0;
       this.update();
+      document.title = `NewTab`;
     },
   },
 };

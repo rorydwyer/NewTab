@@ -1,31 +1,52 @@
 <template>
   <div>
     <div class="timer w-full text-center">
-      <span v-on:click="focusInput" ref="timerInput" class="w-full text-7xl text-gray-600 dark:text-gray-200 focus:outline-none text-center bg-transparent">
-        <span v-if="timer.h">{{ formatTimer.h }}:</span>
-        <span>{{ formatTimer.m }}:</span>
-        <span>{{ formatTimer.s }}</span>
-        <span v-if="inputFocus">|</span>
-      </span>
+      <p v-on:click="focusInput" ref="input" class="w-full text-7xl text-gray-600 dark:text-gray-200 text-center -mb-3">
+        <!-- Hours -->
+        <span v-if="getPlaceholder(5)" v-bind:class="{ placeholder: !getPlaceholder(5) }">{{ timer[5] }}</span>
+        <span v-if="getPlaceholder(4)" v-bind:class="{ placeholder: !getPlaceholder(4) }">{{ timer[4] }}:</span>
+
+        <!-- Minutes -->
+        <span v-bind:class="{ placeholder: !getPlaceholder(3) }">{{ timer[3] || "0" }}</span>
+        <span v-bind:class="{ placeholder: !getPlaceholder(2) }">{{ timer[2] || "0" }}:</span>
+
+        <!-- Seconds -->
+        <span v-bind:class="{ placeholder: !getPlaceholder(1) }">{{ timer[1] || "0" }}</span>
+        <span v-bind:class="{ placeholder: !getPlaceholder(0) }">{{ timer[0] || "0" }}</span>
+
+        <!-- Cursor -->
+        <span class=" h-1/2  text-6xl relative bottom-2 dark:border-r-gray-200 border-r-gray-600" v-bind:class="{ inputFocus: inputFocus }"></span>
+      </p>
       <input
         ref="timer"
-        class="opacity-0 w-0 h-0 overflow-hidden"
+        class="opacity-0 w-0 h-0 overflow-hidden focus:outline-none"
         type="number"
         id="timer"
-        @keypress="timerInput"
-        @focus="inputFocus = true"
-        v-on:blur="
-          timerBlur;
-          inputFocus = false;
+        @keypress="input"
+        v-on:keyup.delete="tDelete()"
+        v-on:keyup.enter="
+          if (!timerInterval) {
+            $refs.timer.blur();
+            start();
+          }
         "
+        @focus="inputFocus = true"
+        v-on:blur="blur()"
       />
     </div>
     <button
-      v-on:click="startTimer"
+      v-on:click="start"
+      v-if="!timerInterval"
       class="w-full py-1 border border-gray-400 dark:border-gray-500 rounded hover:bg-gray-400 hover:dark:bg-gray-100 hover:bg-opacity-10 text-sm text-center text-gray-600 dark:text-gray-300 transition"
     >
-      <span v-if="timerOn">Stop Timer</span>
-      <span v-else>Start Timer</span>
+      <span>Start Timer</span>
+    </button>
+    <button
+      v-on:click="pause"
+      v-else
+      class="w-full py-1 border border-gray-400 dark:border-gray-500 rounded hover:bg-gray-400 hover:dark:bg-gray-100 hover:bg-opacity-10 text-sm text-center text-gray-600 dark:text-gray-300 transition"
+    >
+      <span>Pause Timer</span>
     </button>
   </div>
 </template>
@@ -39,129 +60,134 @@ export default {
   watch: {
     settings: {
       deep: true,
-      handler(newValue, oldValue) {
-        if (newValue.timerDefault != oldValue.timerDefault);
+      handler() {
+        this.clear();
         this.timer = this.settings.timerDefault;
-        this.timerOn = false;
-        this.timerSet = false;
       },
     },
   },
   data() {
     return {
-      timer: {
-        h: 0,
-        m: 0,
-        s: 0,
-      },
-      timerRaw: [0, 0, 0, 0, 0],
+      timer: [],
       inputFocus: false,
-      startTime: "",
-      timerSet: true, // Makes sure the input does clear if the user clicks on a spot to edit
-      timerOn: false,
-      timerOver: false,
+      prevTime: "",
+      remainingTime: 0,
+      timerInterval: 0,
     };
   },
-  computed: {
-    formatTimer: function() {
-      let formatTimer;
-
-      formatTimer = this.timer;
-
-      return {
-        h: formatTimer.h,
-        m: formatTimer.m.toString().padStart(2, "0"),
-        s: formatTimer.s.toString().padStart(2, "0"),
-      };
-    },
-  },
   mounted() {
-    // this.timer = this.settings.timerDefault;
+    this.timer = this.settings.timerDefault;
   },
   methods: {
     focusInput: function() {
-      this.clearTime();
+      this.clear();
       this.$refs.timer.focus();
     },
 
-    timerInput: function(e) {
-      if ((e.charCode == 8 && e.charCode != 0) || !(e.charCode >= 48 && e.charCode <= 58) || this.timer.length >= 5) {
-        // Only allow numbers, backspace, colon or arrows
-        e.preventDefault();
+    getPlaceholder: function(i) {
+      let result = true;
+      let tempArray = [];
+      for (i; i < this.timer.length; i++) {
+        tempArray.push(this.timer[i]);
       }
-
-      this.timerRaw.unshift(e.key);
-      this.timerRaw = this.timerRaw.slice(0, 6);
-
-      this.timer.h = this.timerRaw[5] + this.timerRaw[4];
-      this.timer.m = this.timerRaw[3] + this.timerRaw[2];
-      this.timer.s = this.timerRaw[1] + this.timerRaw[0];
+      if (tempArray.every((e) => e == "0")) result = false;
+      return result;
     },
 
-    clearTime: function() {
-      this.timer = {
-        h: 0,
-        m: 0,
-        s: 0,
-      };
-      this.timerRaw = [0, 0, 0, 0, 0];
-      this.timerOn = false;
-      this.timerSet = false;
+    input: function(e) {
+      if (!(e.charCode >= 48 && e.charCode <= 57)) {
+        // Only allow numbers, backspace or arrows
+        e.preventDefault();
+      } else {
+        this.timer.unshift(e.key);
+        this.timer = this.timer.slice(0, 6);
+      }
+    },
+
+    tDelete: function() {
+      this.timer.push("0");
+      this.timer = this.timer.slice(1, 7);
+    },
+
+    blur: function() {
+      this.inputFocus = false;
+      if (this.timer[1] > 6) {
+        this.timer[1] = 6;
+        this.timer[0] = 0;
+      }
+
+      if (this.timer[3] > 6) {
+        this.timer[3] = 6;
+        this.timer[2] = 0;
+      }
+
+      if (this.timer.every((e) => e == "0")) {
+        this.timer = ["0", "0", "5", "2", "0", "0"];
+      }
+    },
+
+    clear: function() {
+      this.timer = ["0", "0", "0", "0", "0", "0"];
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
+      this.prevTime = null;
       document.title = `NewTab`;
     },
 
-    timerBlur: function() {
-      // If timer was not set
-      if (this.timer == "") {
-        this.timer = this.settings.timerDefault;
-        this.timerSet = true;
-      } else if (!this.timer.includes(":")) {
-        this.timer += ":00";
+    start: function() {
+      // check if input has value
+      this.prevTime = new Date();
+
+      this.prevTime.setHours(this.prevTime.getHours() + parseInt(`${this.timer[5] || 0}${this.timer[4] || 0}`));
+      this.prevTime.setMinutes(this.prevTime.getMinutes() + parseInt(`${this.timer[3] || 0}${this.timer[2] || 0}`));
+      this.prevTime.setSeconds(this.prevTime.getSeconds() + parseInt(`${this.timer[1] || 0}${this.timer[0] || 0}`));
+
+      if (!this.timerInterval) {
+        this.timerInterval = setInterval(() => {
+          this.remainingTime = this.prevTime - Date.now();
+          this.update();
+        }, 100);
       }
     },
 
-    startTimer: function() {
-      if (this.timerOver) {
-        this.timer = this.timerDefault;
-        this.timerOver = false;
+    update: function() {
+      if (this.timer.every((e) => e == 0)) {
+        clearInterval(this.timerInterval);
+        this.timerInterval = null;
+        this.done();
+      } else {
+        let tempTime = this.remainingTime;
+        let tempTimer = [];
 
-        // Set timer in Date()
-        this.startTime = new Date();
-        this.startTime.setHours(this.startTime.getHours + 0);
-        this.startTime.setMinutes(this.startTime.getMinutes + 0);
-        this.startTime.setSeconds(this.startTime.getSeconds + 0);
-      }
+        tempTime = Math.floor(tempTime / 1000);
+        let s = (tempTime % 60).toString().padStart(2, "0");
+        tempTimer[1] = s.charAt(0);
+        tempTimer[0] = s.charAt(1);
 
-      this.timerOn = !this.timerOn;
-      this.timerSet = true;
+        tempTime = Math.floor(tempTime / 60);
+        let m = (tempTime % 60).toString().padStart(2, "0");
+        tempTimer[3] = m.charAt(0);
+        tempTimer[2] = m.charAt(1);
 
-      if (this.timerOn) {
-        //check this.timer for validation
-        let minutes = this.timer.split(":")[0];
-        let seconds = this.timer.split(":")[1];
+        tempTime = Math.floor(tempTime / 60);
+        let h = (tempTime % 60).toString().padStart(2, "0");
+        tempTimer[5] = h.charAt(0);
+        tempTimer[4] = h.charAt(1);
 
-        let timer = setInterval(() => {
-          if (this.timerOn) {
-            if (seconds != 0) {
-              seconds--;
-              seconds = seconds.toString().padStart(2, "0");
-            } else if (minutes != 0) {
-              minutes--;
-              seconds = "59";
-            } else if (seconds == 0 && minutes == 0) {
-              // If timer is over
-              this.timerDone();
-            }
-            this.timer = `${minutes}:${seconds}`;
-            document.title = `${this.timer}`;
-          } else {
-            clearInterval(timer);
-          }
-        }, 1000);
+        this.timer = tempTimer;
+        document.title = `${this.timer[5]}${this.timer[4]}:${this.timer[3]}${this.timer[2]}:${this.timer[1]}${this.timer[0]}`;
       }
     },
 
-    timerDone: function() {
+    pause: function() {
+      if (this.timerInterval) {
+        clearInterval(this.timerInterval);
+        this.timerInterval = null;
+      }
+      this.prevTime = null;
+    },
+
+    done: function() {
       let audio = new Audio("/timer.mp3");
       audio.play();
 
@@ -175,9 +201,37 @@ export default {
         }
       }, 800);
 
-      this.timerOn = false;
-      this.timerOver = true;
+      this.timerInterval = null;
     },
   },
 };
 </script>
+
+<style scoped>
+.placeholder {
+  opacity: 0.5;
+}
+
+.inputFocus {
+  animation: cursor 1.5s linear infinite;
+}
+
+@keyframes cursor {
+  0% {
+    border-right: solid 2px;
+    margin-right: -2px;
+  }
+  50% {
+    border-right: solid 2px;
+    margin-right: -2px;
+  }
+  51% {
+    border-right: none;
+    margin-right: 0px;
+  }
+  100% {
+    border-right: none;
+    margin-right: 0px;
+  }
+}
+</style>

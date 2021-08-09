@@ -101,15 +101,31 @@
 
           <div v-if="settings.timerClock == 'timer'" class="w-full">
             <label for="timerDefault">Timer Default</label>
+            <p v-on:click="focusInput" ref="input" class="w-full border border-grey text-gray-600 dark:text-gray-200 text-sm p-1">
+              <!-- Hours -->
+              <span v-bind:class="{ placeholder: !getPlaceholder(5) }">{{ settings.timerDefault[5] || "0" }}</span>
+              <span v-bind:class="{ placeholder: !getPlaceholder(4) }">{{ settings.timerDefault[4] || "0" }}:</span>
+
+              <!-- Minutes -->
+              <span v-bind:class="{ placeholder: !getPlaceholder(3) }">{{ settings.timerDefault[3] || "0" }}</span>
+              <span v-bind:class="{ placeholder: !getPlaceholder(2) }">{{ settings.timerDefault[2] || "0" }}:</span>
+
+              <!-- Seconds -->
+              <span v-bind:class="{ placeholder: !getPlaceholder(1) }">{{ settings.timerDefault[1] || "0" }}</span>
+              <span v-bind:class="{ placeholder: !getPlaceholder(0) }">{{ settings.timerDefault[0] || "0" }}</span>
+
+              <!-- Cursor -->
+              <span class=" border-r-gray" v-bind:class="{ inputFocus: inputFocus }"></span>
+            </p>
             <input
+              ref="timer"
+              class="opacity-0 w-0 h-0 overflow-hidden focus:outline-none"
+              type="number"
               id="timerDefault"
-              v-model="settings.timerDefault"
-              v-on:change="updateSettings()"
-              v-on:blur="timerBlur()"
-              @keypress="timerInput"
-              type="text"
-              placeholder="25:00"
-              class="color-white w-full focus:outline-none bg-transparent text-sm border border-white placeholder-gray-100 placeholder-opacity-50 p-1 mb-4"
+              @keypress="tInput"
+              @focus="inputFocus = true"
+              v-on:keyup.delete="tDelete()"
+              v-on:blur="tBlur()"
             />
           </div>
         </div>
@@ -190,6 +206,7 @@ export default {
   data() {
     return {
       timeout: null,
+      inputFocus: false,
     };
   },
   computed: {
@@ -227,20 +244,60 @@ export default {
     },
 
     // Timer
-    timerInput: function(e) {
-      if ((e.charCode == 8 && e.charCode != 0) || !(e.charCode >= 48 && e.charCode <= 58)) {
-        // Only allow numbers, backspace, colon or arrows
+    getPlaceholder: function(i) {
+      let result = true;
+      let tempArray = [];
+      for (i; i < this.settings.timerDefault.length; i++) {
+        tempArray.push(this.settings.timerDefault[i]);
+      }
+      if (tempArray.every((e) => e == "0")) result = false;
+      return result;
+    },
+
+    focusInput: function() {
+      this.settings.timerDefault = ["0", "0", "0", "0", "0", "0"];
+      this.$refs.timer.focus();
+    },
+
+    tClear: function() {
+      this.settitimer = [];
+    },
+
+    tInput: function(e) {
+      if (!(e.charCode >= 48 && e.charCode <= 57)) {
+        // Only allow numbers, backspace or arrows
         e.preventDefault();
+      } else {
+        this.settings.timerDefault.unshift(e.key);
+        this.settings.timerDefault = this.settings.timerDefault.slice(0, 6);
+        this.updateSettings();
       }
     },
 
-    timerBlur: function() {
-      // If timer was not set
-      if (this.settings.timerDefault == "") {
-        this.settings.timerDefault = "25:00";
-      } else if (!this.settings.timerDefault.includes(":")) {
-        this.settings.timerDefault += ":00";
+    tDelete: function() {
+      this.settings.timerDefault.push("0");
+      this.settings.timerDefault = this.settings.timerDefault.slice(1, 7);
+      this.updateSettings();
+    },
+
+    tBlur: function() {
+      let tempArray = this.settings.timerDefault;
+      this.inputFocus = false;
+      if (tempArray[1] > 6) {
+        tempArray[1] = 6;
+        tempArray[0] = 0;
       }
+
+      if (tempArray[3] > 6) {
+        tempArray[3] = 6;
+        tempArray[2] = 0;
+      }
+
+      if (tempArray.every((e) => e == "0")) {
+        tempArray = [0, 0, 5, 2];
+      }
+
+      this.settings.timerDefault = tempArray;
       this.updateSettings();
     },
 
@@ -334,5 +391,32 @@ input[type="radio"] + label span {
 input[type="radio"]:checked + label span {
   background-color: #5cff8a;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.placeholder {
+  opacity: 0.5;
+}
+
+.inputFocus {
+  animation: cursor 1.5s linear infinite;
+}
+
+@keyframes cursor {
+  0% {
+    border-right: solid 2px;
+    margin-right: -2px;
+  }
+  50% {
+    border-right: solid 2px;
+    margin-right: -2px;
+  }
+  51% {
+    border-right: none;
+    margin-right: 0px;
+  }
+  100% {
+    border-right: none;
+    margin-right: 0px;
+  }
 }
 </style>

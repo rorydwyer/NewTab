@@ -95,7 +95,7 @@ export default {
           quoteContent: "",
           quoteAuthor: "",
           quoteDate: "",
-          timerDefault: "25:00",
+          timerDefault: ["0", "0", "5", "2", "0", "0"],
         },
       },
     };

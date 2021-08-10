@@ -4,6 +4,7 @@
       <input
         v-on:keyup.enter="addTodo"
         v-model="todos.newText"
+        ref="todoInput"
         type="text"
         id="newTodo"
         placeholder="Create new to do item..."
@@ -13,9 +14,19 @@
     </div>
     <draggable v-model="todos.collection" @end="moveTodo()" class="flex-grow draggable overflow-y-auto overflow-x-hidden">
       <transition-group name="flip-list">
-        <div v-for="(todo, index) in todos.collection" :key="todo.id" class="todo-item my-2 flex">
-          <input class="checkbox relative" type="checkbox" v-on:click="deleteTodo(index)" />
-          <span class="todoContent ml-3 text-sm flex-grow">{{ todo.content }}</span>
+        <div v-for="(todo, index) in todos.collection" :key="todo.id" class="todo-item my-2 flex relative">
+          <font-awesome-icon icon="pen-fancy" v-if="!todo.edit" v-on:click="edit(todo)" class="editTodo absolute top-0 right-0 opacity-0" />
+          <input v-if="!todo.edit" class="checkbox relative" type="checkbox" v-on:click="deleteTodo(index)" />
+          <span v-if="!todo.edit" class="todoContent ml-3 text-sm flex-grow">{{ todo.content }}</span>
+          <input
+            v-bind:id="'todo-' + todo.id"
+            v-else
+            class="todoContent ml-3 text-sm flex-grow bg-none border border-grey"
+            type="text"
+            v-model="todo.content"
+            @keyup.enter="saveEdit(todo)"
+            @blur="saveEdit(todo)"
+          />
         </div>
       </transition-group>
     </draggable>
@@ -25,21 +36,43 @@
 <script>
 import draggable from "vuedraggable";
 
+// Font Awesome
+import { faPenFancy } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+library.add(faPenFancy);
 export default {
   components: {
     draggable,
+    FontAwesomeIcon,
   },
   props: {
     todos: Object,
     settings: Object,
   },
   methods: {
+    edit: function(todo) {
+      todo.edit = true;
+      let ref = "todo-" + todo.id;
+
+      this.$nextTick(() => {
+        document.getElementById(ref).focus();
+      });
+      // console.log(document.getElementById(ref));
+    },
+
+    saveEdit: function(todo) {
+      todo.edit = false;
+      this.$emit("updateTodos", this.todos);
+    },
+
     addTodo: function() {
       if (this.todos.newText.length > 0) {
         this.todos.newId++;
         this.todos.collection.unshift({
           id: this.todos.newId,
           content: this.todos.newText,
+          edit: false,
         });
 
         this.todos.newText = "";
@@ -95,6 +128,14 @@ export default {
   cursor: grabbing !important;
   cursor: -moz-grabbing;
   cursor: -webkit-grabbing;
+}
+
+.todo-item:hover .editTodo {
+  opacity: 0.5;
+}
+
+.editTodo:hover {
+  opacity: 1;
 }
 
 .focus-border {

@@ -144,13 +144,16 @@
           </label>
 
           <div v-if="settings.bgImage" class="w-full ">
-            <label for="bgTheme">Background Image Theme</label>
+            <label for="bgTheme"
+              >Background Image Theme
+              <span id="bgImageNext" v-on:click="backgroundTheme()" class="underline float-right">Next Image</span>
+            </label>
             <input
               id="bgTheme"
               v-model="settings.bgImageTheme"
               v-on:keyup="backgroundTheme()"
               type="text"
-              placeholder="Nature"
+              placeholder="Nature, abstract, gradient..."
               class="capitalize color-white w-full focus:outline-none bg-transparent text-sm border border-white placeholder-gray-100 placeholder-opacity-50 p-1 mb-4"
             />
             <label for="bgOpacity"
@@ -306,8 +309,6 @@ export default {
       const root = document.querySelector(":root");
 
       if (this.settings.bgImage) {
-        // NEED TO CREATE FALLBACK IMAGE IF  NOT CONNECTED TO INTERNET
-
         fetch(`https://source.unsplash.com/1920x1080/?${this.searchTerm}`)
           .then((response) => {
             this.settings.bgImageURL = response.url;
@@ -370,7 +371,8 @@ input:checked ~ .dot {
   caret-color: white !important;
 }
 
-#bgImageOpacityReset:hover {
+#bgImageOpacityReset:hover,
+#bgImageNext:hover {
   cursor: pointer;
 }
 

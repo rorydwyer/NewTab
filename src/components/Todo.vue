@@ -3,6 +3,8 @@
     <div class="w-full relative mb-4">
       <input
         v-on:keyup.enter="addTodo"
+        v-on:keyup.down="editRecent"
+        v-on:keyup.up="editRecent"
         v-model="todos.newText"
         ref="todoInput"
         type="text"
@@ -15,13 +17,13 @@
     <draggable v-model="todos.collection" @end="moveTodo()" class="flex-grow draggable overflow-y-auto overflow-x-hidden">
       <transition-group name="flip-list">
         <div v-for="(todo, index) in todos.collection" :key="todo.id" class="todo-item my-2 flex relative">
-          <font-awesome-icon icon="pen-fancy" v-if="!todo.edit" v-on:click="edit(todo)" class="editTodo absolute top-0 right-0 opacity-0" />
+          <!-- <font-awesome-icon icon="pen-fancy" v-if="!todo.edit" v-on:click="edit(todo)" class="editTodo absolute top-1 right-0 opacity-0 transition" /> -->
           <input v-if="!todo.edit" class="checkbox relative" type="checkbox" v-on:click="deleteTodo(index)" />
-          <span v-if="!todo.edit" class="todoContent ml-3 text-sm flex-grow">{{ todo.content }}</span>
+          <span v-if="!todo.edit" class="todoContent ml-3 text-sm flex-grow" @dblclick="edit(todo)">{{ todo.content }}</span>
           <input
             v-bind:id="'todo-' + todo.id"
             v-else
-            class="todoContent ml-3 text-sm flex-grow bg-none border border-grey"
+            class="todoContent w-full focus:outline-none bg-transparent text-sm border rounded  border-gray-400 dark:border-gray-500"
             type="text"
             v-model="todo.content"
             @keyup.enter="saveEdit(todo)"
@@ -37,14 +39,19 @@
 import draggable from "vuedraggable";
 
 // Font Awesome
-import { faPenFancy } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { library } from "@fortawesome/fontawesome-svg-core";
-library.add(faPenFancy);
+// import { faPenFancy } from "@fortawesome/free-solid-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+// import { library } from "@fortawesome/fontawesome-svg-core";
+// library.add(faPenFancy);
 export default {
   components: {
     draggable,
-    FontAwesomeIcon,
+    // FontAwesomeIcon,
+  },
+  data() {
+    return {
+      recentTodo: false,
+    };
   },
   props: {
     todos: Object,
@@ -58,12 +65,22 @@ export default {
       this.$nextTick(() => {
         document.getElementById(ref).focus();
       });
-      // console.log(document.getElementById(ref));
     },
 
     saveEdit: function(todo) {
       todo.edit = false;
       this.$emit("updateTodos", this.todos);
+    },
+
+    editRecent: function() {
+      let note = this.todos.collection[0];
+      if (this.recentTodo) {
+        let input = document.getElementById("newTodo");
+        input.value = note.content;
+        input.dispatchEvent(new Event("input"));
+        this.deleteTodo(0);
+      }
+      this.recentTodo = false;
     },
 
     addTodo: function() {
@@ -76,16 +93,19 @@ export default {
         });
 
         this.todos.newText = "";
+        this.recentTodo = true;
         this.$emit("updateTodos", this.todos);
       }
     },
 
     deleteTodo: function(index) {
       this.todos.collection.splice(index, 1);
+      this.recentTodo = false;
       this.$emit("updateTodos", this.todos);
     },
 
     moveTodo: function() {
+      this.recentTodo = false;
       this.$emit("updateTodos", this.todos);
     },
   },
@@ -130,13 +150,14 @@ export default {
   cursor: -webkit-grabbing;
 }
 
-.todo-item:hover .editTodo {
+/* .todo-item:hover .editTodo {
   opacity: 0.5;
 }
 
 .editTodo:hover {
-  opacity: 1;
-}
+  opacity: 1 !important;
+  cursor: pointer;
+} */
 
 .focus-border {
   height: 1px;

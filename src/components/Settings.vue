@@ -101,7 +101,7 @@
 
           <div v-if="settings.timerClock == 'timer'" class="w-full">
             <label for="timerDefault">Timer Default</label>
-            <p v-on:click="focusInput" ref="input" class="w-full border border-grey text-gray-600 dark:text-gray-200 text-sm p-1">
+            <p v-on:click="focusInput" ref="input" class="w-full border border-grey text-gray-200 text-sm p-1">
               <!-- Hours -->
               <span v-bind:class="{ placeholder: !getPlaceholder(5) }">{{ settings.timerDefault[5] || "0" }}</span>
               <span v-bind:class="{ placeholder: !getPlaceholder(4) }">{{ settings.timerDefault[4] || "0" }}:</span>

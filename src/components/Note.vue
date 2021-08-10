@@ -3,7 +3,7 @@
     <vue-simplemde class="flex-grow" ref="markdownEditor" v-model="note.content" :configs="configs" v-bind:class="spellChecker" />
     <div class="text-right">
       <font-awesome-icon icon="paragraph" id="formatIcon" v-on:click="formatNote()" class="transition text-gray-500 dark:text-gray-300" title="Format" />
-      <font-awesome-icon icon="trash" id="deleteIcon" v-on:click="deleteNote()" class="transition text-gray-500 dark:text-gray-300" title="Delete" />
+      <font-awesome-icon icon="trash-alt" id="deleteIcon" v-on:click="deleteNote()" class="transition text-gray-500 dark:text-gray-300" title="Delete" />
     </div>
   </div>
 </template>
@@ -12,10 +12,10 @@
 import VueSimplemde from "vue-simplemde";
 
 // Font Awesome
-import { faParagraph, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faParagraph, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
-library.add(faParagraph, faTrash);
+library.add(faParagraph, faTrashAlt);
 
 export default {
   name: "note",
@@ -151,7 +151,7 @@ export default {
 }
 
 #deleteIcon:hover {
-  color: red;
+  color: #dc3545;
 }
 
 .disable-spell-error .cm-spell-error {

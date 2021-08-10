@@ -1,5 +1,5 @@
 <template>
-  <div v-if="settings.todo">
+  <div v-if="settings.todo" class="flex flex-col max-h-full">
     <div class="w-full relative mb-4">
       <input
         v-on:keyup.enter="addTodo"
@@ -11,11 +11,11 @@
       />
       <span class="focus-border absolute left-0 bottom-0 w-0 bg-gray-800 dark:bg-gray-200 transition"></span>
     </div>
-    <draggable v-model="todos.collection" @end="moveTodo()" class="draggable">
+    <draggable v-model="todos.collection" @end="moveTodo()" class="flex-grow draggable overflow-y-auto overflow-x-hidden">
       <transition-group name="flip-list">
-        <div v-for="(todo, index) in todos.collection" :key="todo.id" class="todo-item my-1 flex">
+        <div v-for="(todo, index) in todos.collection" :key="todo.id" class="todo-item my-2 flex">
           <input class="checkbox relative" type="checkbox" v-on:click="deleteTodo(index)" />
-          <span class="ml-3 text-sm flex-grow">{{ todo.content }}</span>
+          <span class="todoContent ml-3 text-sm flex-grow">{{ todo.content }}</span>
         </div>
       </transition-group>
     </draggable>
@@ -77,10 +77,11 @@ export default {
 
 .sortable-chosen {
   background-color: #ddd;
+  opacity: 0.5;
   padding: 2px;
-  margin: -2px;
+  margin-bottom: -4px !important;
   color: black !important;
-  border-radius: 4px;
+  border-radius: 2px;
 }
 
 .sortable-chosen:hover {
@@ -104,5 +105,9 @@ export default {
 #newTodo:focus ~ .focus-border {
   width: 100%;
   transition: all cubic-bezier(0.4, 0, 0.2, 1) 150ms;
+}
+
+.todoContent:first-letter {
+  text-transform: uppercase;
 }
 </style>

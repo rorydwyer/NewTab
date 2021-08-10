@@ -38,7 +38,7 @@
                 v-bind:class="{ pinned: note.pinned }"
                 v-on:click="pinNote(note)"
               />
-              {{ note.content || "Empty note" }}
+              {{ note.content || "Blank note" }}
             </li>
           </transition-group>
         </ul>
@@ -49,21 +49,21 @@
         <font-awesome-icon
           :icon="['far', 'clock']"
           title="Clock"
-          class="clockIcon transition-all opacity-0 w-0 text-gray-500 dark:text-gray-300"
+          class="clockIcon transition-all opacity-0 text-gray-500 dark:text-gray-300"
           v-bind:class="{ activeClockTimer: settings.timerClock == 'clock' }"
           v-on:click="updateClockTimer('clock')"
         />
         <font-awesome-icon
           :icon="['fas', 'stopwatch']"
           title="Stopwatch"
-          class="clockIcon transition-all opacity-0 w-0 text-gray-500 dark:text-gray-300"
+          class="clockIcon transition-all opacity-0 text-gray-500 dark:text-gray-300"
           v-bind:class="{ activeClockTimer: settings.timerClock == 'stopwatch' }"
           v-on:click="updateClockTimer('stopwatch')"
         />
         <font-awesome-icon
           :icon="['fas', 'hourglass-start']"
           title="Timer"
-          class="clockIcon transition-all opacity-0 w-0 text-gray-500 dark:text-gray-300"
+          class="clockIcon transition-all opacity-0 text-gray-500 dark:text-gray-300"
           v-bind:class="{ activeClockTimer: settings.timerClock == 'timer' }"
           v-on:click="updateClockTimer('timer')"
         />

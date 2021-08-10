@@ -10,7 +10,7 @@
     />
     <Note ref="note" :notes="newTab.notes" :settings="newTab.settings" @updateNotes="updateNotes($event)" class="col-span-6 h-screen pt-8 max-h-screen" />
     <div class="col-span-3 h-screen pt-8 max-h-screen px-4 pb-4 flex flex-col">
-      <div class="flex-grow">
+      <div class="flex-grow mb-4 max-h-full overflow-y-scroll overflow-x-hidden">
         <Todo :todos="newTab.todos" :settings="newTab.settings" @updateTodos="updateTodos($event)" />
       </div>
       <Quote ref="quote" :settings="newTab.settings" @updateSettings="updateSettings($event)" />

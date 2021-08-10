@@ -1,8 +1,9 @@
 <template>
   <div>
     <div class="stopwatch text-center mb-2">
-      <span id="time" class="text-7xl w-full text-gray-600 dark:text-gray-200 focus:outline-none text-center bg-transparent">{{ hmStopwatch }}</span>
-      <span>{{ sStopwatch }}</span>
+      <span id="time" class="text-7xl w-full text-gray-600 dark:text-gray-200 focus:outline-none text-center bg-transparent">{{ hms }}</span>
+
+      <span class="w-4 inline-block">{{ m }}</span>
     </div>
 
     <div class="flex">
@@ -39,8 +40,8 @@ export default {
   name: "stopwatch",
   data() {
     return {
-      hmStopwatch: "0:00",
-      sStopwatch: "00",
+      hms: "0:00",
+      m: "00",
       elapsedTime: 0,
       prevTime: 0,
       stopwatchInterval: 0,
@@ -50,6 +51,7 @@ export default {
     update: function() {
       let tempTime = this.elapsedTime;
 
+      let milliseconds = tempTime % 1000;
       tempTime = Math.floor(tempTime / 1000);
       let seconds = tempTime % 60;
       tempTime = Math.floor(tempTime / 60);
@@ -57,9 +59,9 @@ export default {
       tempTime = Math.floor(tempTime / 60);
       let hours = tempTime % 60;
 
-      this.hmStopwatch = `${hours}:${minutes.toString().padStart(2, "0")}`;
-      this.sStopwatch = seconds.toString().padStart(2, "0");
-      document.title = `${this.hmStopwatch}:${this.sStopwatch}`;
+      this.hms = `${hours ? hours + ":" : ""}${minutes}:${seconds.toString().padStart(2, "0")}`;
+      this.m = milliseconds.toString().substring(0, 2);
+      document.title = `${hours ? hours + ":" : ""}${minutes}:${seconds.toString().padStart(2, "0")}`;
     },
 
     start: function() {

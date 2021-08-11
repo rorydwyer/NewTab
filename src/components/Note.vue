@@ -3,7 +3,14 @@
     <vue-simplemde class="flex-grow" ref="markdownEditor" v-model="note.content" :configs="configs" v-bind:class="spellChecker" />
     <div class="text-right">
       <font-awesome-icon icon="paragraph" id="formatIcon" v-on:click="formatNote()" class="transition text-gray-500 dark:text-gray-300" title="Format" />
-      <font-awesome-icon icon="trash-alt" id="deleteIcon" v-on:click="deleteNote()" class="transition text-gray-500 dark:text-gray-300" title="Delete" />
+      <font-awesome-icon
+        v-if="onlyNote > 1"
+        icon="trash-alt"
+        id="deleteIcon"
+        v-on:click="deleteNote()"
+        class="transition text-gray-500 dark:text-gray-300"
+        title="Delete"
+      />
     </div>
   </div>
 </template>
@@ -33,14 +40,6 @@ export default {
       configs: {
         status: false,
         spellChecker: true,
-        // toolbar: [
-        //   {
-        //     name: "heading1",
-        //     action: VueSimplemde.toggleHeading1,
-        //     className: "fa fa-header fa-header-x fa-header-1",
-        //     title: "#Heading 1",
-        //   },
-        // ],
         toolbar: [
           "heading-1",
           "heading-2",
@@ -71,6 +70,9 @@ export default {
     },
     spellChecker() {
       return this.settings.spellChecker ? "" : "disable-spell-error";
+    },
+    onlyNote: function() {
+      return this.notes.collection.length;
     },
   },
   mounted() {

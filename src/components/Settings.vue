@@ -173,6 +173,46 @@
             />
           </div>
         </div>
+
+        <!-- Load Blank Note -->
+        <div class=" w-full py-4">
+          <div class="mb-2">
+            <div class="mr-3 text-base">
+              Load note on new tab
+            </div>
+            <div class="flex items-center mr-4 my-2">
+              <input
+                id="lastNoteRadio"
+                type="radio"
+                name="radioNote"
+                class="hidden"
+                v-bind:value="false"
+                v-model="settings.loadBlankNote"
+                v-on:change="updateSettings"
+              />
+              <label for="lastNoteRadio" class="flex items-center cursor-pointer">
+                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-grey flex-no-shrink"></span>
+                Load last note</label
+              >
+            </div>
+
+            <div class="flex items-center mr-4 my-2">
+              <input
+                id="blankNoteRadio"
+                type="radio"
+                name="radioNote"
+                class="hidden"
+                v-bind:value="true"
+                v-model="settings.loadBlankNote"
+                v-on:change="updateSettings"
+              />
+              <label for="blankNoteRadio" class="flex items-center cursor-pointer">
+                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-grey flex-no-shrink"></span>
+                Load blank note</label
+              >
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="text-right">

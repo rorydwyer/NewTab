@@ -2,6 +2,7 @@
   <div id="main" class="main grid grid-cols-12 gap-12 h-screen max-h-screen overflow-hidden dark:text-white relative">
     <div v-if="showSettings" v-on:click="showSettings = !showSettings" class="absolute top-0 left-0 w-screen h-screen z-10"></div>
     <NoteList
+      ref="notelist"
       :notes="newTab.notes"
       :settings="newTab.settings"
       @updateNotes="updateNotes($event)"
@@ -87,6 +88,7 @@ export default {
           todo: true,
           quote: true,
           bgImage: true,
+          loadBlankNote: false,
           spellChecker: false,
           today: "",
           bgImageTheme: "Nature",
@@ -103,6 +105,15 @@ export default {
   computed: {
     toggleSettings: function() {
       return this.showSettings ? "right-0" : "-right-1/4";
+    },
+    currentNoteIndex: function() {
+      let noteIndex;
+      for (let i = 0; i < this.newTab.notes.collection.length; i += 1) {
+        if (this.newTab.notes.collection[i]["id"] === this.newTab.notes.currentId) {
+          noteIndex = i;
+        }
+      }
+      return noteIndex;
     },
   },
   mounted() {
@@ -131,6 +142,21 @@ export default {
           // Get a new background image
           this.$refs.settings.backgroundImage();
         }
+      }
+
+      // Load Blank Note
+      if (this.newTab.settings.loadBlankNote && this.newTab.notes.collection[this.currentNoteIndex].content !== "") {
+        this.$nextTick(() => {
+          let blankNote = false;
+          for (let i = 0; i < this.newTab.notes.collection.length; i += 1) {
+            if (this.newTab.notes.collection[i]["content"] === "") {
+              this.$refs.notelist.loadNote(this.newTab.notes.collection[i]);
+              blankNote = true;
+              break;
+            }
+          }
+          if (!blankNote) this.$refs.notelist.createNote();
+        });
       }
 
       // Quote

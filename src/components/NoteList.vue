@@ -134,6 +134,9 @@ export default {
       this.notes.currentId = note.id;
       this.$emit("updateNotes", { notes: this.notes, load: true });
     },
+
+    loadBlankNote: function() {},
+
     pinNote: function(note) {
       note.pinned = !note.pinned;
       this.$emit("updateNotes", { notes: this.notes, load: true });

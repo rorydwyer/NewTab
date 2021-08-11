@@ -17,13 +17,12 @@
     <draggable v-model="todos.collection" @end="moveTodo()" class="flex-grow draggable overflow-y-auto overflow-x-hidden">
       <transition-group name="flip-list">
         <div v-for="(todo, index) in todos.collection" :key="todo.id" class="todo-item my-2 flex relative">
-          <!-- <font-awesome-icon icon="pen-fancy" v-if="!todo.edit" v-on:click="edit(todo)" class="editTodo absolute top-1 right-0 opacity-0 transition" /> -->
           <input v-if="!todo.edit" class="checkbox relative" type="checkbox" v-on:click="deleteTodo(index)" />
           <span v-if="!todo.edit" class="todoContent ml-3 text-sm flex-grow" @dblclick="edit(todo)">{{ todo.content }}</span>
           <input
             v-bind:id="'todo-' + todo.id"
             v-else
-            class="todoContent w-full focus:outline-none bg-transparent text-sm border rounded  border-gray-400 dark:border-gray-500"
+            class="todoContent w-full focus:outline-none bg-transparent text-sm border rounded pl-1 border-gray-400 dark:border-gray-500"
             type="text"
             v-model="todo.content"
             @keyup.enter="saveEdit(todo)"
@@ -38,15 +37,9 @@
 <script>
 import draggable from "vuedraggable";
 
-// Font Awesome
-// import { faPenFancy } from "@fortawesome/free-solid-svg-icons";
-// import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-// import { library } from "@fortawesome/fontawesome-svg-core";
-// library.add(faPenFancy);
 export default {
   components: {
     draggable,
-    // FontAwesomeIcon,
   },
   data() {
     return {
@@ -149,15 +142,6 @@ export default {
   cursor: -moz-grabbing;
   cursor: -webkit-grabbing;
 }
-
-/* .todo-item:hover .editTodo {
-  opacity: 0.5;
-}
-
-.editTodo:hover {
-  opacity: 1 !important;
-  cursor: pointer;
-} */
 
 .focus-border {
   height: 1px;

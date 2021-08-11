@@ -220,7 +220,7 @@ export default {
       return `0.${this.settings.bgImageOpacity.toString().padStart(2, "0")}`;
     },
     fallbackBg: function() {
-      let imgNum = Math.floor(Math.random() * 5);
+      let imgNum = Math.floor(Math.random() * 5) + 1;
 
       return `/images/bgImage-${imgNum}.jpg`;
     },

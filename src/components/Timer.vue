@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="timer w-full text-center">
-      <p v-on:click="focusInput" ref="input" class="w-full text-7xl text-gray-600 dark:text-gray-200 text-center -mb-3">
+      <p id="timer" v-on:click="focusInput" ref="input" class="w-full text-7xl text-gray-600 dark:text-gray-200 text-center -mb-3 transition">
         <!-- Hours -->
         <span v-if="getPlaceholder(5)" v-bind:class="{ placeholder: !getPlaceholder(5) }">{{ timer[5] }}</span>
         <span v-if="getPlaceholder(4)" v-bind:class="{ placeholder: !getPlaceholder(4) }">{{ timer[4] }}:</span>
@@ -21,7 +21,6 @@
         ref="timer"
         class="opacity-0 w-0 h-0 overflow-hidden focus:outline-none"
         type="number"
-        id="timer"
         @keypress="input"
         v-on:keyup.delete="tDelete()"
         v-on:keyup.enter="
@@ -34,19 +33,28 @@
         v-on:blur="blur()"
       />
     </div>
+    <div v-if="!alertInterval">
+      <button
+        v-on:click="start"
+        v-if="!timerInterval"
+        class="w-full py-1 border border-gray-400 dark:border-gray-500 rounded hover:bg-gray-400 hover:dark:bg-gray-100 hover:bg-opacity-10 text-sm text-center text-gray-600 dark:text-gray-300 transition"
+      >
+        <span>Start Timer</span>
+      </button>
+      <button
+        v-on:click="pause"
+        v-else
+        class="w-full py-1 border border-gray-400 dark:border-gray-500 rounded hover:bg-gray-400 hover:dark:bg-gray-100 hover:bg-opacity-10 text-sm text-center text-gray-600 dark:text-gray-300 transition"
+      >
+        <span>Pause Timer</span>
+      </button>
+    </div>
     <button
-      v-on:click="start"
-      v-if="!timerInterval"
-      class="w-full py-1 border border-gray-400 dark:border-gray-500 rounded hover:bg-gray-400 hover:dark:bg-gray-100 hover:bg-opacity-10 text-sm text-center text-gray-600 dark:text-gray-300 transition"
-    >
-      <span>Start Timer</span>
-    </button>
-    <button
-      v-on:click="pause"
       v-else
+      v-on:click="endAlarm"
       class="w-full py-1 border border-gray-400 dark:border-gray-500 rounded hover:bg-gray-400 hover:dark:bg-gray-100 hover:bg-opacity-10 text-sm text-center text-gray-600 dark:text-gray-300 transition"
     >
-      <span>Pause Timer</span>
+      <span>Ok</span>
     </button>
   </div>
 </template>
@@ -68,11 +76,13 @@ export default {
   },
   data() {
     return {
+      audio: new Audio("/timer.mp3"),
       timer: [],
       inputFocus: false,
       prevTime: "",
       remainingTime: 0,
       timerInterval: 0,
+      alertInterval: 0,
     };
   },
   mounted() {
@@ -81,6 +91,7 @@ export default {
   methods: {
     focusInput: function() {
       this.clear();
+      this.endAlarm();
       this.$refs.timer.focus();
     },
 
@@ -188,20 +199,26 @@ export default {
     },
 
     done: function() {
-      let audio = new Audio("/timer.mp3");
-      audio.play();
-
-      let alertLength = 0;
+      this.audio.play();
       document.querySelector("#timer").classList.toggle("timer-alert");
-      let alert = setInterval(() => {
-        document.querySelector("#timer").classList.toggle("timer-alert");
-        alertLength++;
-        if (alertLength >= 5) {
-          clearInterval(alert);
-        }
-      }, 800);
 
       this.timerInterval = null;
+      let alertLength = 0;
+      this.alertInterval = setInterval(() => {
+        this.audio.play();
+        document.querySelector("#timer").classList.toggle("timer-alert");
+        alertLength++;
+        if (alertLength >= 9) {
+          clearInterval(this.alertInterval);
+          this.alertInterval = null;
+        }
+      }, 500);
+    },
+
+    endAlarm: function() {
+      clearInterval(this.alertInterval);
+      this.alertInterval = null;
+      document.querySelector("#timer").classList.remove("timer-alert");
     },
   },
 };
@@ -210,6 +227,10 @@ export default {
 <style scoped>
 .placeholder {
   opacity: 0.5;
+}
+
+.timer-alert {
+  opacity: 0;
 }
 
 .inputFocus {

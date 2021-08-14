@@ -45,6 +45,7 @@ import Note from "@/components/Note.vue";
 import Todo from "@/components/Todo.vue";
 import Settings from "@/components/Settings.vue";
 import Quote from "@/components/Quote.vue";
+import { diff } from "deep-object-diff";
 import "tailwindcss/tailwind.css";
 
 // Font Awesome
@@ -66,6 +67,8 @@ export default {
   data() {
     return {
       showSettings: false,
+      timeout: 0,
+      focus: false,
       newTab: {
         notes: {
           collection: [
@@ -170,9 +173,15 @@ export default {
       if (this.newTab.settings.quote && (!this.newTab.settings.quoteContent.length || this.newTab.settings.today != today.toDateString())) {
         this.$refs.quote.getQuote();
       }
-
-      // chrome.storage.local.set(res);
     });
+
+    window.addEventListener("focus", () => {
+      this.$refs.note.loadNote();
+    });
+
+    this.timeout = setInterval(() => {
+      this.checkForUpdate();
+    }, 1000);
   },
   methods: {
     init: function(res) {
@@ -193,6 +202,16 @@ Unordered lists can be started using the tool bar or by typing \`* \`, \`- \`, o
       this.newTab.notes.collection[0].pinned = true;
       this.newTab.settings.timerClock = "clock";
       res.newTab = this.newTab;
+    },
+
+    checkForUpdate: function() {
+      chrome.storage.local.get("newTab", (res) => {
+        if (Object.keys(diff(this.newTab.notes, res.newTab.notes)).length && document.hidden) {
+          this.newTab.notes = res.newTab.notes;
+          this.$refs.note.loadNote();
+        }
+        chrome.storage.local.set(res);
+      });
     },
 
     updateNotes: function({ notes, load }) {

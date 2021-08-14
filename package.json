@@ -16,6 +16,7 @@
     "autoprefixer": "^9",
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
+    "deep-object-diff": "^1.1.0",
     "lodash": "^4.17.21",
     "postcss": "^7",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2",

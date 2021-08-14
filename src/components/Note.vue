@@ -91,7 +91,6 @@ export default {
     });
 
     // Styles for toolbar
-    // document.querySelector(".editor-toolbar").classList.add("show-toolbar");
     document.querySelector(".main").style.opacity = "1";
   },
   methods: {
@@ -117,7 +116,6 @@ export default {
         this.timeout = null;
       }
       this.timeout = setTimeout(() => {
-        console.log("autosave");
         this.noteCollection[this.currentNoteIndex()].date = new Date().getTime();
         this.$emit("updateNotes", { notes: this.notes, load: false });
       }, 1000);

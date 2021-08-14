@@ -1,5 +1,5 @@
 <template>
-  <div v-if="settings.todo" class="flex flex-col max-h-full">
+  <div v-if="settings.todo" class="flex flex-col max-h-full h-full">
     <div class="w-full relative mb-4">
       <input
         v-on:keyup.enter="addTodo"
@@ -14,8 +14,8 @@
       />
       <span class="focus-border absolute left-0 bottom-0 w-0 bg-gray-800 dark:bg-gray-200 transition"></span>
     </div>
-    <draggable v-model="todos.collection" @end="moveTodo()" class="flex-grow draggable overflow-y-auto overflow-x-hidden">
-      <transition-group name="flip-list">
+    <draggable v-model="todos.collection" @end="moveTodo()" class="flex-grow h-full draggable overflow-y-auto overflow-x-hidden">
+      <transition-group name="flip-list" class="h-full">
         <div v-for="(todo, index) in todos.collection" :key="todo.id" class="todo-item my-2 flex relative">
           <input v-if="!todo.edit" class="checkbox relative" type="checkbox" v-on:click="deleteTodo(index)" />
           <span v-if="!todo.edit" class="todoContent ml-3 text-sm flex-grow" @dblclick="edit(todo)">{{ todo.content }}</span>

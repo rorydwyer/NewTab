@@ -7,6 +7,7 @@
       :settings="newTab.settings"
       @updateNotes="updateNotes($event)"
       @updateSettings="updateSettings($event)"
+      @viewTrash="$refs.note.viewTrash($event)"
       class="col-span-3 h-screen pt-8 max-h-screen"
     />
     <Note ref="note" :notes="newTab.notes" :settings="newTab.settings" @updateNotes="updateNotes($event)" class="col-span-6 h-screen pt-8 max-h-screen" />
@@ -31,6 +32,7 @@
       :settings="newTab.settings"
       @settings="showSettings = !showSettings"
       @updateSettings="updateSettings($event)"
+      @toggleTrash="$refs.note.loadNote()"
       v-bind:class="toggleSettings"
       class="absolute w-1/4 h-full transition-all z-50 pt-8 max-h-screen"
     />
@@ -74,6 +76,7 @@ export default {
               pinned: false,
             },
           ],
+          trash: [],
           currentId: 0,
           newId: 0,
         },
@@ -86,10 +89,11 @@ export default {
           darkMode: true,
           timerClock: "",
           todo: true,
-          quote: true,
           bgImage: true,
+          quote: false,
           loadBlankNote: false,
           spellChecker: false,
+          viewTrash: false,
           today: "",
           bgImageTheme: "Nature",
           bgImageURL: "",
@@ -123,6 +127,9 @@ export default {
       this.newTab = res.newTab;
 
       // Load Settings
+      //View Trash
+      this.newTab.settings.viewTrash = false;
+
       // Dark Mode
       if (this.newTab.settings.darkMode) {
         document.documentElement.classList.add("dark");
@@ -237,6 +244,16 @@ Unordered lists can be started using the tool bar or by typing \`* \`, \`- \`, o
 
 .dark > body {
   background-color: rgba(31, 41, 55, 1);
+}
+
+::-webkit-input-placeholder,
+::placeholder {
+  color: rgba(75, 85, 99, 0.7) !important;
+}
+
+.dark ::-webkit-input-placeholder,
+.dark ::placeholder {
+  color: rgba(209, 213, 219, 0.7) !important;
 }
 
 #main::before {

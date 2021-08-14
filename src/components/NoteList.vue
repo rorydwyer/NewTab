@@ -1,6 +1,6 @@
 <template>
   <div class="px-4 pb-4 flex flex-col">
-    <div class="notelist flex-grow overflow-y-scroll">
+    <div v-if="!settings.viewTrash" class="notelist flex-grow overflow-y-scroll">
       <div class="flex mb-4">
         <div class="flex-grow relative">
           <input
@@ -9,7 +9,7 @@
             name="search"
             id="searchNotes"
             placeholder="Search notes..."
-            class="w-full focus:outline-none bg-transparent border-b text-sm border-gray-400 dark:border-gray-500 p-1 mr-1"
+            class="w-full focus:outline-none bg-transparent border-b text-sm border-gray-400 dark:border-gray-500 p-1 mr-1 placeholder-gray-800::placeholder"
           />
           <span class="focus-border absolute left-0 bottom-0 w-0 bg-gray-800 dark:bg-gray-200 transition"></span>
         </div>
@@ -44,6 +44,28 @@
         </ul>
       </div>
     </div>
+    <!-- Trash List -->
+    <div v-else class="notelist flex-grow overflow-y-scroll">
+      <div class=" mb-4">
+        <h3 class="text-xl text-center">Trash</h3>
+      </div>
+      <div>
+        <ul>
+          <transition-group name="flip-list" tag="ul">
+            <li
+              v-for="note in notes.trash"
+              :key="note.id"
+              v-on:click="loadNote(note)"
+              v-bind:class="{ activeNote: notes.currentId == note.id }"
+              class="bg-gray-400 hover:bg-opacity-20 bg-opacity-10 dark:text-gray-300 text-sm my-2 p-2 text-gray-600 note-single relative transition"
+            >
+              {{ note.content || "Blank note" }}
+            </li>
+          </transition-group>
+        </ul>
+      </div>
+    </div>
+
     <div id="clockTimer" class="relative" v-if="settings.timerClock">
       <div id="clockIconMenu" class="absolute -bottom-2 left-full w-0 pl-4">
         <font-awesome-icon
@@ -134,8 +156,6 @@ export default {
       this.notes.currentId = note.id;
       this.$emit("updateNotes", { notes: this.notes, load: true });
     },
-
-    loadBlankNote: function() {},
 
     pinNote: function(note) {
       note.pinned = !note.pinned;

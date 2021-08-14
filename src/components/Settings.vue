@@ -216,6 +216,9 @@
       </div>
     </div>
     <div class="text-right">
+      <p v-on:click="toggleTrash()" class="underline pb-3">
+        View Trash
+      </p>
       <p><a href="https://rory-dwyer.com" target="_blank" class="underline">About the developer</a></p>
       <p>
         <font-awesome-icon icon="heart" />
@@ -284,6 +287,12 @@ export default {
         document.documentElement.classList.remove("dark");
       }
       this.updateSettings();
+    },
+
+    // Trash
+    toggleTrash: function() {
+      this.settings.viewTrash = !this.settings.viewTrash;
+      this.$emit("toggleTrash");
     },
 
     // Timer
@@ -412,7 +421,8 @@ input:checked ~ .dot {
 }
 
 #bgImageOpacityReset:hover,
-#bgImageNext:hover {
+#bgImageNext:hover,
+p.underline:hover {
   cursor: pointer;
 }
 

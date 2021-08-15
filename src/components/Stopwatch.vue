@@ -60,7 +60,10 @@ export default {
       let hours = tempTime % 60;
 
       this.hms = `${hours ? hours + ":" : ""}${minutes}:${seconds.toString().padStart(2, "0")}`;
-      this.m = milliseconds.toString().substring(0, 2);
+      this.m = milliseconds
+        .toString()
+        .substring(0, 2)
+        .padStart(2, "0");
       document.title = `${hours ? hours + ":" : ""}${minutes}:${seconds.toString().padStart(2, "0")}`;
     },
 

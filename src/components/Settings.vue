@@ -163,7 +163,7 @@
         <!-- Load Blank Note -->
         <div class=" w-full py-4">
           <div class="mr-3 text-base pb-2">
-            Note editor
+            Note Editor
           </div>
           <div class="mb-2">
             <label for="lastNoteRadio">Load note on new tab</label>
@@ -281,7 +281,6 @@ export default {
   },
   methods: {
     updateSettings: function() {
-      console.log(this.settings.quote);
       this.$emit("updateSettings", this.settings);
     },
 

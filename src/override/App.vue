@@ -71,14 +71,7 @@ export default {
       focus: false,
       newTab: {
         notes: {
-          collection: [
-            {
-              id: 0,
-              date: new Date().getTime(),
-              content: "",
-              pinned: false,
-            },
-          ],
+          collection: [],
           trash: [],
           currentId: 0,
           newId: 0,
@@ -93,7 +86,7 @@ export default {
           timerClock: "",
           todo: true,
           bgImage: true,
-          quote: false,
+          quote: true,
           loadBlankNote: false,
           spellChecker: false,
           viewTrash: false,
@@ -188,7 +181,10 @@ export default {
   },
   methods: {
     init: function(res) {
-      this.newTab.notes.collection[0].content = `# First Note
+      this.newTab.notes.collection.unshift({
+        id: 0,
+        date: new Date().getTime(),
+        content: `# First Note
 Go ahead, play around with the editor! Be sure to check out **bold**, *italic*  and ~~strikethrough~~ styling. You can type using Markdown syntax, by toggling the Format tool bar below, or using shortcuts like \`cmd-b\` or \`ctrl-b\`.
 
 ## Lists
@@ -201,9 +197,10 @@ Unordered lists can be started using the tool bar or by typing \`* \`, \`- \`, o
 
 #### Ordered
 1. Numbered lists...
-2. ...work too!`;
-      this.newTab.notes.collection[0].pinned = true;
-      this.newTab.settings.timerClock = "clock";
+2. ...work too!`,
+        pinned: true,
+      }),
+        (this.newTab.settings.timerClock = "clock");
       res.newTab = this.newTab;
     },
 

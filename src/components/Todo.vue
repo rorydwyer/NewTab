@@ -1,6 +1,6 @@
 <template>
   <div v-if="settings.todo" class="flex flex-col max-h-full h-full">
-    <div class="w-full relative mb-4">
+    <div class="w-full relative mb-2">
       <input
         v-on:keyup.enter="addTodo"
         v-on:keyup.down="editRecent"

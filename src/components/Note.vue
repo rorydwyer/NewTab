@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="noteCollection.length > 0" class="pb-4 h-full flex flex-col">
+    <div v-show="onlyNote" class="pb-4 h-full flex flex-col">
       <vue-simplemde class="flex-grow" ref="markdownEditor" v-model="note.content" :configs="configs" v-bind:class="spellChecker" />
       <div class="flex">
         <div class="text-left flex-grow">
@@ -15,6 +15,8 @@
         </div>
         <div class="text-right flex-grow">
           <font-awesome-icon icon="paragraph" id="formatIcon" v-on:click="formatNote()" class="transition text-gray-500 dark:text-gray-300" title="Format" />
+
+          <!-- v-if="!settings.viewTrash && notes.collection.length != 1" -->
           <font-awesome-icon icon="trash-alt" id="deleteIcon" v-on:click="deleteNote()" class="transition text-gray-500 dark:text-gray-300" title="Delete" />
         </div>
       </div>
@@ -72,7 +74,11 @@ export default {
     },
     note: {
       get: function() {
-        return this.noteCollection[this.currentNoteIndex()];
+        if (this.onlyNote) {
+          return this.noteCollection[this.currentNoteIndex()];
+        } else {
+          return {};
+        }
       },
     },
     noteCollection: function() {
@@ -95,7 +101,7 @@ export default {
   },
   methods: {
     loadNote: function() {
-      if (this.noteCollection.length > 0) {
+      if (this.onlyNote) {
         this.simplemde.value(this.note.content);
         this.simplemde.codemirror.focus();
       }

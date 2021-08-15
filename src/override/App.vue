@@ -208,7 +208,6 @@ Unordered lists can be started using the tool bar or by typing \`* \`, \`- \`, o
       chrome.storage.local.get("newTab", (res) => {
         if (Object.keys(diff(this.newTab.notes, res.newTab.notes)).length && document.hidden) {
           this.newTab.notes = res.newTab.notes;
-          this.$refs.note.loadNote();
         }
         chrome.storage.local.set(res);
       });

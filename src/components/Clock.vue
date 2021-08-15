@@ -1,5 +1,5 @@
 <template>
-  <div class="text-center">
+  <div class="text-center pt-8">
     <span id="time" class="w-full text-gray-600 dark:text-gray-200 focus:outline-none text-center bg-transparent">{{ time }}</span>
     <span>{{ meridiem }}</span>
   </div>

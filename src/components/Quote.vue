@@ -8,36 +8,33 @@
 </template>
 
 <script>
+import Quote from "inspirational-quotes";
+
 export default {
   name: "quote",
   props: {
     settings: Object,
   },
+  data() {
+    return {
+      q: "",
+      a: "",
+    };
+  },
   mounted() {
     this.getQuote();
   },
   methods: {
-    getQuote: async function() {
-      if (this.settings.quote) {
-        let q;
-        let a;
-        fetch("https://quotes.rest/qod?language=en")
-          .then((response) => response.json())
-          .then((data) => {
-            q = data.contents.quotes[0].quote;
-            a = data.contents.quotes[0].author;
-          })
-          .catch(() => {
-            q = "The adventure doesn't start until something goes wrong.";
-            a = "Rory Dwyer";
-          })
-          .then(() => {
-            this.settings.quoteContent = q;
-            this.settings.quoteAuthor = a;
-            this.settings.today = new Date().toDateString();
-            this.$emit("updateSettings", this.settings);
-          });
-      }
+    getQuote: function() {
+      console.log(Quote.getQuote());
+      let quote = Quote.getQuote();
+
+      this.settings.quoteContent = quote.text;
+      this.settings.quoteAuthor = quote.author;
+      this.settings.quoteDate = new Date().toDateString();
+      this.settings.today = new Date().toDateString();
+
+      // this.$emit("updateSettings", this.settings);
     },
   },
 };
@@ -45,7 +42,6 @@ export default {
 
 <style scoped>
 #quote:hover #qAuthor {
-  /* top: 0px; */
   height: 28px;
   opacity: 1;
 }

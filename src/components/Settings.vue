@@ -1,22 +1,8 @@
 <template>
   <div id="settings" class="flex flex-col px-4 pb-4 text-white max-h-screen">
     <h2 class="text-xl text-center font-bold"># NewTab Settings</h2>
-    <div class="flex-grow my-8 px-4 overflow-y-scroll">
-      <div class="flex flex-col items-center justify-center w-full mb-6">
-        <!-- Spellcheck -->
-        <div class="border-b border-white w-full py-4">
-          <label for="spellCheck" class="flex justify-between cursor-pointer">
-            <div class="mr-3 text-base">
-              Spellcheck
-            </div>
-            <div class="relative">
-              <input id="spellCheck" type="checkbox" class="sr-only" v-model="settings.spellChecker" v-on:change="updateSettings" />
-              <div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
-              <div class="dot absolute w-6 h-6 bg-white rounded-full shadow-md -left-1 -top-1 transition"></div>
-            </div>
-          </label>
-        </div>
-
+    <div class="flex-grow mt-8 mb-2 px-4 overflow-y-scroll relative">
+      <div class="flex flex-col items-center justify-center w-full -mb-4">
         <!-- Dark Mode -->
         <div class="border-b border-white w-full py-4">
           <label for="darkMode" class="flex justify-between cursor-pointer">
@@ -31,11 +17,55 @@
           </label>
         </div>
 
+        <!-- Background Image -->
+        <div class="border-b border-white w-full py-4">
+          <label for="bgImage" class="flex justify-between cursor-pointer pb-2">
+            <div class="mr-3 text-base">
+              Background Image
+            </div>
+            <div class="relative">
+              <input id="bgImage" type="checkbox" class="sr-only" v-model="settings.bgImage" v-on:change="backgroundImage(true)" />
+              <div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
+              <div class="dot absolute w-6 h-6 bg-white rounded-full shadow-md -left-1 -top-1 transition"></div>
+            </div>
+          </label>
+
+          <div v-if="settings.bgImage" class="w-full ">
+            <label for="bgTheme"
+              >Background Image Theme
+              <span id="bgImageNext" v-on:click="backgroundTheme()" class="underline float-right">Next Image</span>
+            </label>
+            <input
+              id="bgTheme"
+              v-model="settings.bgImageTheme"
+              v-on:keyup="backgroundTheme()"
+              type="text"
+              placeholder="Nature, abstract, gradient..."
+              class="capitalize color-white w-full focus:outline-none bg-transparent text-sm border border-white placeholder-gray-100 placeholder-opacity-50 p-1 mb-4"
+            />
+            <label for="bgOpacity"
+              >Background Image Opacity
+              <span id="bgImageOpacityReset" class="underline float-right" v-on:click="backgroundOpacity({ reset: true })">Reset</span></label
+            >
+
+            <vue-slider
+              class="w-full p-1 mx-1"
+              :process-style="{ backgroundColor: '#5cff8a' }"
+              :tooltip-style="{ backgroundColor: 'rgb(75, 85, 99)' }"
+              :dotSize="18"
+              :min="1"
+              :max="99"
+              v-model="settings.bgImageOpacity"
+              v-on:change="backgroundOpacity()"
+            />
+          </div>
+        </div>
+
         <!-- Toggle To do -->
         <div class="border-b border-white w-full py-4">
           <label for="toggleTodo" class="flex justify-between cursor-pointer">
             <div class="mr-3 text-base">
-              Show To Do List
+              To Do List
             </div>
             <div class="relative">
               <input id="toggleTodo" type="checkbox" class="sr-only" v-model="settings.todo" v-on:change="updateSettings" />
@@ -49,7 +79,7 @@
         <div class="border-b border-white w-full py-4">
           <label for="toggleQuote" class="flex justify-between cursor-pointer">
             <div class="mr-3 text-base">
-              Show Quote
+              Quote
             </div>
             <div class="relative">
               <input id="toggleQuote" type="checkbox" class="sr-only" v-model="settings.quote" v-on:change="updateSettings" />
@@ -63,7 +93,7 @@
         <div class="border-b border-white w-full py-4">
           <label for="toggleTimer" class="flex justify-between cursor-pointer">
             <div class="mr-3 text-base">
-              Show Clock
+              Clock / Stopwatch / Timer
             </div>
             <div class="relative">
               <input id="toggleTimer" type="checkbox" class="sr-only" v-model="settings.timerClock" v-on:change="timerClock()" />
@@ -130,57 +160,14 @@
           </div>
         </div>
 
-        <!-- Background Image -->
-        <div class="border-b border-white w-full py-4">
-          <label for="bgImage" class="flex justify-between cursor-pointer pb-2">
-            <div class="mr-3 text-base">
-              Background Image
-            </div>
-            <div class="relative">
-              <input id="bgImage" type="checkbox" class="sr-only" v-model="settings.bgImage" v-on:change="backgroundImage(true)" />
-              <div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
-              <div class="dot absolute w-6 h-6 bg-white rounded-full shadow-md -left-1 -top-1 transition"></div>
-            </div>
-          </label>
-
-          <div v-if="settings.bgImage" class="w-full ">
-            <label for="bgTheme"
-              >Background Image Theme
-              <span id="bgImageNext" v-on:click="backgroundTheme()" class="underline float-right">Next Image</span>
-            </label>
-            <input
-              id="bgTheme"
-              v-model="settings.bgImageTheme"
-              v-on:keyup="backgroundTheme()"
-              type="text"
-              placeholder="Nature, abstract, gradient..."
-              class="capitalize color-white w-full focus:outline-none bg-transparent text-sm border border-white placeholder-gray-100 placeholder-opacity-50 p-1 mb-4"
-            />
-            <label for="bgOpacity"
-              >Background Image Opacity
-              <span id="bgImageOpacityReset" class="underline float-right" v-on:click="backgroundOpacity({ reset: true })">Reset</span></label
-            >
-
-            <vue-slider
-              class="w-full p-1 mx-1"
-              :process-style="{ backgroundColor: '#5cff8a' }"
-              :tooltip-style="{ backgroundColor: 'rgb(75, 85, 99)' }"
-              :dotSize="18"
-              :min="1"
-              :max="99"
-              v-model="settings.bgImageOpacity"
-              v-on:change="backgroundOpacity()"
-            />
-          </div>
-        </div>
-
         <!-- Load Blank Note -->
         <div class=" w-full py-4">
+          <div class="mr-3 text-base pb-2">
+            Note editor
+          </div>
           <div class="mb-2">
-            <div class="mr-3 text-base">
-              Load note on new tab
-            </div>
-            <div class="flex items-center mr-4 my-2">
+            <label for="lastNoteRadio">Load note on new tab</label>
+            <div class="flex items-center mr-4 mt-2">
               <input
                 id="lastNoteRadio"
                 type="radio"
@@ -192,7 +179,7 @@
               />
               <label for="lastNoteRadio" class="flex items-center cursor-pointer">
                 <span class="w-5 h-5 inline-block mr-2 rounded-full border border-grey flex-no-shrink"></span>
-                Load last note</label
+                Load recently edited note</label
               >
             </div>
 
@@ -212,13 +199,37 @@
               >
             </div>
           </div>
+          <!-- Spellcheck -->
+          <div class="w-full pt-4">
+            <label for="spellCheck" class="flex justify-between cursor-pointer">
+              <div class="text-base mr-3">
+                Spellcheck
+              </div>
+              <div class="relative">
+                <input id="spellCheck" type="checkbox" class="sr-only" v-model="settings.spellChecker" v-on:change="updateSettings" />
+                <div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
+                <div class="dot absolute w-6 h-6 bg-white rounded-full shadow-md -left-1 -top-1 transition"></div>
+              </div>
+            </label>
+          </div>
+          <!-- View Trash -->
+          <div class="w-full pt-4">
+            <label for="viewTrash" class="flex justify-between cursor-pointer">
+              <div class="text-base mr-3">
+                View Trash
+              </div>
+              <div class="relative">
+                <input id="viewTrash" type="checkbox" class="sr-only" v-model="settings.viewTrash" v-on:change="$emit('toggleTrash')" />
+                <div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
+                <div class="dot absolute w-6 h-6 bg-white rounded-full shadow-md -left-1 -top-1 transition"></div>
+              </div>
+            </label>
+          </div>
         </div>
       </div>
+      <div id="settings-overflow" class="w-full h-16 sticky bottom-0 left-0 "></div>
     </div>
     <div class="text-right">
-      <p v-on:click="toggleTrash()" class="underline pb-3">
-        View Trash
-      </p>
       <p><a href="https://rory-dwyer.com" target="_blank" class="underline">About the developer</a></p>
       <p>
         <font-awesome-icon icon="heart" />
@@ -270,6 +281,7 @@ export default {
   },
   methods: {
     updateSettings: function() {
+      console.log(this.settings.quote);
       this.$emit("updateSettings", this.settings);
     },
 
@@ -287,12 +299,6 @@ export default {
         document.documentElement.classList.remove("dark");
       }
       this.updateSettings();
-    },
-
-    // Trash
-    toggleTrash: function() {
-      this.settings.viewTrash = !this.settings.viewTrash;
-      this.$emit("toggleTrash");
     },
 
     // Timer
@@ -409,6 +415,10 @@ export default {
 <style>
 #settings {
   background-color: #ff5c5c;
+}
+
+#settings-overflow {
+  background: linear-gradient(rgba(255, 92, 92, 0), rgba(255, 92, 92, 1));
 }
 
 input:checked ~ .dot {

@@ -155,7 +155,6 @@ export default {
       }
 
       // Load Blank Note
-
       if (
         this.newTab.settings.loadBlankNote &&
         (this.newTab.notes.collection.length == 0 || this.newTab.notes.collection[this.currentNoteIndex].content !== "")
@@ -212,6 +211,10 @@ Unordered lists can be started using the tool bar or by typing \`* \`, \`- \`, o
       chrome.storage.local.get("newTab", (res) => {
         if (Object.keys(diff(this.newTab.notes, res.newTab.notes)).length && document.hidden) {
           this.newTab.notes = res.newTab.notes;
+        }
+
+        if (Object.keys(diff(this.newTab.todos, res.newTab.todos)).length && document.hidden) {
+          this.newTab.todos = res.newTab.todos;
         }
         chrome.storage.local.set(res);
       });

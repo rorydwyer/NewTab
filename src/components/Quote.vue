@@ -26,15 +26,12 @@ export default {
   },
   methods: {
     getQuote: function() {
-      console.log(Quote.getQuote());
       let quote = Quote.getQuote();
 
       this.settings.quoteContent = quote.text;
       this.settings.quoteAuthor = quote.author;
       this.settings.quoteDate = new Date().toDateString();
       this.settings.today = new Date().toDateString();
-
-      // this.$emit("updateSettings", this.settings);
     },
   },
 };

@@ -9,14 +9,12 @@
             id="restoreIcon"
             icon="trash-restore-alt"
             v-on:click="restore()"
-            class="transition text-green-600"
+            class="transition text-green-500"
             title="Restore"
           />
         </div>
         <div class="text-right flex-grow">
           <font-awesome-icon icon="paragraph" id="formatIcon" v-on:click="formatNote()" class="transition text-gray-500 dark:text-gray-300" title="Format" />
-
-          <!-- v-if="!settings.viewTrash && notes.collection.length != 1" -->
           <font-awesome-icon icon="trash-alt" id="deleteIcon" v-on:click="deleteNote()" class="transition text-gray-500 dark:text-gray-300" title="Delete" />
         </div>
       </div>
@@ -53,7 +51,6 @@ export default {
           "heading-1",
           "heading-2",
           "heading-3",
-          // "horizontal-rule",
           "|",
           "bold",
           "italic",
@@ -74,7 +71,7 @@ export default {
     },
     note: {
       get: function() {
-        if (this.onlyNote) {
+        if (this.noteCollection.length) {
           return this.noteCollection[this.currentNoteIndex()];
         } else {
           return {};
@@ -87,21 +84,15 @@ export default {
     spellChecker() {
       return this.settings.spellChecker ? "" : "disable-spell-error";
     },
-    onlyNote: function() {
-      return this.noteCollection.length;
-    },
   },
   mounted() {
     this.simplemde.codemirror.on("keyup", () => {
       this.autoSave();
     });
-
-    // Styles for toolbar
-    document.querySelector(".main").style.opacity = "1";
   },
   methods: {
     loadNote: function() {
-      if (this.onlyNote) {
+      if (this.noteCollection.length) {
         this.simplemde.value(this.note.content);
         this.simplemde.codemirror.focus();
       }
@@ -213,7 +204,6 @@ export default {
   padding-top: 0;
   font-size: 1rem;
   caret-color: #ff5c5c imo !important;
-  /* overflow: scr; */
 }
 
 .CodeMirror-cursor {
@@ -257,10 +247,7 @@ export default {
 }
 
 /* Dark Mode */
-
 .dark .CodeMirror pre {
   color: white !important;
 }
-
-/* Quote */
 </style>

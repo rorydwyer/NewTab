@@ -93,7 +93,7 @@
         <div class="border-b border-white w-full py-4">
           <label for="toggleTimer" class="flex justify-between cursor-pointer">
             <div class="mr-3 text-base">
-              Clock / Stopwatch / Timer
+              Clock
             </div>
             <div class="relative">
               <input id="toggleTimer" type="checkbox" class="sr-only" v-model="settings.timerClock" v-on:change="timerClock()" />
@@ -402,7 +402,7 @@ export default {
 
     // Reset
     reset: function() {
-      if (confirm("Are you sure you want to reset everything (deletes all notes)?")) {
+      if (confirm("Are you sure you want to reset everything (deletes all notes and to do items)?")) {
         chrome.storage.local.clear();
         location.reload();
       }

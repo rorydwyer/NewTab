@@ -88,7 +88,7 @@ export default {
       return this.settings.spellChecker ? "" : "disable-spell-error";
     },
     onlyNote: function() {
-      return this.notes.collection.length;
+      return this.noteCollection.length;
     },
   },
   mounted() {

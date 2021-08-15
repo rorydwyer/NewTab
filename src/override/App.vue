@@ -155,7 +155,11 @@ export default {
       }
 
       // Load Blank Note
-      if (this.newTab.settings.loadBlankNote && this.newTab.notes.collection[this.currentNoteIndex].content !== "") {
+
+      if (
+        this.newTab.settings.loadBlankNote &&
+        (this.newTab.notes.collection.length == 0 || this.newTab.notes.collection[this.currentNoteIndex].content !== "")
+      ) {
         this.$nextTick(() => {
           let blankNote = false;
           for (let i = 0; i < this.newTab.notes.collection.length; i += 1) {

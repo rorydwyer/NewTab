@@ -146,7 +146,6 @@ export default {
     },
 
     start: function() {
-      // check if input has value
       this.prevTime = new Date();
 
       this.prevTime.setHours(this.prevTime.getHours() + parseInt(`${this.timer[5] || 0}${this.timer[4] || 0}`));

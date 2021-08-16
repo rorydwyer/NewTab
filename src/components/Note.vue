@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-show="onlyNote" class="pb-4 h-full flex flex-col">
+    <div v-show="this.noteCollection.length" class="pb-4 h-full flex flex-col">
       <vue-simplemde class="flex-grow" ref="markdownEditor" v-model="note.content" :configs="configs" v-bind:class="spellChecker" />
       <div class="flex">
         <div class="text-left flex-grow">

@@ -18,8 +18,7 @@
             <font-awesome-icon
               icon="trash-alt"
               id="deleteIcon"
-              @click="deleteTip = true"
-              @dblclick="deleteNote()"
+              @click="clickDelete()"
               class="transition text-gray-500 dark:text-gray-300"
               title="Delete (Double Click)"
             />
@@ -69,6 +68,7 @@ export default {
   data() {
     return {
       timeout: null,
+      timeoutDelete: null,
       toolBar: false,
       deleteTip: false,
     };
@@ -105,6 +105,18 @@ export default {
     // });
   },
   methods: {
+    clickDelete: function() {
+      if (!this.timeoutId) {
+        this.timeoutId = setTimeout(() => {
+          this.deleteTip = true;
+          this.timeoutId = null;
+        }, 500); //tolerance in ms
+      } else {
+        clearTimeout(this.timeoutId);
+        this.timeoutId = null;
+        this.deleteNote();
+      }
+    },
     restore: function() {
       let nextNote = this.nextNote();
 
@@ -126,6 +138,7 @@ export default {
     },
 
     deleteNote: function() {
+      this.deleteTip = false;
       let nextNote = this.nextNote();
       if (!this.settings.viewTrash) {
         this.notes.trash.push(this.notes.collection[this.currentNoteIndex()]);

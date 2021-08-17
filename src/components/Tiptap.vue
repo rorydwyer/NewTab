@@ -189,6 +189,28 @@
             editor
               .chain()
               .focus()
+              .toggleHighlight({
+                color: '',
+              })
+              .run()
+          "
+          :class="{
+            'is-active': editor.isActive('highlight', {
+              color: '',
+            }),
+          }"
+        >
+          <div>
+            <font-awesome-icon icon="highlighter" />
+            <span class="px-2"> <span class="opacity-50">==</span>Highlight<span class="opacity-50">==</span> </span>
+          </div>
+          <span class="opacity-50 pl-2">{{ powerKey }}⇧H</span>
+        </button>
+        <button
+          @click="
+            editor
+              .chain()
+              .focus()
               .toggleCode()
               .run()
           "
@@ -354,6 +376,7 @@ import {
   faCheckSquare,
   faLink,
   faUnlink,
+  faHighlighter,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -372,7 +395,8 @@ library.add(
   faImage,
   faCheckSquare,
   faLink,
-  faUnlink
+  faUnlink,
+  faHighlighter
 );
 
 export default {

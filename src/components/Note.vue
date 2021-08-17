@@ -91,20 +91,13 @@ export default {
     // });
   },
   methods: {
-    loadNote: function() {
-      if (this.noteCollection.length) {
-        // this.simplemde.value(this.note.content);
-        // this.simplemde.codemirror.focus();
-      }
-    },
-
     restore: function() {
       let nextNote = this.nextNote();
 
       this.notes.collection.push(this.note);
       this.notes.trash.splice(this.currentNoteIndex(), 1);
       this.notes.currentId = nextNote;
-      this.$emit("updateNotes", { notes: this.notes, load: true });
+      this.$emit("updateNotes", this.notes);
     },
 
     autoSave: function() {
@@ -114,7 +107,7 @@ export default {
       }
       this.timeout = setTimeout(() => {
         this.noteCollection[this.currentNoteIndex()].date = new Date().getTime();
-        this.$emit("updateNotes", { notes: this.notes, load: false });
+        this.$emit("updateNotes", this.notes);
       }, 1000);
     },
 
@@ -126,7 +119,7 @@ export default {
       this.noteCollection.splice(this.currentNoteIndex(), 1);
       this.notes.currentId = nextNote;
 
-      this.$emit("updateNotes", { notes: this.notes, load: true });
+      this.$emit("updateNotes", this.notes);
     },
 
     nextNote: function() {

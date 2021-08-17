@@ -32,7 +32,6 @@
       :settings="newTab.settings"
       @settings="showSettings = !showSettings"
       @updateSettings="updateSettings($event)"
-      @toggleTrash="$refs.note.loadNote()"
       v-bind:class="toggleSettings"
       class="absolute w-1/4 h-full transition-all z-50 pt-8 max-h-screen"
     />
@@ -159,7 +158,6 @@ export default {
           let blankNote = false;
           for (let i = 0; i < this.newTab.notes.collection.length; i += 1) {
             if (this.newTab.notes.collection[i]["content"] === "") {
-              this.$refs.notelist.loadNote(this.newTab.notes.collection[i]);
               blankNote = true;
               break;
             }
@@ -173,10 +171,6 @@ export default {
       if (this.newTab.settings.quote) {
         this.$refs.quote.getQuote();
       }
-    });
-
-    window.addEventListener("focus", () => {
-      this.$refs.note.loadNote();
     });
 
     this.timeout = setInterval(() => {
@@ -221,7 +215,7 @@ Unordered lists can be started using the tool bar or by typing \`* \`, \`- \`, o
       });
     },
 
-    updateNotes: function({ notes, load }) {
+    updateNotes: function(notes) {
       notes.collection
         .sort((a, b) => {
           return b.date - a.date;
@@ -232,7 +226,6 @@ Unordered lists can be started using the tool bar or by typing \`* \`, \`- \`, o
 
       chrome.storage.local.get("newTab", (res) => {
         this.newTab.notes = notes;
-        if (load) this.$refs.note.loadNote();
         res.newTab = this.newTab;
         chrome.storage.local.set(res);
       });

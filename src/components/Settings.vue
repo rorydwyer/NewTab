@@ -207,7 +207,7 @@
                 View Trash
               </div>
               <div class="relative">
-                <input id="viewTrash" type="checkbox" class="sr-only" v-model="settings.viewTrash" v-on:change="$emit('toggleTrash')" />
+                <input id="viewTrash" type="checkbox" class="sr-only" v-model="settings.viewTrash" />
                 <div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
                 <div class="dot absolute w-6 h-6 bg-white rounded-full shadow-md -left-1 -top-1 transition"></div>
               </div>

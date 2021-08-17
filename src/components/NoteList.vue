@@ -145,17 +145,17 @@ export default {
         pinned: false,
       });
 
-      this.$emit("updateNotes", { notes: this.notes, load: true });
+      this.$emit("updateNotes", this.notes);
     },
 
     loadNote: function(note) {
       this.notes.currentId = note.id;
-      this.$emit("updateNotes", { notes: this.notes, load: true });
+      this.$emit("updateNotes", this.notes);
     },
 
     pinNote: function(note) {
       note.pinned = !note.pinned;
-      this.$emit("updateNotes", { notes: this.notes, load: true });
+      this.$emit("updateNotes", this.notes);
     },
 
     updateClockTimer: function(selection) {

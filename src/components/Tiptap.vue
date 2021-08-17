@@ -502,6 +502,53 @@ export default {
   caret-color: #ff5c5c;
   overflow-y: scroll;
   overflow-x: hidden;
+
+  * {
+    text-decoration-color: #ff5c5c !important;
+  }
+
+  ul > li::before {
+    background-color: #ff5c5c !important;
+  }
+
+  ol > li::before {
+    color: #ff5c5c !important;
+  }
+
+  blockquote,
+  hr {
+    border-color: #ff5c5c !important;
+  }
+  p > code {
+    background-color: rgba(97, 97, 97, 0.1);
+    color: #616161 !important;
+    font-weight: normal !important;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+  }
+
+  ul[data-type="taskList"] {
+    list-style: none !important;
+    padding: 0 !important;
+
+    p {
+      margin: 0 !important;
+    }
+
+    li {
+      display: flex !important;
+      align-items: center !important;
+
+      > label {
+        flex: 0 0 auto !important;
+        margin-right: 0.5rem !important;
+      }
+    }
+
+    li::before {
+      display: none;
+    }
+  }
 }
 
 .ProseMirror:focus {

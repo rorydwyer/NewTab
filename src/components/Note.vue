@@ -15,13 +15,19 @@
         </div>
         <div class="text-right flex-grow">
           <font-awesome-icon
+            icon="trash-alt"
+            id="deleteIcon"
+            @dblclick="deleteNote()"
+            class="transition text-gray-500 dark:text-gray-300"
+            title="Delete (Double Click)"
+          />
+          <font-awesome-icon
             icon="paragraph"
             id="formatIcon"
             v-on:click="toolBar = !toolBar"
             class="transition text-gray-500 dark:text-gray-300"
             title="Format"
           />
-          <font-awesome-icon icon="trash-alt" id="deleteIcon" v-on:click="deleteNote()" class="transition text-gray-500 dark:text-gray-300" title="Delete" />
         </div>
       </div>
     </div>
@@ -179,10 +185,6 @@ export default {
 
 #deleteIcon:hover {
   color: #dc3545;
-}
-
-.disable-spell-error .cm-spell-error {
-  background: none !important;
 }
 
 /* MDE Styles */

@@ -11,12 +11,11 @@
       class="col-span-3 h-screen pt-8 max-h-screen"
     />
     <Note ref="note" :notes="newTab.notes" :settings="newTab.settings" @updateNotes="updateNotes($event)" class="col-span-6 h-screen pt-8 max-h-screen" />
-    <!-- <tiptap id="editor" :notes="newTab.notes" :settings="newTab.settings" class="col-span-6 h-screen pt-8 max-h-screen" /> -->
     <div class="col-span-3 h-screen pt-8 max-h-screen px-4 pb-4 flex flex-col">
       <div class="flex-grow mb-4 max-h-full overflow-y-scroll overflow-x-hidden">
         <Todo :todos="newTab.todos" :settings="newTab.settings" @updateTodos="updateTodos($event)" />
       </div>
-      <Quote ref="quote" :settings="newTab.settings" @updateSettings="updateSettings($event)" />
+      <Quote ref="quote" :settings="newTab.settings" />
       <div class="text-right">
         <font-awesome-icon
           icon="cog"
@@ -93,7 +92,6 @@ export default {
           bgImage: true,
           quote: true,
           loadBlankNote: false,
-          spellChecker: false,
           viewTrash: false,
           today: "",
           bgImageTheme: "Nature",
@@ -171,7 +169,8 @@ export default {
       }
 
       // Quote
-      if (this.newTab.settings.quote && (!this.newTab.settings.quoteContent.length || this.newTab.settings.today != today.toDateString())) {
+      // && (!this.newTab.settings.quoteContent.length || this.newTab.settings.today != today.toDateString())
+      if (this.newTab.settings.quote) {
         this.$refs.quote.getQuote();
       }
     });
@@ -271,6 +270,7 @@ Unordered lists can be started using the tool bar or by typing \`* \`, \`- \`, o
 
 .dark > body {
   background-color: rgba(31, 41, 55, 1);
+  /* background-color: rgb(13, 17, 23); */
 }
 
 ::-webkit-input-placeholder,

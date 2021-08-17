@@ -199,19 +199,7 @@
               >
             </div>
           </div>
-          <!-- Spellcheck -->
-          <div class="w-full pt-4">
-            <label for="spellCheck" class="flex justify-between cursor-pointer">
-              <div class="text-base mr-3">
-                Spellcheck
-              </div>
-              <div class="relative">
-                <input id="spellCheck" type="checkbox" class="sr-only" v-model="settings.spellChecker" v-on:change="updateSettings" />
-                <div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
-                <div class="dot absolute w-6 h-6 bg-white rounded-full shadow-md -left-1 -top-1 transition"></div>
-              </div>
-            </label>
-          </div>
+
           <!-- View Trash -->
           <div class="w-full pt-4">
             <label for="viewTrash" class="flex justify-between cursor-pointer">

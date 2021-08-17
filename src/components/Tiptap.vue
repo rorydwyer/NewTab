@@ -381,11 +381,10 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 .ProseMirror,
 .ProseMirror-focused {
   outline-color: transparent;
-  border-color: none !important;
   height: 88vh;
   max-height: 88vh;
   overflow: scroll;
@@ -394,28 +393,45 @@ export default {
   overflow-x: hidden;
 }
 
-#toolbar button {
-  display: flex;
-  justify-content: space-between;
-  padding: 2px 8px;
-  border-radius: 2px;
+.ProseMirror:focus {
+  outline: none;
 }
 
-#toolbar .svg-inline--fa {
-  width: 2em !important;
-  margin-left: -0.5em;
+.dark {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: white !important;
+  }
 }
 
-#toolbar button:hover {
-  background-color: rgba(156, 163, 175, 0.2);
-}
+#toolbar {
+  button {
+    display: flex;
+    justify-content: space-between;
+    padding: 2px 8px;
+    border-radius: 2px;
+  }
 
-#toolbar hr {
-  margin: 24px 0 !important;
-}
+  .svg-inline--fa {
+    width: 2em !important;
+    margin-left: -0.5em;
+  }
 
-#toolbar button.is-active {
-  border-left: 1px solid #ff5c5c;
-  border-radius: 0px 2px 2px 0px;
+  button:hover {
+    background-color: rgba(156, 163, 175, 0.2);
+  }
+
+  hr {
+    margin: 24px 0 !important;
+  }
+
+  button.is-active {
+    border-left: 1px solid #ff5c5c;
+    border-radius: 0px 2px 2px 0px;
+  }
 }
 </style>

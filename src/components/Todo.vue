@@ -10,7 +10,7 @@
         type="text"
         id="newTodo"
         placeholder="Create new to do item..."
-        class="w-full focus:outline-none bg-transparent text-sm border-b  border-gray-400 dark:border-gray-500 p-1"
+        class="w-full focus:outline-none bg-transparent text-sm border-b dark:text-white border-gray-400 dark:border-gray-500 p-1"
       />
       <span class="focus-border absolute left-0 bottom-0 w-0 bg-gray-800 dark:bg-gray-200 transition"></span>
     </div>

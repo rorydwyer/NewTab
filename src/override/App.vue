@@ -1,5 +1,5 @@
 <template>
-  <div id="main" class="main grid grid-cols-12 gap-12 h-screen max-h-screen overflow-hidden dark:text-white relative">
+  <div id="main" class="main grid grid-cols-12 gap-24 h-screen max-h-screen overflow-hidden dark:text-white relative">
     <div v-if="showSettings" v-on:click="showSettings = !showSettings" class="absolute top-0 left-0 w-screen h-screen z-10"></div>
     <NoteList
       ref="notelist"

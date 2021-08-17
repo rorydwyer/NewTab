@@ -1,5 +1,5 @@
 <template>
-  <div class="px-4 pb-4 flex flex-col">
+  <div class="px-4 pb-4 flex flex-col prose prose-sm">
     <div v-if="!settings.viewTrash" class="notelist flex-grow overflow-y-scroll">
       <div class="flex mb-4">
         <div class="flex-grow relative">
@@ -22,47 +22,43 @@
         />
       </div>
       <div>
-        <ul>
-          <transition-group name="flip-list" tag="ul">
-            <li
-              v-for="note in filteredNotes"
-              :key="note.id"
-              v-on:click="loadNote(note)"
-              v-bind:class="{ activeNote: notes.currentId == note.id }"
-              class="bg-gray-400 hover:bg-opacity-20 bg-opacity-10 dark:text-gray-300 text-sm my-2 p-2 text-gray-600 note-single relative transition"
-            >
-              <font-awesome-icon
-                icon="star"
-                title="Favorite note"
-                class="absolute top-1 right-1 opacity-0 transition text-gray-300 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-100 w-3 h-3"
-                v-bind:class="{ pinned: note.pinned }"
-                v-on:click="pinNote(note)"
-              />
-              {{ removeHTML(note.content) || "Blank note" }}
-            </li>
-          </transition-group>
-        </ul>
+        <transition-group name="flip-list">
+          <div
+            v-for="note in filteredNotes"
+            :key="note.id"
+            v-on:click="loadNote(note)"
+            v-bind:class="{ activeNote: notes.currentId == note.id }"
+            class="bg-gray-400 hover:bg-opacity-20 bg-opacity-10 dark:text-gray-300 text-sm my-2 p-2 text-gray-600 note-single relative transition"
+          >
+            <font-awesome-icon
+              icon="star"
+              title="Favorite note"
+              class="absolute top-1 right-1 opacity-0 transition text-gray-300 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-100 w-3 h-3"
+              v-bind:class="{ pinned: note.pinned }"
+              v-on:click="pinNote(note)"
+            />
+            {{ removeHTML(note.content) || "Blank note" }}
+          </div>
+        </transition-group>
       </div>
     </div>
     <!-- Trash List -->
     <div v-else class="notelist flex-grow overflow-y-scroll">
-      <div class=" mb-4">
-        <h3 class="text-xl text-center">Trash</h3>
+      <div class="mb-4">
+        <h3 class="text-xl text-center m-0" style="margin: 0px">Trash</h3>
       </div>
       <div>
-        <ul>
-          <transition-group name="flip-list" tag="ul">
-            <li
-              v-for="note in notes.trash"
-              :key="note.id"
-              v-on:click="loadNote(note)"
-              v-bind:class="{ activeNote: notes.currentId == note.id }"
-              class="bg-gray-400 hover:bg-opacity-20 bg-opacity-10 dark:text-gray-300 text-sm my-2 p-2 text-gray-600 note-single relative transition"
-            >
-              {{ removeHTML(note.content) || "Blank note" }}
-            </li>
-          </transition-group>
-        </ul>
+        <transition-group name="flip-list">
+          <div
+            v-for="note in notes.trash"
+            :key="note.id"
+            v-on:click="loadNote(note)"
+            v-bind:class="{ activeNote: notes.currentId == note.id }"
+            class="bg-gray-400 hover:bg-opacity-20 bg-opacity-10 dark:text-gray-300 text-sm my-2 p-2 text-gray-600 note-single relative transition"
+          >
+            {{ removeHTML(note.content) || "Blank note" }}
+          </div>
+        </transition-group>
       </div>
     </div>
 

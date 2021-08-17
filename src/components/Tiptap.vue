@@ -40,12 +40,12 @@
     </bubble-menu>
 
     <transition name="fade">
-      <div id="toolbar" v-if="toolBar" class="flex flex-col absolute bottom-6 -right-44 z-50 bg-white rounded shadow py-4 px-2">
+      <div id="toolbar" v-if="toolBar" class="flex flex-col absolute bottom-6 -right-44 z-50 bg-white dark:bg-gray-700 rounded shadow py-4 px-2">
         <div class="triangle-wrapper w-16 overflow-hidden inline-block absolute -bottom-6 ">
-          <div class="triangle h-6 w-6 bg-white shadow -rotate-45 transform origin-top-left"></div>
+          <div class="triangle h-6 w-6 bg-white dark:bg-gray-700 shadow -rotate-45 transform origin-top-left"></div>
         </div>
         <div class="triangle-wrapper w-16 overflow-hidden inline-block absolute ">
-          <div class="triangle h-6 w-6 bg-white -rotate-45 transform origin-top-left"></div>
+          <div class="triangle h-6 w-6 bg-white dark:bg-gray-700 -rotate-45 transform origin-top-left"></div>
         </div>
         <button
           @click="
@@ -493,6 +493,15 @@ export default {
 </script>
 
 <style lang="scss">
+::-webkit-scrollbar {
+  width: 4px !important;
+}
+
+// ::-webkit-scrollbar-thumb {
+//   background: rgb(107, 114, 128) !important;
+//   opacity: 0.5;
+// }
+
 .ProseMirror,
 .ProseMirror-focused {
   outline-color: transparent;
@@ -502,6 +511,7 @@ export default {
   caret-color: #ff5c5c;
   overflow-y: scroll;
   overflow-x: hidden;
+  padding-right: 8px;
 
   * {
     text-decoration-color: #ff5c5c !important;
@@ -551,6 +561,29 @@ export default {
   }
 }
 
+.dark .ProseMirror {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  strong,
+  blockquote {
+    color: white !important;
+  }
+
+  p > code {
+    background-color: #666e78;
+    color: white !important;
+  }
+
+  pre {
+    background-color: #f5f6f7;
+    color: #242d3a !important;
+  }
+}
+
 .ProseMirror:focus {
   outline: none;
 }
@@ -577,17 +610,6 @@ export default {
   opacity: 0;
 }
 
-.dark {
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    color: white !important;
-  }
-}
-
 #toolbar {
   button {
     display: flex;
@@ -612,6 +634,12 @@ export default {
   button.is-active {
     border-left: 1px solid #ff5c5c;
     border-radius: 0px 2px 2px 0px;
+  }
+}
+
+.dark #toolbar {
+  .svg-inline--fa {
+    color: white;
   }
 }
 </style>

@@ -22,13 +22,10 @@
               class="transition text-gray-500 dark:text-gray-300"
               title="Delete (Double Click)"
             />
-            <span class="tooltiptext rounded shadow text-sm text-center w-40 bg-white z-10 absolute -top-8 left-1/2 -ml-20">
+            <span class="tooltiptext rounded shadow text-sm text-center w-40 bg-white dark:bg-gray-700 z-10 absolute -top-8 left-1/2 -ml-20">
               <div class="w-8 overflow-hidden inline-block absolute -bottom-3  " style="left: 72px">
-                <div class="h-3 w-3 bg-white shadow -rotate-45 transform origin-top-left"></div>
+                <div class="h-3 w-3 bg-white dark:bg-gray-700 shadow -rotate-45 transform origin-top-left"></div>
               </div>
-              <!-- <div class="w-16 overflow-hidden inline-block absolute ">
-                <div class="h-6 w-6 bg-white -rotate-45 transform origin-top-left"></div>
-              </div> -->
               Double Click to Delete</span
             >
           </span>

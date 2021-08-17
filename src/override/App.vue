@@ -266,6 +266,10 @@ Unordered lists can be started using the tool bar or by typing \`* \`, \`- \`, o
   /* background-color: rgb(13, 17, 23); */
 }
 
+.dark span {
+  color: white;
+}
+
 ::-webkit-input-placeholder,
 ::placeholder {
   color: rgba(75, 85, 99, 0.7) !important;

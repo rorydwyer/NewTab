@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="stopwatch text-center mb-2">
-      <span id="time" class="text-7xl w-full text-gray-600 dark:text-gray-200 focus:outline-none text-center bg-transparent">{{ hms }}</span>
+      <span id="time" class="text-7xl w-full text-gray-800 dark:text-gray-200 focus:outline-none text-center bg-transparent">{{ hms }}</span>
       <span class="w-4 inline-block">{{ m }}</span>
     </div>
 

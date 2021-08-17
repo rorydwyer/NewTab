@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="timer w-full text-center">
-      <p id="timer" v-on:click="focusInput" ref="input" class="w-full text-7xl text-gray-600 dark:text-gray-200 text-center -mb-3 transition">
+      <p id="timer" v-on:click="focusInput" ref="input" class="w-full text-7xl text-gray-800 dark:text-gray-200 text-center -mb-3 transition">
         <!-- Hours -->
         <span v-if="getPlaceholder(5)" v-bind:class="{ placeholder: !getPlaceholder(5) }">{{ timer[5] }}</span>
         <span v-if="getPlaceholder(4)" v-bind:class="{ placeholder: !getPlaceholder(4) }">{{ timer[4] }}:</span>
@@ -224,6 +224,14 @@ export default {
 </script>
 
 <style scoped>
+#timer {
+  margin: 0 !important;
+}
+
+.timer {
+  line-height: 0;
+}
+
 .placeholder {
   opacity: 0.5;
 }

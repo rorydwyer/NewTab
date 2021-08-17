@@ -38,7 +38,7 @@
                 v-bind:class="{ pinned: note.pinned }"
                 v-on:click="pinNote(note)"
               />
-              {{ note.content || "Blank note" }}
+              {{ removeHTML(note.content) || "Blank note" }}
             </li>
           </transition-group>
         </ul>
@@ -59,7 +59,7 @@
               v-bind:class="{ activeNote: notes.currentId == note.id }"
               class="bg-gray-400 hover:bg-opacity-20 bg-opacity-10 dark:text-gray-300 text-sm my-2 p-2 text-gray-600 note-single relative transition"
             >
-              {{ note.content || "Blank note" }}
+              {{ removeHTML(note.content) || "Blank note" }}
             </li>
           </transition-group>
         </ul>
@@ -165,6 +165,9 @@ export default {
     updateClockTimer: function(selection) {
       this.settings.timerClock = selection;
       this.$emit("updateSettings", this.settings);
+    },
+    removeHTML(note) {
+      return note.replace(/(<([^>]+)>)/gi, " ");
     },
   },
 };

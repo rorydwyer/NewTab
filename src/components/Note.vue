@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div v-show="this.noteCollection.length" class="pb-4 h-full flex flex-col">
-      <vue-simplemde class="flex-grow" ref="markdownEditor" v-model="note.content" :configs="configs" v-bind:class="spellChecker" />
+    <div v-show="this.noteCollection.length" class="pb-4 h-full flex flex-col prose">
+      <tiptap id="editor" v-model="content" :toolBar="toolBar" @input="autoSave" class="h-full" />
       <div class="flex">
         <div class="text-left flex-grow">
           <font-awesome-icon
@@ -14,7 +14,13 @@
           />
         </div>
         <div class="text-right flex-grow">
-          <font-awesome-icon icon="paragraph" id="formatIcon" v-on:click="formatNote()" class="transition text-gray-500 dark:text-gray-300" title="Format" />
+          <font-awesome-icon
+            icon="paragraph"
+            id="formatIcon"
+            v-on:click="toolBar = !toolBar"
+            class="transition text-gray-500 dark:text-gray-300"
+            title="Format"
+          />
           <font-awesome-icon icon="trash-alt" id="deleteIcon" v-on:click="deleteNote()" class="transition text-gray-500 dark:text-gray-300" title="Delete" />
         </div>
       </div>
@@ -23,7 +29,7 @@
 </template>
 
 <script>
-import VueSimplemde from "vue-simplemde";
+import Tiptap from "./Tiptap.vue";
 
 // Font Awesome
 import { faParagraph, faTrashAlt, faTrashRestoreAlt } from "@fortawesome/free-solid-svg-icons";
@@ -34,7 +40,7 @@ library.add(faParagraph, faTrashAlt, faTrashRestoreAlt);
 export default {
   name: "note",
   components: {
-    VueSimplemde,
+    Tiptap,
     FontAwesomeIcon,
   },
   props: {
@@ -44,30 +50,21 @@ export default {
   data() {
     return {
       timeout: null,
-      configs: {
-        status: false,
-        spellChecker: true,
-        toolbar: [
-          "heading-1",
-          "heading-2",
-          "heading-3",
-          "|",
-          "bold",
-          "italic",
-          "strikethrough",
-          "|",
-          "unordered-list",
-          "ordered-list",
-          "quote",
-          "link",
-          "code",
-        ],
-      },
+      toolBar: false,
     };
   },
   computed: {
-    simplemde() {
-      return this.$refs.markdownEditor.simplemde;
+    content: {
+      get: function() {
+        if (this.noteCollection.length) {
+          return this.noteCollection[this.currentNoteIndex()].content;
+        } else {
+          return "";
+        }
+      },
+      set: function(value) {
+        this.noteCollection[this.currentNoteIndex()].content = value;
+      },
     },
     note: {
       get: function() {
@@ -81,20 +78,17 @@ export default {
     noteCollection: function() {
       return this.settings.viewTrash ? this.notes.trash : this.notes.collection;
     },
-    spellChecker() {
-      return this.settings.spellChecker ? "" : "disable-spell-error";
-    },
   },
   mounted() {
-    this.simplemde.codemirror.on("keyup", () => {
-      this.autoSave();
-    });
+    // this.simplemde.codemirror.on("keyup", () => {
+    //   this.autoSave();
+    // });
   },
   methods: {
     loadNote: function() {
       if (this.noteCollection.length) {
-        this.simplemde.value(this.note.content);
-        this.simplemde.codemirror.focus();
+        // this.simplemde.value(this.note.content);
+        // this.simplemde.codemirror.focus();
       }
     },
 
@@ -192,26 +186,9 @@ export default {
 }
 
 /* MDE Styles */
-.CodeMirror,
-.editor-toolbar {
-  border: none !important;
-  background: transparent;
-}
-
-.CodeMirror {
-  height: 88vh;
-  max-height: 88vh;
-  padding-top: 0;
-  font-size: 1rem;
-  caret-color: #ff5c5c imo !important;
-}
 
 .CodeMirror-cursor {
   border-color: #ff5c5c;
-}
-
-.vue-simplemde {
-  position: relative;
 }
 
 .cm-formatting {

@@ -11,6 +11,7 @@
       class="col-span-3 h-screen pt-8 max-h-screen"
     />
     <Note ref="note" :notes="newTab.notes" :settings="newTab.settings" @updateNotes="updateNotes($event)" class="col-span-6 h-screen pt-8 max-h-screen" />
+    <!-- <tiptap id="editor" :notes="newTab.notes" :settings="newTab.settings" class="col-span-6 h-screen pt-8 max-h-screen" /> -->
     <div class="col-span-3 h-screen pt-8 max-h-screen px-4 pb-4 flex flex-col">
       <div class="flex-grow mb-4 max-h-full overflow-y-scroll overflow-x-hidden">
         <Todo :todos="newTab.todos" :settings="newTab.settings" @updateTodos="updateTodos($event)" />
@@ -42,11 +43,14 @@
 <script>
 import NoteList from "@/components/NoteList.vue";
 import Note from "@/components/Note.vue";
+// import Tiptap from "@/components/Tiptap.vue";
 import Todo from "@/components/Todo.vue";
 import Settings from "@/components/Settings.vue";
 import Quote from "@/components/Quote.vue";
 import { diff } from "deep-object-diff";
-import "tailwindcss/tailwind.css";
+// import "tailwindcss/tailwind.css";
+
+import "../assets/tailwind.css";
 
 // Font Awesome
 import { faCog } from "@fortawesome/free-solid-svg-icons";
@@ -59,6 +63,7 @@ export default {
   components: {
     NoteList,
     Note,
+    // Tiptap,
     Todo,
     Settings,
     Quote,

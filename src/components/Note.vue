@@ -14,13 +14,26 @@
           />
         </div>
         <div class="text-right flex-grow">
-          <font-awesome-icon
-            icon="trash-alt"
-            id="deleteIcon"
-            @dblclick="deleteNote()"
-            class="transition text-gray-500 dark:text-gray-300"
-            title="Delete (Double Click)"
-          />
+          <span @mouseleave="deleteTip = false" class="tooltip" :class="{ 'delete-tip': deleteTip }">
+            <font-awesome-icon
+              icon="trash-alt"
+              id="deleteIcon"
+              @click="deleteTip = true"
+              @dblclick="deleteNote()"
+              class="transition text-gray-500 dark:text-gray-300"
+              title="Delete (Double Click)"
+            />
+            <span class="tooltiptext rounded shadow text-sm text-center w-40 bg-white z-10 absolute -top-8 left-1/2 -ml-20">
+              <div class="w-8 overflow-hidden inline-block absolute -bottom-3  " style="left: 72px">
+                <div class="h-3 w-3 bg-white shadow -rotate-45 transform origin-top-left"></div>
+              </div>
+              <!-- <div class="w-16 overflow-hidden inline-block absolute ">
+                <div class="h-6 w-6 bg-white -rotate-45 transform origin-top-left"></div>
+              </div> -->
+              Double Click to Delete</span
+            >
+          </span>
+
           <font-awesome-icon
             icon="paragraph"
             id="formatIcon"
@@ -57,6 +70,7 @@ export default {
     return {
       timeout: null,
       toolBar: false,
+      deleteTip: false,
     };
   },
   computed: {
@@ -169,6 +183,10 @@ export default {
   margin-left: 24px;
 }
 
+#deleteIcon {
+  margin-left: 0px;
+}
+
 #formatIcon:hover,
 #deleteIcon:hover,
 #restoreIcon:hover {
@@ -221,5 +239,21 @@ export default {
 /* Dark Mode */
 .dark .CodeMirror pre {
   color: white !important;
+}
+
+/* Tooltip container */
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.delete-tip .tooltiptext {
+  visibility: visible;
 }
 </style>

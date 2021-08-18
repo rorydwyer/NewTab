@@ -2,7 +2,7 @@
   <div class="relative">
     <bubble-menu
       class="bubble-menu flex flex-col bottom-full bg-white dark:bg-gray-700 rounded shadow py-4 px-2"
-      :tippy-options="{ duration: 100, placement: 'bottom-start' }"
+      :tippy-options="{ duration: 150, placement: 'bottom-start' }"
       :editor="editor"
       v-if="editor"
     >
@@ -69,6 +69,13 @@
           <span class="px-2"> <span class="opacity-50">==</span>Highlight<span class="opacity-50">==</span> </span>
         </div>
         <span class="opacity-50 pl-2">{{ powerKey }}⇧H</span>
+      </button>
+      <button @click="setLink" :class="{ 'is-active': editor.isActive('link') }">
+        <div>
+          <font-awesome-icon icon="link" />
+          <span class="px-2"> <span class="opacity-50 text-sm">url </span>Link</span>
+        </div>
+        <span class="opacity-50 pl-2"></span>
       </button>
       <button
         @click="
@@ -699,7 +706,8 @@ export default {
     background-color: #ff5c5c !important;
   }
 
-  ol > li::before {
+  ol > li::before,
+  a {
     color: #ff5c5c !important;
   }
 

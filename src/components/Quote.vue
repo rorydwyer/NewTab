@@ -1,5 +1,5 @@
 <template>
-  <div id="quote" v-show="settings.quote" class="text-right mb-3">
+  <div id="quote" v-if="settings.quote" class="text-right mb-3">
     <p id="qContent" class="italic border-r pr-4 transition-all duration-400">
       {{ q }}
     </p>
@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import Quote from "inspirational-quotes";
+const Quote = require("inspirational-quotes");
 
 export default {
   name: "quote",
@@ -17,24 +17,14 @@ export default {
   },
   data() {
     return {
-      q: "",
-      a: "",
+      q: "foo",
+      a: "bar",
     };
   },
   mounted() {
-    this.getQuote();
-  },
-  methods: {
-    getQuote: function() {
-      let quote = Quote.getRandomQuote();
-      console.log(quote);
-
-      this.q = quote.text;
-      this.a = quote.author;
-      // this.settings.quoteDate = new Date().toDateString();
-      // this.settings.today = new Date().toDateString();
-      // this.$emit("updateSettings", this.settings);
-    },
+    let quote = Quote.getQuote();
+    this.q = quote.text;
+    this.a = quote.author;
   },
 };
 </script>

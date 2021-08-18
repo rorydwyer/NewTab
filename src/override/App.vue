@@ -96,9 +96,9 @@ export default {
           bgImageTheme: "Nature",
           bgImageURL: "",
           bgImageOpacity: 30,
-          quoteContent: "",
-          quoteAuthor: "",
-          quoteDate: "",
+          // quoteContent: "",
+          // quoteAuthor: "",
+          // quoteDate: "",
           timerDefault: ["0", "0", "5", "2", "0", "0"], //Default: 25:00
         },
       },
@@ -164,12 +164,6 @@ export default {
           }
           if (!blankNote) this.$refs.notelist.createNote();
         });
-      }
-
-      // Quote
-      // && (!this.newTab.settings.quoteContent.length || this.newTab.settings.today != today.toDateString())
-      if (this.newTab.settings.quote) {
-        this.$refs.quote.getQuote();
       }
     });
 

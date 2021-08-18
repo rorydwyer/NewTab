@@ -439,7 +439,7 @@
 </template>
 
 <script>
-import { Editor, EditorContent, BubbleMenu } from "@tiptap/vue-2";
+import { Editor, EditorContent, BubbleMenu, VueRenderer } from "@tiptap/vue-2";
 import { markInputRule } from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
 import Typography from "@tiptap/extension-typography";
@@ -449,6 +449,10 @@ import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
 import Link from "@tiptap/extension-link";
 import TextAlign from "@tiptap/extension-text-align";
+import tippy from "tippy.js";
+import Commands from "./commands";
+import CommandsList from "./CommandsList";
+const commandsListArray = require("./CommandsListArray.js");
 
 import Underline from "@tiptap/extension-underline";
 const CustomUnderline = Underline.extend({
@@ -536,6 +540,51 @@ export default {
         CustomUnderline,
         TextAlign.configure({
           types: ["heading", "paragraph"],
+        }),
+        Commands.configure({
+          suggestion: {
+            items: (query) => {
+              return commandsListArray.array.filter((item) => item.title.toLowerCase().startsWith(query.toLowerCase())).slice(0, 10);
+            },
+            render: () => {
+              let component;
+              let popup;
+              return {
+                onStart: (props) => {
+                  component = new VueRenderer(CommandsList, {
+                    parent: this,
+                    propsData: props,
+                  });
+                  popup = tippy("body", {
+                    getReferenceClientRect: props.clientRect,
+                    appendTo: () => document.body,
+                    content: component.element,
+                    showOnCreate: true,
+                    interactive: true,
+                    trigger: "manual",
+                    placement: "bottom-start",
+                  });
+                },
+                onUpdate(props) {
+                  component.updateProps(props);
+                  popup[0].setProps({
+                    getReferenceClientRect: props.clientRect,
+                  });
+                },
+                onKeyDown(props) {
+                  if (props.event.key === "Escape") {
+                    popup[0].hide();
+                    return true;
+                  }
+                  return component.ref?.onKeyDown(props);
+                },
+                onExit() {
+                  popup[0].destroy();
+                  component.destroy();
+                },
+              };
+            },
+          },
         }),
       ],
       content: this.value,

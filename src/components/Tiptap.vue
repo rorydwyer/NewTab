@@ -1,6 +1,11 @@
 <template>
   <div class="relative">
-    <bubble-menu class="bubble-menu" :tippy-options="{ duration: 100 }" :editor="editor" v-if="editor">
+    <bubble-menu
+      class="bubble-menu flex flex-col bottom-full bg-white dark:bg-gray-700 rounded shadow py-4 px-2"
+      :tippy-options="{ duration: 100, placement: 'bottom-start' }"
+      :editor="editor"
+      v-if="editor"
+    >
       <button
         @click="
           editor
@@ -11,7 +16,11 @@
         "
         :class="{ 'is-active': editor.isActive('bold') }"
       >
-        Bold
+        <div>
+          <font-awesome-icon icon="bold" />
+          <span class="px-2"> <span class="opacity-50">**</span>Bold<span class="opacity-50">**</span> </span>
+        </div>
+        <span class="opacity-50 pl-2">{{ powerKey }}B</span>
       </button>
       <button
         @click="
@@ -23,7 +32,11 @@
         "
         :class="{ 'is-active': editor.isActive('italic') }"
       >
-        Italic
+        <div>
+          <font-awesome-icon icon="italic" />
+          <span class="px-2"> <span class="opacity-50">*</span>Italic<span class="opacity-50">*</span> </span>
+        </div>
+        <span class="opacity-50 pl-2">{{ powerKey }}I</span>
       </button>
       <button
         @click="
@@ -35,7 +48,91 @@
         "
         :class="{ 'is-active': editor.isActive('strike') }"
       >
-        Strike
+        <div>
+          <font-awesome-icon icon="strikethrough" />
+          <span class="px-2"> <span class="opacity-50">~~</span>Strike<span class="opacity-50">~~</span> </span>
+        </div>
+        <span class="opacity-50 pl-2">{{ powerKey }}⇧X</span>
+      </button>
+      <button
+        @click="
+          editor
+            .chain()
+            .focus()
+            .toggleHighlight()
+            .run()
+        "
+        :class="{ 'is-active': editor.isActive('highlight') }"
+      >
+        <div>
+          <font-awesome-icon icon="highlighter" />
+          <span class="px-2"> <span class="opacity-50">==</span>Highlight<span class="opacity-50">==</span> </span>
+        </div>
+        <span class="opacity-50 pl-2">{{ powerKey }}⇧H</span>
+      </button>
+      <button
+        @click="
+          editor
+            .chain()
+            .focus()
+            .setTextAlign('left')
+            .run()
+        "
+        :class="{ 'is-active': editor.isActive({ textAlign: 'left' }) }"
+      >
+        <div>
+          <font-awesome-icon icon="align-left" />
+          <span class="px-2"> <span class="opacity-50"></span>Left<span class="opacity-50"></span> </span>
+        </div>
+        <span class="opacity-50 pl-2">{{ powerKey }}⇧L</span>
+      </button>
+      <button
+        @click="
+          editor
+            .chain()
+            .focus()
+            .setTextAlign('center')
+            .run()
+        "
+        :class="{ 'is-active': editor.isActive({ textAlign: 'center' }) }"
+      >
+        <div>
+          <font-awesome-icon icon="align-center" />
+          <span class="px-2"> <span class="opacity-50"></span>Center<span class="opacity-50"></span> </span>
+        </div>
+        <span class="opacity-50 pl-2">{{ powerKey }}⇧E</span>
+      </button>
+      <button
+        @click="
+          editor
+            .chain()
+            .focus()
+            .setTextAlign('right')
+            .run()
+        "
+        :class="{ 'is-active': editor.isActive({ textAlign: 'right' }) }"
+      >
+        <div>
+          <font-awesome-icon icon="align-right" />
+          <span class="px-2"> <span class="opacity-50"></span>Right<span class="opacity-50"></span> </span>
+        </div>
+        <span class="opacity-50 pl-2">{{ powerKey }}⇧R</span>
+      </button>
+      <button
+        @click="
+          editor
+            .chain()
+            .focus()
+            .setTextAlign('justify')
+            .run()
+        "
+        :class="{ 'is-active': editor.isActive({ textAlign: 'justify' }) }"
+      >
+        <div>
+          <font-awesome-icon icon="align-justify" />
+          <span class="px-2"> <span class="opacity-50"></span>Justify<span class="opacity-50"></span> </span>
+        </div>
+        <span class="opacity-50 pl-2">{{ powerKey }}⇧J</span>
       </button>
     </bubble-menu>
 
@@ -351,6 +448,7 @@ import Image from "@tiptap/extension-image";
 import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
 import Link from "@tiptap/extension-link";
+import TextAlign from "@tiptap/extension-text-align";
 
 import Underline from "@tiptap/extension-underline";
 const CustomUnderline = Underline.extend({
@@ -377,6 +475,10 @@ import {
   faLink,
   faUnlink,
   faHighlighter,
+  faAlignLeft,
+  faAlignCenter,
+  faAlignRight,
+  faAlignJustify,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -396,7 +498,11 @@ library.add(
   faCheckSquare,
   faLink,
   faUnlink,
-  faHighlighter
+  faHighlighter,
+  faAlignLeft,
+  faAlignCenter,
+  faAlignRight,
+  faAlignJustify
 );
 
 export default {
@@ -419,7 +525,19 @@ export default {
   },
   mounted() {
     this.editor = new Editor({
-      extensions: [StarterKit, Typography, Highlight, Image, TaskList, TaskItem, Link, CustomUnderline],
+      extensions: [
+        StarterKit,
+        Typography,
+        Highlight,
+        Image,
+        TaskList,
+        TaskItem,
+        Link,
+        CustomUnderline,
+        TextAlign.configure({
+          types: ["heading", "paragraph"],
+        }),
+      ],
       content: this.value,
       onUpdate: () => {
         // HTML
@@ -610,7 +728,8 @@ export default {
   opacity: 0;
 }
 
-#toolbar {
+#toolbar,
+.bubble-menu {
   button {
     display: flex;
     justify-content: space-between;
@@ -637,7 +756,8 @@ export default {
   }
 }
 
-.dark #toolbar {
+.dark #toolbar,
+.dark .bubble-menu {
   .svg-inline--fa {
     color: white;
   }

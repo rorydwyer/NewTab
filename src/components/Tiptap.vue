@@ -342,6 +342,22 @@
             editor
               .chain()
               .focus()
+              .toggleOrderedList()
+              .run()
+          "
+          :class="{ 'is-active': editor.isActive('orderedList') }"
+        >
+          <div>
+            <font-awesome-icon icon="list-ol" />
+            <span class="px-2"> <span class="opacity-50">1. </span>Ordered List</span>
+          </div>
+          <span class="opacity-50 pl-2">{{ powerKey }}⇧ 7</span>
+        </button>
+        <button
+          @click="
+            editor
+              .chain()
+              .focus()
               .toggleBulletList()
               .run()
           "
@@ -358,16 +374,15 @@
             editor
               .chain()
               .focus()
-              .toggleOrderedList()
+              .toggleTaskList()
               .run()
           "
-          :class="{ 'is-active': editor.isActive('orderedList') }"
         >
           <div>
-            <font-awesome-icon icon="list-ol" />
-            <span class="px-2"> <span class="opacity-50">1. </span>Ordered List</span>
+            <font-awesome-icon icon="check-square" />
+            <span class="px-2"> <span class="opacity-50">[ ] </span>To do</span>
           </div>
-          <span class="opacity-50 pl-2">{{ powerKey }}⇧ 7</span>
+          <span class="opacity-50 pl-2">{{ powerKey }}⇧9</span>
         </button>
         <button
           @click="
@@ -385,21 +400,7 @@
           </div>
           <span class="opacity-50 pl-2">{{ powerKey }}⇧B</span>
         </button>
-        <button
-          @click="
-            editor
-              .chain()
-              .focus()
-              .toggleTaskList()
-              .run()
-          "
-        >
-          <div>
-            <font-awesome-icon icon="check-square" />
-            <span class="px-2"> <span class="opacity-50">[ ] </span>To do</span>
-          </div>
-          <span class="opacity-50 pl-2">{{ powerKey }}⇧9</span>
-        </button>
+
         <hr class="border-b border-gray-500 m-0" />
         <button @click="addImage">
           <div>
@@ -544,12 +545,23 @@ export default {
         Commands.configure({
           suggestion: {
             items: (query) => {
-              return commandsListArray.array.filter((item) => item.title.toLowerCase().startsWith(query.toLowerCase())).slice(0, 10);
+              return commandsListArray.array.filter((item) => item.title.toLowerCase().startsWith(query.toLowerCase()));
             },
             render: () => {
               let component;
               let popup;
               return {
+                addImage() {
+                  const url = window.prompt("URL");
+
+                  if (url) {
+                    this.editor
+                      .chain()
+                      .focus()
+                      .setImage({ src: url })
+                      .run();
+                  }
+                },
                 onStart: (props) => {
                   component = new VueRenderer(CommandsList, {
                     parent: this,
@@ -603,7 +615,7 @@ export default {
       if (navigator.appVersion.indexOf("Mac") != -1) {
         powerKey = "⌘";
       } else {
-        powerKey = "ctrl";
+        powerKey = "Ctrl+";
       }
       return powerKey;
     },
@@ -612,7 +624,7 @@ export default {
       if (navigator.appVersion.indexOf("Mac") != -1) {
         optionKey = "⌥";
       } else {
-        optionKey = "alt";
+        optionKey = "Alt+";
       }
       return optionKey;
     },
@@ -644,7 +656,6 @@ export default {
     },
     setLink() {
       const url = window.prompt("URL");
-
       this.editor
         .chain()
         .focus()
@@ -778,7 +789,8 @@ export default {
 }
 
 #toolbar,
-.bubble-menu {
+.bubble-menu,
+.commands-menu {
   button {
     display: flex;
     justify-content: space-between;
@@ -806,7 +818,8 @@ export default {
 }
 
 .dark #toolbar,
-.dark .bubble-menu {
+.dark .bubble-menu,
+.dark .commands-menu {
   .svg-inline--fa {
     color: white;
   }

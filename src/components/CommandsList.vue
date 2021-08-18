@@ -1,13 +1,72 @@
 <template>
-  <div class="items">
-    <button class="item" :class="{ 'is-selected': index === selectedIndex }" v-for="(item, index) in items" :key="index" @click="selectItem(index)">
-      {{ item.title }}
+  <div class="commands-menu items prose text-left flex flex-col bg-white dark:bg-gray-700 rounded shadow py-4 px-2 h-64 max-h-64 overflow-y-scroll">
+    <button class="item" :class="{ 'is-active': index === selectedIndex }" v-for="(item, index) in items" :key="index" @click="selectItem(index)">
+      <div>
+        <font-awesome-icon :icon="item.icon" />
+        <span class="px-2">
+          <span class="opacity-50">{{ item.pBefore }}</span>
+          {{ item.title }}
+          <span class="opacity-50">{{ item.pAfter }}</span>
+        </span>
+      </div>
+      <span class="opacity-50 pl-2">{{ getShortcut(item.shortcut) }}</span>
     </button>
   </div>
 </template>
 
 <script>
+// Font Awesome
+import {
+  faBold,
+  faItalic,
+  faStrikethrough,
+  faCode,
+  faHeading,
+  faListUl,
+  faListOl,
+  faFileCode,
+  faQuoteLeft,
+  faGripLines,
+  faUnderline,
+  faImage,
+  faCheckSquare,
+  faLink,
+  faUnlink,
+  faHighlighter,
+  faAlignLeft,
+  faAlignCenter,
+  faAlignRight,
+  faAlignJustify,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+library.add(
+  faBold,
+  faItalic,
+  faStrikethrough,
+  faCode,
+  faHeading,
+  faListUl,
+  faListOl,
+  faFileCode,
+  faQuoteLeft,
+  faGripLines,
+  faUnderline,
+  faImage,
+  faCheckSquare,
+  faLink,
+  faUnlink,
+  faHighlighter,
+  faAlignLeft,
+  faAlignCenter,
+  faAlignRight,
+  faAlignJustify
+);
+
 export default {
+  components: {
+    FontAwesomeIcon,
+  },
   props: {
     items: {
       type: Array,
@@ -29,6 +88,30 @@ export default {
     },
   },
   methods: {
+    getShortcut(keys) {
+      let shortcut = "";
+
+      // PowerKey
+      if (keys[0] === "cmd") {
+        if (navigator.appVersion.indexOf("Mac") != -1) {
+          shortcut += "⌘";
+        } else {
+          shortcut += "Ctrl+";
+        }
+      }
+
+      // SecondKey
+      if (keys[1] === "opt") {
+        if (navigator.appVersion.indexOf("Mac") != -1) {
+          shortcut += "⌥";
+        } else {
+          shortcut += "Alt+";
+        }
+      } else if (keys[1] === "shift") shortcut += "⇧";
+
+      shortcut += keys[2];
+      return shortcut;
+    },
     onKeyDown({ event }) {
       if (event.key === "ArrowUp") {
         this.upHandler();
@@ -46,9 +129,25 @@ export default {
     },
     upHandler() {
       this.selectedIndex = (this.selectedIndex + this.items.length - 1) % this.items.length;
+      this.$nextTick(() => {
+        let selected = document.querySelector(".commands-menu > .is-active");
+        selected.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+          inline: "start",
+        });
+      });
     },
     downHandler() {
       this.selectedIndex = (this.selectedIndex + 1) % this.items.length;
+      this.$nextTick(() => {
+        let selected = document.querySelector(".commands-menu > .is-active");
+        selected.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+          inline: "start",
+        });
+      });
     },
     enterHandler() {
       this.selectItem(this.selectedIndex);
@@ -59,31 +158,29 @@ export default {
         this.command(item);
       }
     },
+    addImage() {
+      const url = window.prompt("URL");
+
+      if (url) {
+        this.editor
+          .chain()
+          .focus()
+          .setImage({ src: url })
+          .run();
+      }
+    },
+    setLink() {
+      const url = window.prompt("URL");
+
+      this.editor
+        .chain()
+        .focus()
+        .extendMarkRange("link")
+        .setLink({ href: url })
+        .run();
+    },
   },
 };
 </script>
 
-<style lang="scss" scoped>
-.items {
-  position: relative;
-  border-radius: 0.25rem;
-  background: white;
-  color: rgba(black, 0.8);
-  overflow: hidden;
-  font-size: 0.9rem;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0px 10px 20px rgba(0, 0, 0, 0.1);
-}
-.item {
-  display: block;
-  width: 100%;
-  text-align: left;
-  background: transparent;
-  border: none;
-  padding: 0.2rem 0.5rem;
-  &.is-selected,
-  &:hover {
-    color: #a975ff;
-    background: rgba(#a975ff, 0.1);
-  }
-}
-</style>
+<style lang="scss" scoped></style>

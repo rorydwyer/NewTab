@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-show="this.noteCollection.length" class="pb-4 h-full flex flex-col prose prose-sm max-w-full">
-      <tiptap id="editor" v-model="content" :toolBar="toolBar" @input="autoSave" class="h-full" />
+      <tiptap id="editor" v-model="content" :toolBar="toolBar" :settings="settings" @input="autoSave" class="h-full" />
       <div class="flex">
         <div class="text-left flex-grow">
           <font-awesome-icon

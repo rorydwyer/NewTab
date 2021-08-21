@@ -205,6 +205,20 @@
             </div>
           </div>
 
+          <!-- Select Menu -->
+          <div class="w-full pt-4">
+            <label for="selectMenu" class="flex justify-between cursor-pointer">
+              <div class="text-base mr-3">
+                Select Menu
+              </div>
+              <div class="relative">
+                <input id="selectMenu" type="checkbox" class="sr-only" v-model="settings.selectMenu" v-on:change="updateSettings" />
+                <div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
+                <div class="dot absolute w-6 h-6 bg-white rounded-full shadow-md -left-1 -top-1 transition"></div>
+              </div>
+            </label>
+          </div>
+
           <!-- View Trash -->
           <div class="w-full pt-4">
             <label for="viewTrash" class="flex justify-between cursor-pointer">
@@ -227,7 +241,7 @@
       <p>
         <font-awesome-icon icon="heart" />
         <a href="https://www.paypal.com/donate?business=AHBCN7RUN39R4&no_recurring=0&currency_code=USD" target="_blank" class="underline ml-2"
-          >Donate (Buy me a beer)</a
+          >Support (Buy me a beer)</a
         >
       </p>
       <div class="w-full flex justify-between mt-4">

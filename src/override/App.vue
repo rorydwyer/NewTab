@@ -92,6 +92,7 @@ export default {
           quote: true,
           loadBlankNote: false,
           viewTrash: false,
+          selectMenu: true,
           today: "",
           bgImageTheme: "Gradient",
           bgImageURL: "",

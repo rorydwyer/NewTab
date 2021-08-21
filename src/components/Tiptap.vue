@@ -4,7 +4,7 @@
       class="bubble-menu flex flex-col bottom-full bg-white dark:bg-gray-700 rounded shadow py-4 px-2"
       :tippy-options="{ duration: 150, placement: 'bottom-start' }"
       :editor="editor"
-      v-if="editor"
+      v-if="editor && settings.selectMenu"
     >
       <button
         @click="
@@ -557,6 +557,7 @@ export default {
     FontAwesomeIcon,
   },
   props: {
+    settings: Object,
     toolBar: Boolean,
     value: {
       type: String,

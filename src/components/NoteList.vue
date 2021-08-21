@@ -37,7 +37,7 @@
               v-bind:class="{ pinned: note.pinned }"
               v-on:click="pinNote(note)"
             />
-            {{ removeHTML(note.content) || "Blank note" }}
+            {{ removeHTML(note.content) }}
           </div>
         </transition-group>
       </div>
@@ -45,7 +45,7 @@
     <!-- Trash List -->
     <div v-else class="notelist flex-grow overflow-y-scroll">
       <div class="mb-4">
-        <h3 class="text-xl text-center m-0" style="margin: 0px">Trash</h3>
+        <h3 class="text-xl text-center m-0 dark:text-white" style="margin: 0px">Trash</h3>
       </div>
       <div>
         <transition-group name="flip-list">
@@ -56,7 +56,7 @@
             v-bind:class="{ activeNote: notes.currentId == note.id }"
             class="bg-gray-400 hover:bg-opacity-20 bg-opacity-10 dark:text-gray-300 text-sm my-2 p-2 text-gray-600 note-single relative transition"
           >
-            {{ removeHTML(note.content) || "Blank note" }}
+            {{ removeHTML(note.content) }}
           </div>
         </transition-group>
       </div>
@@ -133,8 +133,15 @@ export default {
   mounted() {
     // Sort notes by date
     this.notes.collection.sort((a, b) => (a.date > b.date ? 1 : b.date > a.date ? -1 : 0));
+    // window.addEventListener("keydown", this.searchListener);
   },
   methods: {
+    searchListener: function(event) {
+      if (event.key === "Escape") {
+        let message = "Escape has been pressed";
+        alert(message);
+      }
+    },
     createNote: function() {
       this.notes.newId++;
       this.notes.currentId = this.notes.newId;
@@ -149,6 +156,7 @@ export default {
     },
 
     loadNote: function(note) {
+      console.log(note);
       this.notes.currentId = note.id;
       this.$emit("updateNotes", this.notes);
     },
@@ -163,7 +171,12 @@ export default {
       this.$emit("updateSettings", this.settings);
     },
     removeHTML(note) {
-      return note.replace(/(<([^>]+)>)/gi, " ");
+      let content = note.replace(/(<([^>]+)>)/gi, " ");
+      if (content.split(" ").join("") !== "") {
+        return content;
+      } else {
+        return "Blank note";
+      }
     },
   },
 };

@@ -33,7 +33,12 @@
           <div v-if="settings.bgImage" class="w-full ">
             <label for="bgTheme"
               >Background Image Theme
-              <span id="bgImageNext" v-on:click="backgroundTheme()" class="underline float-right">Next Image</span>
+              <span id="bgImageNext" v-on:click="backgroundTheme()" class="float-right">
+                <div v-if="bgLoading" class="spinner inline-block m-auto h-3 w-3 mr-2"></div>
+                <span class="underline">
+                  Next Image
+                </span>
+              </span>
             </label>
             <input
               id="bgTheme"
@@ -252,6 +257,7 @@ export default {
     return {
       timeout: null,
       inputFocus: false,
+      bgLoading: false,
     };
   },
   computed: {
@@ -361,6 +367,7 @@ export default {
           .then(() => {
             this.settings.today = new Date().toDateString();
             root.style.setProperty("--bgImage", `url(${this.settings.bgImageURL})`);
+            this.bgLoading = false;
             this.updateSettings();
           });
       } else {
@@ -373,6 +380,7 @@ export default {
     },
 
     backgroundTheme: function() {
+      this.bgLoading = true;
       if (this.timeout) {
         clearTimeout(this.timeout);
         this.timeout = null;
@@ -450,6 +458,21 @@ input[type="radio"]:checked + label span {
   animation: cursor 1.5s linear infinite;
 }
 
+.spinner {
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-top-color: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  animation: rotation 0.6s infinite linear;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}
 @keyframes cursor {
   0% {
     border-right: solid 2px;

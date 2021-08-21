@@ -17,22 +17,17 @@
 
 <script>
 import { NodeViewWrapper, NodeViewContent, nodeViewProps } from "@tiptap/vue-2";
-import lowlight from "lowlight";
-
 export default {
   components: {
     NodeViewWrapper,
     NodeViewContent,
   },
-
   props: nodeViewProps,
-
   data() {
     return {
-      languages: lowlight.listLanguages(),
+      languages: this.extension.options.lowlight.listLanguages(),
     };
   },
-
   computed: {
     selectedLanguage: {
       get() {
@@ -49,7 +44,6 @@ export default {
 <style lang="scss" scoped>
 .code-block {
   position: relative;
-
   select {
     position: absolute;
     top: 0.5rem;

@@ -82,6 +82,39 @@
           editor
             .chain()
             .focus()
+            .toggleOrderedList()
+            .run()
+        "
+        :class="{ 'is-active': editor.isActive('orderedList') }"
+      >
+        <div>
+          <font-awesome-icon icon="list-ol" />
+          <span class="px-2"> <span class="opacity-50">1. </span>Ordered List</span>
+        </div>
+        <span class="opacity-50 pl-2">{{ powerKey }}⇧ 7</span>
+      </button>
+      <button
+        @click="
+          editor
+            .chain()
+            .focus()
+            .toggleBulletList()
+            .run()
+        "
+        :class="{ 'is-active': editor.isActive('bulletList') }"
+      >
+        <div>
+          <font-awesome-icon icon="list-ul" />
+          <span class="px-2"> <span class="opacity-50">* </span>List</span>
+        </div>
+        <span class="opacity-50 pl-2">{{ powerKey }}⇧8</span>
+      </button>
+
+      <button
+        @click="
+          editor
+            .chain()
+            .focus()
             .setTextAlign('left')
             .run()
         "

@@ -1,5 +1,29 @@
 <template>
   <div class="px-4 pb-4 flex flex-col prose prose-sm">
+    <div v-show="spotlight" class="absolute w-screen h-screen top-0 left-0">
+      <div v-on:click="spotlight = false" class="absolute w-screen h-screen top-0 left-0 z-20"></div>
+      <div class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 rounded bg-white shadow-lg z-40">
+        <input v-model="search" ref="spotlightSearch" type="text" placeholder="Search Notes..." class="w-full p-2 text-lg" />
+        <div class="prose flex flex-col py-4 max-h-96 overflow-y-scroll">
+          <button
+            class="relative max-h-20 h-20 text-left pb-4 mb-4 overflow-hidden border-b "
+            v-for="note in filteredNotes"
+            :key="note.id"
+            v-on:click="loadNote(note)"
+            v-bind:class="{ activeNote: notes.currentId == note.id }"
+          >
+            <font-awesome-icon
+              icon="star"
+              title="Favorite note"
+              class="absolute top-1 right-1 opacity-0 transition text-gray-300 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-100 w-3 h-3"
+              v-bind:class="{ pinned: note.pinned }"
+              v-on:click="pinNote(note)"
+            />
+            {{ removeHTML(note.content) }}
+          </button>
+        </div>
+      </div>
+    </div>
     <div v-if="!settings.viewTrash" class="notelist flex-grow overflow-y-scroll">
       <div class="flex mb-4">
         <div class="flex-grow relative">
@@ -119,6 +143,7 @@ export default {
   data() {
     return {
       search: "",
+      spotlight: false,
     };
   },
   computed: {
@@ -133,14 +158,16 @@ export default {
   mounted() {
     // Sort notes by date
     this.notes.collection.sort((a, b) => (a.date > b.date ? 1 : b.date > a.date ? -1 : 0));
-    // window.addEventListener("keydown", this.searchListener);
+    window.addEventListener("keydown", this.searchListener);
   },
   methods: {
-    searchListener: function(event) {
-      if (event.key === "Escape") {
-        let message = "Escape has been pressed";
-        alert(message);
+    searchListener: function(e) {
+      if (e.metaKey && e.key === "k") {
+        this.spotlight = !this.spotlight;
       }
+      this.$nextTick(() => {
+        this.$refs.spotlightSearch.focus();
+      });
     },
     createNote: function() {
       this.notes.newId++;

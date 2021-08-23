@@ -684,6 +684,9 @@ export default {
   },
 
   methods: {
+    focus: function() {
+      this.editor.chain().focus();
+    },
     addImage() {
       const url = window.prompt("URL");
 

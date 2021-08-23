@@ -236,7 +236,6 @@ export default {
     },
 
     loadNote: function(note) {
-      console.log(note);
       this.notes.currentId = note.id;
       this.$emit("updateNotes", this.notes);
     },

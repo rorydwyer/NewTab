@@ -93,6 +93,7 @@ export default {
           loadBlankNote: false,
           viewTrash: false,
           selectMenu: true,
+          noteList: true,
           today: "",
           bgImageTheme: "Gradient",
           bgImageURL: "",
@@ -222,6 +223,7 @@ Unordered lists can be started using the tool bar or by typing \`* \`, \`- \`, o
       chrome.storage.local.get("newTab", (res) => {
         this.newTab.notes = notes;
         res.newTab = this.newTab;
+        this.$refs.note.focus();
         chrome.storage.local.set(res);
       });
     },

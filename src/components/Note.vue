@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-show="this.noteCollection.length" class="pb-4 h-full flex flex-col prose prose-sm max-w-full">
-      <tiptap id="editor" v-model="content" :toolBar="toolBar" :settings="settings" @input="autoSave" class="h-full" />
+      <tiptap id="editor" ref="editor" v-model="content" :toolBar="toolBar" :settings="settings" @input="autoSave" class="h-full" />
       <div class="flex">
         <div class="text-left flex-grow">
           <font-awesome-icon
@@ -96,12 +96,10 @@ export default {
       return this.settings.viewTrash ? this.notes.trash : this.notes.collection;
     },
   },
-  mounted() {
-    // this.simplemde.codemirror.on("keyup", () => {
-    //   this.autoSave();
-    // });
-  },
   methods: {
+    focus: function() {
+      this.$refs.editor.focus();
+    },
     clickDelete: function() {
       if (!this.timeoutId) {
         this.timeoutId = setTimeout(() => {

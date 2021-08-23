@@ -27,14 +27,17 @@
       </div>
     </div>
 
-    <Settings
-      ref="settings"
-      :settings="newTab.settings"
-      @settings="showSettings = !showSettings"
-      @updateSettings="updateSettings($event)"
-      v-bind:class="toggleSettings"
-      class="absolute w-1/4 h-full transition-all z-50 pt-8 max-h-screen"
-    />
+    <transition name="slide" class="transition-all">
+      <Settings
+        v-show="showSettings"
+        ref="settings"
+        :settings="newTab.settings"
+        :notes="newTab.notes"
+        @settings="showSettings = !showSettings"
+        @updateSettings="updateSettings($event)"
+        class="absolute w-1/4 h-full transition-all z-50 pt-8 max-h-screen right-0"
+      />
+    </transition>
   </div>
 </template>
 
@@ -293,6 +296,11 @@ input {
 
 ::selection {
   background-color: #ffcdcd;
+}
+
+.slide-enter,
+.slide-leave-to {
+  right: -25%;
 }
 
 /* Scroll Bar */

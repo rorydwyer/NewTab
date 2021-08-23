@@ -1,6 +1,9 @@
 <template>
-  <div class="commands-menu items prose text-left flex flex-col bg-white dark:bg-gray-700 rounded shadow py-4 px-2 h-64 max-h-64 overflow-y-scroll">
-    <button class="item" :class="{ 'is-active': index === selectedIndex }" v-for="(item, index) in items" :key="index" @click="selectItem(index)">
+  <div
+    :class="{ 'p-2': items.length > 0 }"
+    class="commands-menu items prose text-left flex flex-col bg-white dark:bg-gray-700 rounded shadow max-h-64 overflow-y-scroll"
+  >
+    <button class="item py-2" :class="{ 'is-active': index === selectedIndex }" v-for="(item, index) in items" :key="index" @click="selectItem(index)">
       <div>
         <font-awesome-icon :icon="item.icon" />
         <span class="px-2">
@@ -131,22 +134,14 @@ export default {
       this.selectedIndex = (this.selectedIndex + this.items.length - 1) % this.items.length;
       this.$nextTick(() => {
         let selected = document.querySelector(".commands-menu > .is-active");
-        selected.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-          inline: "start",
-        });
+        selected.scrollIntoView({ behavior: "auto", block: "end", inline: "nearest" });
       });
     },
     downHandler() {
       this.selectedIndex = (this.selectedIndex + 1) % this.items.length;
       this.$nextTick(() => {
         let selected = document.querySelector(".commands-menu > .is-active");
-        selected.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-          inline: "start",
-        });
+        selected.scrollIntoView({ behavior: "auto", block: "end", inline: "nearest" });
       });
     },
     enterHandler() {

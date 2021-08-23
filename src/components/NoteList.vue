@@ -1,7 +1,7 @@
 <template>
   <div class="px-4 pb-4 flex justify-end flex-col prose prose-sm">
     <div v-show="spotlight" class="absolute w-screen h-screen top-0 left-0">
-      <div v-on:click="spotlight = false" class="absolute w-screen h-screen top-0 left-0 z-20"></div>
+      <div v-on:click="spotlight = false" class="absolute w-screen h-screen top-0 left-0 z-20 bg-gray-800 bg-opacity-20"></div>
       <div id="spotlight" class="absolute left-1/2 top-32 transform -translate-x-1/2 p-4 rounded-lg bg-white shadow-lg z-40">
         <div class="flex justify-center">
           <font-awesome-icon icon="search" class="searchIcon mr-4" />
@@ -23,7 +23,7 @@
             <font-awesome-icon
               icon="star"
               title="Favorite note"
-              class="absolute top-1 right-1 opacity-0 transition text-gray-300 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-100 w-3 h-3"
+              class="absolute top-1 right-1 opacity-0 transition text-gray-300 hover:text-white w-3 h-3"
               v-bind:class="{ pinned: note.pinned }"
               v-on:click="pinNote(note)"
             />
@@ -39,6 +39,7 @@
             <input
               v-model="search"
               type="text"
+              ref="searchbar"
               name="search"
               id="searchNotes"
               placeholder="Search notes..."
@@ -174,12 +175,16 @@ export default {
     searchListener: function(e) {
       // Opening / Closing searchlight
       if (e.metaKey && e.key === "k") {
-        this.spotlight = !this.spotlight;
+        if (this.settings.noteList) {
+          this.$refs.searchbar.focus();
+        } else {
+          this.spotlight = !this.spotlight;
 
-        if (this.spotlight) {
-          this.$nextTick(() => {
-            this.$refs.spotlightSearch.focus();
-          });
+          if (this.spotlight) {
+            this.$nextTick(() => {
+              this.$refs.spotlightSearch.focus();
+            });
+          }
         }
       }
 
@@ -314,8 +319,17 @@ export default {
   cursor: pointer;
 }
 
-.note-single:hover svg {
+.note-single:hover svg,
+.searchItem:hover svg {
   opacity: 1;
+}
+
+.spotlight-active .pinned {
+  color: rgb(255, 255, 255) !important;
+}
+
+.spotlight-active .pinned:hover {
+  color: rgb(209, 213, 219) !important;
 }
 
 .timer-alert {

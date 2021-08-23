@@ -3,7 +3,7 @@
     <div v-show="this.noteCollection.length" class="pb-4 h-full flex flex-col prose prose-sm max-w-full">
       <tiptap id="editor" ref="editor" v-model="content" :toolBar="toolBar" :settings="settings" @input="autoSave" class="h-full" />
       <div class="flex">
-        <div class="text-left flex-grow">
+        <div class="icons-left text-left flex-grow">
           <font-awesome-icon
             v-if="settings.viewTrash"
             id="restoreIcon"
@@ -13,7 +13,7 @@
             title="Restore"
           />
           <font-awesome-icon
-            v-if="!settings.noteList"
+            v-if="!settings.noteList && !settings.viewTrash"
             :icon="['far', 'edit']"
             id="createNote"
             class="transition text-gray-500 dark:text-gray-300"
@@ -212,7 +212,8 @@ export default {
   margin-left: 24px;
 }
 
-#deleteIcon {
+#deleteIcon,
+#createNote {
   margin-left: 0px;
 }
 

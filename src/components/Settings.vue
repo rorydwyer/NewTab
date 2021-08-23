@@ -237,7 +237,7 @@
           </div>
 
           <!-- View Trash -->
-          <div class="w-full pt-4">
+          <div class="w-full pt-4 mb-4">
             <label for="viewTrash" class="flex justify-between cursor-pointer">
               <div class="text-base mr-3">
                 View Trash
@@ -248,12 +248,14 @@
                 <div class="dot absolute w-6 h-6 bg-white rounded-full shadow-md -left-1 -top-1 transition"></div>
               </div>
             </label>
+            <p v-show="settings.viewTrash" class="underline" @click="emptyTrash">Empty Trash</p>
           </div>
         </div>
       </div>
-      <div id="settings-overflow" class="w-full h-16 sticky bottom-0 left-0 "></div>
+      <div id="settings-overflow" class="w-full h-4 sticky bottom-0 left-0 "></div>
     </div>
     <div class="text-right">
+      <p><a href="mailto:hello@rory-dwyer.com" class="underline">Report a bug or submit a feature</a></p>
       <p><a href="https://rory-dwyer.com" target="_blank" class="underline">About the developer</a></p>
       <p>
         <font-awesome-icon icon="heart" />
@@ -283,6 +285,7 @@ export default {
   components: { VueSlider, FontAwesomeIcon },
   props: {
     settings: Object,
+    notes: Object,
   },
   data() {
     return {
@@ -427,9 +430,17 @@ export default {
       this.updateSettings();
     },
 
+    //Empty trash
+    emptyTrash: function() {
+      if (confirm("Are you sure you want to empty the trash?")) {
+        this.notes.trash = [];
+        this.$emit.updateNotes(this.notes);
+      }
+    },
+
     // Reset
     reset: function() {
-      if (confirm("Are you sure you want to reset everything (deletes all notes and to do items)?")) {
+      if (confirm("Are you sure you want to reset everything (deletes all notes, to do items, and settings)?")) {
         chrome.storage.local.clear();
         location.reload();
       }

@@ -2,15 +2,23 @@
   <div class="px-4 pb-4 flex flex-col prose prose-sm">
     <div v-show="spotlight" class="absolute w-screen h-screen top-0 left-0">
       <div v-on:click="spotlight = false" class="absolute w-screen h-screen top-0 left-0 z-20"></div>
-      <div class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 p-8 rounded bg-white shadow-lg z-40">
-        <input v-model="search" ref="spotlightSearch" type="text" placeholder="Search Notes..." class="w-full p-2 text-lg" />
-        <div class="prose flex flex-col py-4 max-h-96 overflow-y-scroll">
+      <div id="spotlight" class="absolute left-1/2 top-1/4 transform -translate-x-1/2 p-4 rounded-lg bg-white shadow-lg z-40">
+        <div class="flex justify-center">
+          <font-awesome-icon icon="search" class="searchIcon mr-4" />
+          <input v-model="search" ref="spotlightSearch" type="text" placeholder="Search Notes..." class="flex-grow w-full p-2 text-lg focus:outline-none" />
+        </div>
+        <div v-show="search.length > 0" id="spotlight-items" class="prose m-4 px-2 py-4 max-h-96 overflow-y-scroll border-t border-gray-100">
           <button
-            class="relative max-h-20 h-20 text-left pb-4 mb-4 overflow-hidden border-b "
-            v-for="note in filteredNotes"
-            :key="note.id"
-            v-on:click="loadNote(note)"
-            v-bind:class="{ activeNote: notes.currentId == note.id }"
+            class="searchItem block w-full h-24 relative text-left p-4 mb-4 overflow-y-hidden rounded shadow bg-gray-50"
+            v-for="(note, index) in filteredNotes"
+            :key="index"
+            :class="{ 'spotlight-active': index === selectedIndex }"
+            v-on:click="
+              loadNote(note);
+              search = '';
+              spotlight = false;
+            "
+            @mouseenter="selectedIndex = index"
           >
             <font-awesome-icon
               icon="star"
@@ -123,11 +131,11 @@ import Stopwatch from "@/components/Stopwatch.vue";
 import Clock from "@/components/Clock.vue";
 
 // Font Awesome
-import { faStar, faStopwatch, faHourglassStart } from "@fortawesome/free-solid-svg-icons";
+import { faStar, faStopwatch, faHourglassStart, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { faEdit, faClock } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
-library.add(faStar, faEdit, faClock, faStopwatch, faHourglassStart);
+library.add(faStar, faEdit, faClock, faStopwatch, faHourglassStart, faSearch);
 
 export default {
   components: {
@@ -144,6 +152,7 @@ export default {
     return {
       search: "",
       spotlight: false,
+      selectedIndex: 0,
     };
   },
   computed: {
@@ -162,12 +171,56 @@ export default {
   },
   methods: {
     searchListener: function(e) {
+      // Opening / Closing searchlight
       if (e.metaKey && e.key === "k") {
         this.spotlight = !this.spotlight;
+
+        if (this.spotlight) {
+          this.$nextTick(() => {
+            this.$refs.spotlightSearch.focus();
+          });
+        }
       }
-      this.$nextTick(() => {
-        this.$refs.spotlightSearch.focus();
-      });
+
+      if (this.spotlight) {
+        // Down arrow
+        if (e.key === "ArrowDown") {
+          this.selectedIndex = (this.selectedIndex + 1) % this.filteredNotes.length;
+          this.$nextTick(() => {
+            let selected = document.querySelector(".spotlight-active");
+            selected.scrollIntoView({ behavior: "auto", block: "end", inline: "nearest" });
+          });
+          return true;
+        }
+
+        // Up arrow
+        if (e.key === "ArrowUp") {
+          this.selectedIndex = (this.selectedIndex + this.filteredNotes.length - 1) % this.filteredNotes.length;
+          e.preventDefault();
+
+          this.$nextTick(() => {
+            let selected = document.querySelector(".spotlight-active");
+            selected.scrollIntoView({ behavior: "auto", block: "end", inline: "nearest" });
+          });
+          return true;
+        }
+
+        // Enter
+        if (e.key === "Enter") {
+          let note = this.filteredNotes[this.selectedIndex];
+          this.loadNote(note);
+          this.spotlight = false;
+          this.search = "";
+          return true;
+        }
+
+        // Esc
+        if (e.key === "Escape") {
+          this.spotlight = false;
+          this.search = "";
+          return true;
+        }
+      }
     },
     createNote: function() {
       this.notes.newId++;
@@ -210,6 +263,25 @@ export default {
 </script>
 
 <style scoped>
+#spotlight {
+  width: 700px;
+}
+
+.searchItem {
+  height: 80px !important;
+}
+
+.searchIcon {
+  width: 24px !important;
+  height: auto !important;
+  color: #ff5c5c;
+}
+
+.spotlight-active {
+  background-color: #ff5c5c;
+  color: white;
+}
+
 .notelist {
   padding-left: 1px;
 }

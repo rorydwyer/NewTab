@@ -66,6 +66,23 @@
           </div>
         </div>
 
+        <!-- Toggle Note list -->
+        <div class="border-b border-white w-full py-4">
+          <label for="toggleNoteList" class="flex justify-between cursor-pointer">
+            <div class="mr-3 text-base">
+              Note List
+            </div>
+            <div class="relative">
+              <input id="toggleNoteList" type="checkbox" class="sr-only" v-model="settings.noteList" v-on:change="updateSettings" />
+              <div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
+              <div class="dot absolute w-6 h-6 bg-white rounded-full shadow-md -left-1 -top-1 transition"></div>
+            </div>
+          </label>
+          <div v-show="!settings.noteList">
+            <p>`Cmd/Ctrl + K` to search notes</p>
+          </div>
+        </div>
+
         <!-- Toggle To do -->
         <div class="border-b border-white w-full py-4">
           <label for="toggleTodo" class="flex justify-between cursor-pointer">

@@ -12,6 +12,14 @@
             class="transition text-green-500"
             title="Restore"
           />
+          <font-awesome-icon
+            v-if="!settings.noteList"
+            :icon="['far', 'edit']"
+            id="createNote"
+            class="transition text-gray-500 dark:text-gray-300"
+            v-on:click="createNote()"
+            title="Create note"
+          />
         </div>
         <div class="text-right flex-grow">
           <span @mouseleave="deleteTip = false" class="tooltip" :class="{ 'delete-tip': deleteTip }">
@@ -47,10 +55,10 @@
 import Tiptap from "./Tiptap.vue";
 
 // Font Awesome
-import { faParagraph, faTrashAlt, faTrashRestoreAlt } from "@fortawesome/free-solid-svg-icons";
+import { faParagraph, faTrashAlt, faTrashRestoreAlt, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
-library.add(faParagraph, faTrashAlt, faTrashRestoreAlt);
+library.add(faParagraph, faTrashAlt, faTrashRestoreAlt, faEdit);
 
 export default {
   name: "note",
@@ -99,6 +107,18 @@ export default {
   methods: {
     focus: function() {
       this.$refs.editor.focus();
+    },
+    createNote: function() {
+      this.notes.newId++;
+      this.notes.currentId = this.notes.newId;
+      this.notes.collection.unshift({
+        id: this.notes.newId,
+        content: "",
+        date: new Date().getTime(),
+        pinned: false,
+      });
+
+      this.$emit("updateNotes", this.notes);
     },
     clickDelete: function() {
       if (!this.timeoutId) {
@@ -184,7 +204,8 @@ export default {
 
 #formatIcon,
 #deleteIcon,
-#restoreIcon {
+#restoreIcon,
+#createNote {
   opacity: 0.4;
   width: auto;
   height: 18px;
@@ -197,7 +218,8 @@ export default {
 
 #formatIcon:hover,
 #deleteIcon:hover,
-#restoreIcon:hover {
+#restoreIcon:hover,
+#createNote:hover {
   opacity: 1;
   cursor: pointer;
 }

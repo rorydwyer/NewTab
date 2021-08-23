@@ -98,9 +98,6 @@ export default {
           bgImageTheme: "Gradient",
           bgImageURL: "",
           bgImageOpacity: 20,
-          // quoteContent: "",
-          // quoteAuthor: "",
-          // quoteDate: "",
           timerDefault: ["0", "0", "5", "2", "0", "0"], //Default: 25:00
         },
       },

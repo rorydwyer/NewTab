@@ -27,7 +27,7 @@
               v-bind:class="{ pinned: note.pinned }"
               v-on:click="pinNote(note)"
             />
-            {{ removeHTML(note.content) }}
+            {{ removeHTML(note.content).substring(0, 200) }}
           </button>
         </div>
       </div>
@@ -71,7 +71,7 @@
                 v-bind:class="{ pinned: note.pinned }"
                 v-on:click="pinNote(note)"
               />
-              {{ removeHTML(note.content) }}
+              {{ removeHTML(note.content).substring(0, 200) }}
             </div>
           </transition-group>
         </div>
@@ -90,7 +90,7 @@
               v-bind:class="{ activeNote: notes.currentId == note.id }"
               class="bg-gray-400 hover:bg-opacity-20 bg-opacity-10 dark:text-gray-300 text-sm my-2 p-2 text-gray-600 note-single relative transition"
             >
-              {{ removeHTML(note.content) }}
+              {{ removeHTML(note.content).substring(0, 200) }}
             </div>
           </transition-group>
         </div>

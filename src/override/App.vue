@@ -44,13 +44,12 @@
 <script>
 import NoteList from "@/components/NoteList.vue";
 import Note from "@/components/Note.vue";
-// import Tiptap from "@/components/Tiptap.vue";
 import Todo from "@/components/Todo.vue";
 import Settings from "@/components/Settings.vue";
 import Quote from "@/components/Quote.vue";
-import { diff } from "deep-object-diff";
-// import "tailwindcss/tailwind.css";
 
+import { diff } from "deep-object-diff";
+const intNotes = require("@/components/intNotes.js");
 import "../assets/tailwind.css";
 
 // Font Awesome
@@ -80,7 +79,7 @@ export default {
           collection: [],
           trash: [],
           currentId: 0,
-          newId: 0,
+          newId: 2,
         },
         todos: {
           collection: [],
@@ -88,10 +87,10 @@ export default {
           newId: 0,
         },
         settings: {
-          darkMode: true,
+          darkMode: false,
           timerClock: "",
           todo: true,
-          bgImage: true,
+          bgImage: false,
           quote: true,
           loadBlankNote: false,
           viewTrash: false,
@@ -107,9 +106,6 @@ export default {
     };
   },
   computed: {
-    toggleSettings: function() {
-      return this.showSettings ? "right-0" : "-right-1/4";
-    },
     currentNoteIndex: function() {
       let noteIndex;
       for (let i = 0; i < this.newTab.notes.collection.length; i += 1) {
@@ -167,6 +163,8 @@ export default {
           if (!blankNote) this.$refs.notelist.createNote();
         });
       }
+
+      this.updateNotes(this.newTab.notes);
     });
 
     this.timeout = setInterval(() => {
@@ -177,24 +175,25 @@ export default {
     init: function(res) {
       this.newTab.notes.collection.unshift({
         id: 0,
-        date: new Date().getTime(),
-        content: `# First Note
-Go ahead, play around with the editor! Be sure to check out **bold**, *italic*  and ~~strikethrough~~ styling. You can type using Markdown syntax, by toggling the Format tool bar below, or using shortcuts like \`cmd-b\` or \`ctrl-b\`.
-
-## Lists
-Unordered lists can be started using the tool bar or by typing \`* \`, \`- \`, or \`+ \`. Ordered lists can be started by typing \`1. \`.
-
-#### Unordered
-* Lists are a piece of cake
-* They even auto continue as you type
-* A double enter will end them
-
-#### Ordered
-1. Numbered lists...
-2. ...work too!`,
+        date: "3",
+        content: intNotes.array[0],
         pinned: true,
-      }),
-        (this.newTab.settings.timerClock = "clock");
+      });
+      this.newTab.notes.collection.push({
+        id: 1,
+        date: "2",
+        content: intNotes.array[1],
+        pinned: true,
+      });
+      this.newTab.notes.collection.push({
+        id: 2,
+        date: "1",
+        content: intNotes.array[2],
+        pinned: false,
+      });
+
+      this.newTab.settings.timerClock = "clock";
+      this.$refs.note.focus();
       res.newTab = this.newTab;
     },
 

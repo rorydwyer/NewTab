@@ -1,4 +1,4 @@
-exports.array = [
+export const array = [
   {
     title: "Heading 1",
     icon: "heading",

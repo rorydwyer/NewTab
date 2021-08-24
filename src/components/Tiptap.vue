@@ -853,7 +853,7 @@ export default {
   }
 
   hr {
-    margin: 24px 0 !important;
+    margin: 8px 0 !important;
   }
 
   button.is-active {

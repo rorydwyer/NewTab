@@ -391,6 +391,7 @@ export default {
       const root = document.querySelector(":root");
 
       if (this.settings.bgImage) {
+        this.bgLoading = true;
         fetch(`https://source.unsplash.com/1920x1080/?${this.searchTerm}`)
           .then((response) => {
             this.settings.bgImageURL = response.url;

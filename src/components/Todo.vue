@@ -66,12 +66,13 @@ export default {
     },
 
     editRecent: function() {
-      let note = this.todos.collection[0];
+      let lastNote = this.todos.collection.length - 1;
+      let note = this.todos.collection[lastNote];
       if (this.recentTodo) {
         let input = document.getElementById("newTodo");
         input.value = note.content;
         input.dispatchEvent(new Event("input"));
-        this.deleteTodo(0);
+        this.deleteTodo(lastNote);
       }
       this.recentTodo = false;
     },
@@ -79,7 +80,7 @@ export default {
     addTodo: function() {
       if (this.todos.newText.length > 0) {
         this.todos.newId++;
-        this.todos.collection.unshift({
+        this.todos.collection.push({
           id: this.todos.newId,
           content: this.todos.newText,
           edit: false,

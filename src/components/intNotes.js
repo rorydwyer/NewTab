@@ -37,7 +37,7 @@ export const array = [
       <p><strong>Note list</strong>: (left sidebar) This is where all your notes live.</p>
     </li>
     <li>
-      <p><strong>Clock</strong>: (bottom left) Stay synced with the world.</p>
+      <p><strong>Clock</strong>: (bottom left) Keep track of time.</p>
     </li>
     <li>
       <p><strong>To do</strong>: (right sidebar) Add your list of tasks you need to accomplish.</p>

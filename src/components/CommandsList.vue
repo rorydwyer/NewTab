@@ -97,20 +97,20 @@ export default {
       // PowerKey
       if (keys[0] === "cmd") {
         if (navigator.appVersion.indexOf("Mac") != -1) {
-          shortcut += "⌘";
+          shortcut += "⌘ ";
         } else {
-          shortcut += "Ctrl+";
+          shortcut += "Ctrl ";
         }
       }
 
       // SecondKey
       if (keys[1] === "opt") {
         if (navigator.appVersion.indexOf("Mac") != -1) {
-          shortcut += "⌥";
+          shortcut += "⌥ ";
         } else {
-          shortcut += "Alt+";
+          shortcut += "Alt ";
         }
-      } else if (keys[1] === "shift") shortcut += "⇧";
+      } else if (keys[1] === "shift") shortcut += "⇧ ";
 
       shortcut += keys[2];
       return shortcut;

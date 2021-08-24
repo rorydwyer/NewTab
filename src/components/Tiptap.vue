@@ -52,7 +52,7 @@
           <font-awesome-icon icon="strikethrough" />
           <span class="px-2"> <span class="opacity-50">~~</span>Strike<span class="opacity-50">~~</span> </span>
         </div>
-        <span class="opacity-50 pl-2">{{ powerKey }}⇧X</span>
+        <span class="opacity-50 pl-2">{{ powerKey }}⇧ X</span>
       </button>
       <button
         @click="
@@ -68,7 +68,7 @@
           <font-awesome-icon icon="highlighter" />
           <span class="px-2"> <span class="opacity-50">==</span>Highlight<span class="opacity-50">==</span> </span>
         </div>
-        <span class="opacity-50 pl-2">{{ powerKey }}⇧H</span>
+        <span class="opacity-50 pl-2">{{ powerKey }}⇧ H</span>
       </button>
       <button @click="setLink" :class="{ 'is-active': editor.isActive('link') }">
         <div>
@@ -107,7 +107,7 @@
           <font-awesome-icon icon="list-ul" />
           <span class="px-2"> <span class="opacity-50">* </span>List</span>
         </div>
-        <span class="opacity-50 pl-2">{{ powerKey }}⇧8</span>
+        <span class="opacity-50 pl-2">{{ powerKey }}⇧ 8</span>
       </button>
 
       <button
@@ -124,7 +124,7 @@
           <font-awesome-icon icon="align-left" />
           <span class="px-2"> <span class="opacity-50"></span>Left<span class="opacity-50"></span> </span>
         </div>
-        <span class="opacity-50 pl-2">{{ powerKey }}⇧L</span>
+        <span class="opacity-50 pl-2">{{ powerKey }}⇧ L</span>
       </button>
       <button
         @click="
@@ -140,7 +140,7 @@
           <font-awesome-icon icon="align-center" />
           <span class="px-2"> <span class="opacity-50"></span>Center<span class="opacity-50"></span> </span>
         </div>
-        <span class="opacity-50 pl-2">{{ powerKey }}⇧E</span>
+        <span class="opacity-50 pl-2">{{ powerKey }}⇧ E</span>
       </button>
       <button
         @click="
@@ -156,7 +156,7 @@
           <font-awesome-icon icon="align-right" />
           <span class="px-2"> <span class="opacity-50"></span>Right<span class="opacity-50"></span> </span>
         </div>
-        <span class="opacity-50 pl-2">{{ powerKey }}⇧R</span>
+        <span class="opacity-50 pl-2">{{ powerKey }}⇧ R</span>
       </button>
       <button
         @click="
@@ -172,12 +172,12 @@
           <font-awesome-icon icon="align-justify" />
           <span class="px-2"> <span class="opacity-50"></span>Justify<span class="opacity-50"></span> </span>
         </div>
-        <span class="opacity-50 pl-2">{{ powerKey }}⇧J</span>
+        <span class="opacity-50 pl-2">{{ powerKey }}⇧ J</span>
       </button>
     </bubble-menu>
 
     <transition name="fade">
-      <div id="toolbar" v-if="toolBar" class="flex flex-col absolute bottom-6 -right-44 z-50 bg-white dark:bg-gray-700 rounded shadow py-4 px-2">
+      <div id="toolbar" v-if="toolBar" class="flex flex-col absolute bottom-6 z-50 bg-white dark:bg-gray-700 rounded shadow py-4 px-2">
         <div class="triangle-wrapper w-16 overflow-hidden inline-block absolute -bottom-6 ">
           <div class="triangle h-6 w-6 bg-white dark:bg-gray-700 shadow -rotate-45 transform origin-top-left"></div>
         </div>
@@ -319,7 +319,7 @@
             <font-awesome-icon icon="strikethrough" />
             <span class="px-2"> <span class="opacity-50">~~</span>Strike<span class="opacity-50">~~</span> </span>
           </div>
-          <span class="opacity-50 pl-2">{{ powerKey }}⇧X</span>
+          <span class="opacity-50 pl-2">{{ powerKey }}⇧ X</span>
         </button>
         <button
           @click="
@@ -341,7 +341,7 @@
             <font-awesome-icon icon="highlighter" />
             <span class="px-2"> <span class="opacity-50">==</span>Highlight<span class="opacity-50">==</span> </span>
           </div>
-          <span class="opacity-50 pl-2">{{ powerKey }}⇧H</span>
+          <span class="opacity-50 pl-2">{{ powerKey }}⇧ H</span>
         </button>
         <button
           @click="
@@ -407,7 +407,7 @@
             <font-awesome-icon icon="list-ul" />
             <span class="px-2"> <span class="opacity-50">* </span>List</span>
           </div>
-          <span class="opacity-50 pl-2">{{ powerKey }}⇧8</span>
+          <span class="opacity-50 pl-2">{{ powerKey }}⇧ 8</span>
         </button>
         <button
           @click="
@@ -422,7 +422,7 @@
             <font-awesome-icon icon="check-square" />
             <span class="px-2"> <span class="opacity-50">[ ] </span>To do</span>
           </div>
-          <span class="opacity-50 pl-2">{{ powerKey }}⇧9</span>
+          <span class="opacity-50 pl-2">{{ powerKey }}⇧ 9</span>
         </button>
         <button
           @click="
@@ -438,7 +438,7 @@
             <font-awesome-icon icon="quote-left" />
             <span class="px-2"> <span class="opacity-50">> </span>BlockQuote</span>
           </div>
-          <span class="opacity-50 pl-2">{{ powerKey }}⇧B</span>
+          <span class="opacity-50 pl-2">{{ powerKey }}⇧ B</span>
         </button>
 
         <hr class="border-b border-gray-500 m-0" />
@@ -654,18 +654,18 @@ export default {
     powerKey: function() {
       let powerKey;
       if (navigator.appVersion.indexOf("Mac") != -1) {
-        powerKey = "⌘";
+        powerKey = "⌘ ";
       } else {
-        powerKey = "Ctrl+";
+        powerKey = "Ctrl ";
       }
       return powerKey;
     },
     optionKey: function() {
       let optionKey;
       if (navigator.appVersion.indexOf("Mac") != -1) {
-        optionKey = "⌥";
+        optionKey = "⌥ ";
       } else {
-        optionKey = "Alt+";
+        optionKey = "Alt ";
       }
       return optionKey;
     },
@@ -831,6 +831,11 @@ export default {
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+}
+
+#toolbar {
+  width: 240px;
+  right: -205px;
 }
 
 #toolbar,

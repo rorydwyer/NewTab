@@ -87,7 +87,7 @@ export default {
           newId: 0,
         },
         settings: {
-          darkMode: false,
+          darkMode: true,
           timerClock: "",
           todo: true,
           bgImage: false,

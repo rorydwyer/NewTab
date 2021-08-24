@@ -174,7 +174,8 @@ export default {
   methods: {
     searchListener: function(e) {
       // Opening / Closing searchlight
-      if (e.metaKey && e.key === "k") {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
         if (this.settings.noteList) {
           this.$refs.searchbar.focus();
         } else {
@@ -267,13 +268,17 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 #spotlight {
   width: 700px;
-}
 
-.searchItem {
-  height: 80px !important;
+  #spotlight-items {
+    max-width: max-content !important;
+
+    .searchItem {
+      height: 80px !important;
+    }
+  }
 }
 
 .searchIcon {

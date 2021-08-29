@@ -294,6 +294,13 @@ export default {
   visibility: visible;
 }
 
+/* Checkbox */
+
+.ProseMirror ul[data-type="taskList"] p {
+  width: 100%;
+  display: inline-block;
+}
+
 /**
  * ==============================================
  * Dot Flashing

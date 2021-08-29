@@ -116,8 +116,8 @@ export default {
       return noteIndex;
     },
   },
-  mounted() {
-    const today = new Date();
+  created() {
+    let today = new Date();
     chrome.storage.local.get("newTab", (res) => {
       if (!res.newTab) this.init(res); // If very first load
       this.newTab = res.newTab;
@@ -144,13 +144,13 @@ export default {
         } else {
           // Get a new background image
           this.$refs.settings.backgroundImage();
+          this.newTab.settings.today = new Date().toDateString();
         }
       }
 
       // Load Blank Note
       if (this.newTab.settings.loadBlankNote && this.newTab.notes.collection[this.currentNoteIndex].content !== "") {
         this.$nextTick(() => {
-          console.log("foo");
           let blankNote = false;
           for (let i = 0; i < this.newTab.notes.collection.length; i += 1) {
             if (this.newTab.notes.collection[i]["content"] == "") {

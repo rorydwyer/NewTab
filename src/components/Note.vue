@@ -3,7 +3,10 @@
     <div v-show="this.noteCollection.length" class="pb-4 h-full flex flex-col prose prose-sm max-w-full">
       <tiptap id="editor" ref="editor" v-model="content" :toolBar="toolBar" :settings="settings" @input="autoSave" class="h-full" />
       <div class="flex">
-        <div class="icons-left text-left flex-grow">
+        <div class="icons-left text-left flex-grow relative">
+          <div class="absolute -bottom-2 left-2">
+            <div v-show="autoSaved" class="dot-flashing"></div>
+          </div>
           <font-awesome-icon
             v-if="settings.viewTrash"
             id="restoreIcon"
@@ -76,6 +79,7 @@ export default {
       timeoutDelete: null,
       toolBar: false,
       deleteTip: false,
+      autoSaved: false,
     };
   },
   computed: {
@@ -142,6 +146,7 @@ export default {
     },
 
     autoSave: function() {
+      this.autoSaved = true;
       if (this.timeout) {
         clearTimeout(this.timeout);
         this.timeout = null;
@@ -149,6 +154,7 @@ export default {
       this.timeout = setTimeout(() => {
         this.noteCollection[this.currentNoteIndex()].date = new Date().getTime();
         this.$emit("updateNotes", this.notes);
+        this.autoSaved = false;
       }, 1000);
     },
 
@@ -286,5 +292,62 @@ export default {
 /* Show the tooltip text when you mouse over the tooltip container */
 .delete-tip .tooltiptext {
   visibility: visible;
+}
+
+/**
+ * ==============================================
+ * Dot Flashing
+ * ==============================================
+ */
+.dot-flashing {
+  position: relative;
+  width: 5px;
+  height: 5px;
+  border-radius: 5px;
+  background-color: #b2b8c2;
+  color: #b2b8c2;
+  animation: dotFlashing 1s infinite linear alternate;
+  animation-delay: 0.5s;
+  bottom: 0;
+}
+
+.dot-flashing::before,
+.dot-flashing::after {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  bottom: 0;
+}
+
+.dot-flashing::before {
+  left: -10px;
+  width: 5px;
+  height: 5px;
+  border-radius: 5px;
+  background-color: #b2b8c2;
+  color: #b2b8c2;
+  animation: dotFlashing 1s infinite alternate;
+  animation-delay: 0s;
+}
+
+.dot-flashing::after {
+  left: 10px;
+  width: 5px;
+  height: 5px;
+  border-radius: 5px;
+  background-color: #b2b8c2;
+  color: #b2b8c2;
+  animation: dotFlashing 1s infinite alternate;
+  animation-delay: 1s;
+}
+
+@keyframes dotFlashing {
+  0% {
+    background-color: #b2b8c2;
+  }
+  50%,
+  100% {
+    background-color: #ebe6ff;
+  }
 }
 </style>

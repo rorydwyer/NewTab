@@ -34,7 +34,7 @@
             <label for="bgTheme"
               >Background Image Theme
               <span id="bgImageNext" v-on:click="backgroundTheme()" class="float-right">
-                <div v-if="bgLoading" class="spinner inline-block m-auto h-3 w-3 mr-2"></div>
+                <div v-show="bgLoading" class="spinner inline-block m-auto h-3 w-3 mr-2"></div>
                 <span class="underline">
                   Next Image
                 </span>

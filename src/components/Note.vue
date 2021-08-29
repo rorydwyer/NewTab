@@ -4,8 +4,10 @@
       <tiptap id="editor" ref="editor" v-model="content" :toolBar="toolBar" :settings="settings" @input="autoSave" class="h-full" />
       <div class="flex">
         <div class="icons-left text-left flex-grow relative">
-          <div class="absolute -bottom-2 left-2">
-            <div v-show="autoSaved" class="dot-flashing"></div>
+          <div :class="dotSave" class="absolute left-2">
+            <transition name="fade">
+              <div v-show="autoSaved" class="dot-flashing"></div>
+            </transition>
           </div>
           <font-awesome-icon
             v-if="settings.viewTrash"
@@ -106,6 +108,13 @@ export default {
     },
     noteCollection: function() {
       return this.settings.viewTrash ? this.notes.trash : this.notes.collection;
+    },
+    dotSave: function() {
+      if (this.settings.noteList) {
+        return "bottom-0";
+      } else {
+        return "-bottom-2";
+      }
     },
   },
   methods: {
@@ -306,15 +315,30 @@ export default {
  * Dot Flashing
  * ==============================================
  */
-.dot-flashing {
-  position: relative;
+
+.dot-flashing,
+.dot-flashing::before,
+.dot-flashing::after {
   width: 5px;
   height: 5px;
   border-radius: 5px;
-  background-color: #b2b8c2;
-  color: #b2b8c2;
+  background-color: #6b7280;
+  color: #6b7280;
   animation: dotFlashing 1s infinite linear alternate;
-  animation-delay: 0.5s;
+  position: absolute;
+}
+
+.dark .dot-flashing,
+.dark .dot-flashing::before,
+.dark .dot-flashing::after {
+  background-color: #9099aa;
+  color: #9099aa;
+  animation: dotFlashingDark 1s infinite linear alternate;
+}
+
+.dot-flashing {
+  position: relative;
+  animation-delay: 0.5s !important;
   bottom: 0;
 }
 
@@ -322,39 +346,44 @@ export default {
 .dot-flashing::after {
   content: "";
   display: inline-block;
-  position: absolute;
   bottom: 0;
 }
 
 .dot-flashing::before {
   left: -10px;
-  width: 5px;
-  height: 5px;
-  border-radius: 5px;
-  background-color: #b2b8c2;
-  color: #b2b8c2;
-  animation: dotFlashing 1s infinite alternate;
-  animation-delay: 0s;
+  animation-delay: 0s !important;
 }
 
 .dot-flashing::after {
   left: 10px;
-  width: 5px;
-  height: 5px;
-  border-radius: 5px;
-  background-color: #b2b8c2;
-  color: #b2b8c2;
-  animation: dotFlashing 1s infinite alternate;
-  animation-delay: 1s;
+  animation-delay: 1s !important;
 }
 
 @keyframes dotFlashing {
   0% {
-    background-color: #b2b8c2;
+    background-color: #9099aa;
   }
   50%,
   100% {
     background-color: #ebe6ff;
   }
+}
+
+@keyframes dotFlashingDark {
+  0% {
+    background-color: #9099aa;
+  }
+  50%,
+  100% {
+    background-color: #374151;
+  }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

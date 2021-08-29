@@ -148,15 +148,14 @@ export default {
       }
 
       // Load Blank Note
-      if (
-        this.newTab.settings.loadBlankNote &&
-        (this.newTab.notes.collection.length == 0 || this.newTab.notes.collection[this.currentNoteIndex].content !== "")
-      ) {
+      if (this.newTab.settings.loadBlankNote && this.newTab.notes.collection[this.currentNoteIndex].content !== "") {
         this.$nextTick(() => {
+          console.log("foo");
           let blankNote = false;
           for (let i = 0; i < this.newTab.notes.collection.length; i += 1) {
-            if (this.newTab.notes.collection[i]["content"] === "") {
+            if (this.newTab.notes.collection[i]["content"] == "") {
               blankNote = true;
+              this.$refs.notelist.loadNote(this.newTab.notes.collection[i]);
               break;
             }
           }

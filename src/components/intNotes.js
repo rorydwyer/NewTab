@@ -1,12 +1,12 @@
 export const array = [
-  `<h1>Welcome to #NewTab!</h1>
+  `<h1>Welcome to # NewTab!</h1>
   <img src="https://rory-dwyer.com/wp-content/uploads/2021/08/NewTab-image.png" contenteditable="false" draggable="true" />
   <p>
-    #NewTab is a truly minimal, and elegant <strong>markdown</strong> editor with a <em>seamless</em> experience as both a reader and a writer. It removes the
-    preview window, syntax symbols of markdown, and all other unnecessary distractions. Instead, #NewTab provides a live preview while you’re writing to help you
+    # NewTab is a truly minimal, and elegant <strong>markdown</strong> editor with a <em>seamless</em> experience as both a reader and a writer. It removes the
+    preview window, syntax symbols of markdown, and all other unnecessary distractions. Instead, # NewTab provides a live preview while you’re writing to help you
     focus on the content itself.
   </p>
-  <p><strong>Here are the best parts of #NewTab:</strong></p>
+  <p><strong>Here are the best parts of # NewTab:</strong></p>
   <ul>
     <li>
       <p>
@@ -26,9 +26,9 @@ export const array = [
     <li><p>Focus timer, stopwatch and clock for increased productivity.</p></li>
   </ul>
   <p><br /></p>
-  <h2>#NewTab has 5 parts 💻</h2>
+  <h2># NewTab has 5 parts 💻</h2>
   <img src="https://rory-dwyer.com/wp-content/uploads/2021/08/NewTab-image-2.png" contenteditable="false" draggable="true" />
-  <p>#NewTab has 5 main components where you create and edit notes, add to do items, set your focus timer, and view inspirational quotes.</p>
+  <p># NewTab has 5 main components where you create and edit notes, add to do items, set your focus timer, and view inspirational quotes.</p>
   <ol>
     <li>
       <p><strong>Editor</strong>: (center) What you’re looking at right now.</p>
@@ -47,17 +47,17 @@ export const array = [
     </li>
   </ol>
   <p><br /></p>
-  <h2>#NewTab has style 🖋</h2>
+  <h2># NewTab has style 🖋</h2>
   <p>
-    #NewTab has many type styling tools, including: <strong>bold</strong>, <em>italic</em>, <u>underline</u>, <mark>highlight</mark>, <s>strike</s>,
+    # NewTab has many type styling tools, including: <strong>bold</strong>, <em>italic</em>, <u>underline</u>, <mark>highlight</mark>, <s>strike</s>,
     <code>code</code>, and more. You can find shortcuts for them in the formatting menu (below), or in the <code>/</code> command menu.
   </p>
   <p>You can view all the styles, and examples in the <strong>Tips ‘n Tricks,</strong> and <strong>Formatting Examples</strong> note.</p>
   <p><br /></p>
   <h2>Customizable settings ⚙️</h2>
   <p>
-    #NewTab keeps your editor lean and mean. Designed to be a truly minimal experience, it’s also equipped with extensive customization to tailor exactly to your
-    needs. Whether #NewTab is a minimal editor, or vibrant and full of color is up to you.
+    # NewTab keeps your editor lean and mean. Designed to be a truly minimal experience, it’s also equipped with extensive customization to tailor exactly to your
+    needs. Whether # NewTab is a minimal editor, or vibrant and full of color is up to you.
   </p>
   <ul>
     <li>
@@ -66,7 +66,7 @@ export const array = [
     <li>
       <p>Create your own theme with <strong>Dark mode</strong> and <strong>Image backgrounds</strong>.</p>
     </li>
-    <li><p>Load recent or new, empty notes when opening a #NewTab</p></li>
+    <li><p>Load recent or new, empty notes when opening a # NewTab</p></li>
   </ul>
   `,
   `<h1>Tips ‘n Tricks</h1>
@@ -99,7 +99,7 @@ export const array = [
     </p>
     <p><br /></p>
     <p><strong>Menus</strong></p>
-    <p>There are three formatting menus included in #NewTab.</p>
+    <p>There are three formatting menus included in # NewTab.</p>
     <ol>
       <li>
         <p>Your <strong>main</strong> formatting menu the bottom-right of the editor.</p>
@@ -207,7 +207,7 @@ export const array = [
     <hr contenteditable="false" />
     <h2>Theme</h2>
     <p>
-      #NewTab is designed to be fully customizable. Whether you want a bare #NewTab with a blank background, or an inspirational #NewTab with daily wallpapers and
+      # NewTab is designed to be fully customizable. Whether you want a bare # NewTab with a blank background, or an inspirational # NewTab with daily wallpapers and
       quotes is fully up to you.
     </p>
     <ul>
@@ -228,7 +228,7 @@ export const array = [
     <p><strong>Pro tips</strong></p>
     <p>
       <strong>Light mode</strong> is best with no background image. Embrace the minimalistic approach by hiding the note list, quotes, and other components. Bonus
-      points if you load a blank note when opening #NewTab (<em>Settings</em> → <em>Note Editor</em> → <em>Load Blank Note</em>).
+      points if you load a blank note when opening # NewTab (<em>Settings</em> → <em>Note Editor</em> → <em>Load Blank Note</em>).
     </p>
     <p><strong>Dark mode</strong> is great with background images. Explore different themes and contrasts using the background settings.</p>
     `,

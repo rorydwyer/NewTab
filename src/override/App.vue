@@ -116,7 +116,7 @@ export default {
       return noteIndex;
     },
   },
-  created() {
+  mounted() {
     let today = new Date();
     chrome.storage.local.get("newTab", (res) => {
       if (!res.newTab) this.init(res); // If very first load
@@ -128,9 +128,13 @@ export default {
 
       // Dark Mode
       if (this.newTab.settings.darkMode) {
-        document.documentElement.classList.add("dark");
+        this.$nextTick(() => {
+          document.documentElement.classList.add("dark");
+        });
       } else {
-        document.documentElement.classList.remove("dark");
+        this.$nextTick(() => {
+          document.documentElement.classList.remove("dark");
+        });
       }
 
       // Background Image
@@ -143,8 +147,10 @@ export default {
           root.style.setProperty("--bgImage", `url(${this.newTab.settings.bgImageURL})`);
         } else {
           // Get a new background image
-          this.$refs.settings.backgroundImage();
-          this.newTab.settings.today = new Date().toDateString();
+          this.$nextTick(() => {
+            this.$refs.settings.backgroundImage();
+            this.newTab.settings.today = new Date().toDateString();
+          });
         }
       }
 

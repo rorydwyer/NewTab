@@ -24,7 +24,7 @@
               Background Image
             </div>
             <div class="relative">
-              <input id="bgImage" type="checkbox" class="sr-only" v-model="settings.bgImage" v-on:change="backgroundImage(true)" />
+              <input id="bgImage" type="checkbox" class="sr-only" v-model="settings.bgImage" v-on:change="backgroundImage()" />
               <div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
               <div class="dot absolute w-6 h-6 bg-white rounded-full shadow-md -left-1 -top-1 transition"></div>
             </div>
@@ -389,6 +389,7 @@ export default {
     // Background Image
     backgroundImage: function() {
       const root = document.querySelector(":root");
+      console.log(this.settings);
 
       if (this.settings.bgImage) {
         this.bgLoading = true;
@@ -400,15 +401,15 @@ export default {
             this.settings.bgImageURL = this.fallbackBg;
           })
           .then(() => {
-            this.settings.today = new Date().toDateString();
             root.style.setProperty("--bgImage", `url(${this.settings.bgImageURL})`);
+            this.settings.today = new Date().toDateString();
             this.bgLoading = false;
             this.updateSettings();
           });
       } else {
         // Remove Background Image
         this.settings.bgImageURL = "";
-
+        this.settings.today = new Date().toDateString();
         root.style.setProperty("--bgImage", "url()");
         this.updateSettings();
       }

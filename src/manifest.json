@@ -4,7 +4,7 @@
   "short_name": "NewTab",
   "description": "Replace your new tab with a productive and clean dashboard featuring a markdown editor, to do list, focus timer and inspiration.",
   "default_locale": "en",
-  "permissions": ["<all_urls>", "*://*/*", "storage", "unlimitedStorage"],
+  "permissions": ["https://*.unsplash.com/*", "storage", "unlimitedStorage"],
   "icons": {
     "16": "icons/16.png",
     "48": "icons/48.png",

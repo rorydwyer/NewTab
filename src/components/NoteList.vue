@@ -32,7 +32,7 @@
         </div>
       </div>
     </div>
-    <div v-show="settings.noteList" class="flex-grow overflow-y-scroll">
+    <div v-show="settings.noteList" class="flex-grow overflow-y-scroll overflow-x-hidden">
       <div v-if="!settings.viewTrash" class="notelist">
         <div class="flex mb-4">
           <div class="flex-grow relative">

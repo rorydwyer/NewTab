@@ -237,7 +237,7 @@
           </div>
 
           <!-- View Trash -->
-          <div class="w-full pt-4 mb-4">
+          <div class="w-full pt-4 mb-3">
             <label for="viewTrash" class="flex justify-between cursor-pointer">
               <div class="text-base mr-3">
                 View Trash
@@ -249,6 +249,16 @@
               </div>
             </label>
             <p v-show="settings.viewTrash" class="underline" @click="emptyTrash">Empty Trash</p>
+          </div>
+
+          <!-- Export / Import -->
+          <div class="w-full mb-4">
+            <button @click="exportNotes" class="text-base mr-3 underline">
+              Export notes
+            </button>
+            <button @click="importNotes" class="text-base mr-3 underline">
+              Import notes
+            </button>
           </div>
         </div>
       </div>
@@ -432,7 +442,7 @@ export default {
       this.updateSettings();
     },
 
-    //Empty trash
+    // Empty trash
     emptyTrash: function() {
       if (confirm("Are you sure you want to empty the trash?")) {
         this.notes.trash = [];
@@ -447,6 +457,20 @@ export default {
         location.reload();
       }
     },
+
+    // Export Notes
+    exportNotes: function() {
+      let notes = JSON.stringify(this.notes);
+
+      const a = document.createElement("a");
+      const type = "#NewTab.json".split(".").pop();
+      a.href = URL.createObjectURL(new Blob([notes], { type: `text/${type === "txt" ? "plain" : type}` }));
+      a.download = "#NewTab.json";
+      a.click();
+    },
+
+    // Import Notes
+    importNotes: function() {},
   },
 };
 </script>

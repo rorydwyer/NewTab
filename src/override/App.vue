@@ -35,6 +35,7 @@
         :notes="newTab.notes"
         @settings="showSettings = !showSettings"
         @updateSettings="updateSettings($event)"
+        @updateNotes="updateNotes($event)"
         class="absolute w-1/4 h-full transition-all z-50 pt-8 max-h-screen right-0"
       />
     </transition>

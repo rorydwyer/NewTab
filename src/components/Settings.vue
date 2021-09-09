@@ -322,6 +322,10 @@ export default {
       this.$emit("updateSettings", this.settings);
     },
 
+    updateNotes: function() {
+      this.$emit("updateNotes", this.notes);
+    },
+
     //Timer Clock
     timerClock: function() {
       if (this.settings.timerClock === true) this.settings.timerClock = "clock";
@@ -399,7 +403,6 @@ export default {
     // Background Image
     backgroundImage: function() {
       const root = document.querySelector(":root");
-      console.log(this.settings);
 
       if (this.settings.bgImage) {
         this.bgLoading = true;
@@ -446,7 +449,7 @@ export default {
     emptyTrash: function() {
       if (confirm("Are you sure you want to empty the trash?")) {
         this.notes.trash = [];
-        this.$emit.updateNotes(this.notes);
+        this.updateNotes();
       }
     },
 
@@ -470,7 +473,58 @@ export default {
     },
 
     // Import Notes
-    importNotes: function() {},
+    importNotes: function() {
+      const i = document.createElement("input");
+      i.type = "file";
+      i.accept = ".json";
+      i.click();
+
+      i.onchange = () => {
+        let reader = new FileReader();
+        let jsonObj;
+        reader.readAsText(i.files[0]);
+
+        reader.onload = (i) => {
+          try {
+            jsonObj = JSON.parse(i.target.result);
+          } catch (e) {
+            alert("Invalid import file. Errors logged in console.");
+            console.log(e);
+          }
+          // Import notes
+
+          //Check if valid import file
+          if ("collection" in jsonObj) {
+            jsonObj.collection.forEach((note) => {
+              // Check if duplicate note
+
+              if (this.checkIfDuplicateNote(note)) {
+                // Add new note ID, Date, and push it to the main collection
+                this.notes.newId++;
+                note.id = this.notes.newId;
+                note.date = new Date().getTime();
+
+                this.notes.collection.push(note);
+              }
+            });
+            // Update notes
+            this.updateNotes();
+          } else {
+            alert("Invalid import file. No collection found.");
+          }
+        };
+      };
+    },
+
+    checkIfDuplicateNote: function(importNote) {
+      let unique = true;
+      this.notes.collection.forEach((note) => {
+        if (note.content == importNote.content) {
+          unique = false;
+        }
+      });
+      return unique;
+    },
   },
 };
 </script>

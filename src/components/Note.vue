@@ -1,7 +1,16 @@
 <template>
   <div>
     <div v-show="this.noteCollection.length" class="pb-4 h-full flex flex-col prose prose-sm max-w-full">
-      <tiptap id="editor" ref="editor" v-model="content" :toolBar="toolBar" :settings="settings" @input="autoSave" class="h-full" />
+      <tiptap
+        id="editor"
+        ref="editor"
+        v-model="content"
+        :toolBar="toolBar"
+        :settings="settings"
+        :currentId="notes.currentId"
+        @input="autoSave"
+        class="h-full"
+      />
       <div class="flex">
         <div class="icons-left text-left flex-grow relative">
           <div :class="dotSave" class="absolute left-2">
@@ -97,15 +106,15 @@ export default {
         this.noteCollection[this.currentNoteIndex()].content = value;
       },
     },
-    note: {
-      get: function() {
-        if (this.noteCollection.length) {
-          return this.noteCollection[this.currentNoteIndex()];
-        } else {
-          return {};
-        }
-      },
-    },
+    // note: {
+    //   get: function() {
+    //     if (this.noteCollection.length) {
+    //       return this.noteCollection[this.currentNoteIndex()];
+    //     } else {
+    //       return {};
+    //     }
+    //   },
+    // },
     noteCollection: function() {
       return this.settings.viewTrash ? this.notes.trash : this.notes.collection;
     },

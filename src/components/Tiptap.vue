@@ -559,6 +559,7 @@ export default {
   props: {
     settings: Object,
     toolBar: Boolean,
+    currentId: Number,
     value: {
       type: String,
       default: "",
@@ -570,85 +571,7 @@ export default {
     };
   },
   mounted() {
-    this.editor = new Editor({
-      extensions: [
-        StarterKit,
-        Typography,
-        Highlight,
-        Image,
-        TaskList,
-        TaskItem,
-        Link,
-        CustomUnderline,
-        TextAlign.configure({
-          types: ["heading", "paragraph"],
-        }),
-        Commands.configure({
-          suggestion: {
-            items: (query) => {
-              return commandsListArray.array.filter((item) => item.title.toLowerCase().startsWith(query.toLowerCase()));
-            },
-            render: () => {
-              let component;
-              let popup;
-              return {
-                addImage() {
-                  const url = window.prompt("URL");
-
-                  if (url) {
-                    this.editor
-                      .chain()
-                      .focus()
-                      .setImage({ src: url })
-                      .run();
-                  }
-                },
-                onStart: (props) => {
-                  component = new VueRenderer(CommandsList, {
-                    parent: this,
-                    propsData: props,
-                  });
-                  popup = tippy("body", {
-                    getReferenceClientRect: props.clientRect,
-                    appendTo: () => document.body,
-                    content: component.element,
-                    showOnCreate: true,
-                    interactive: true,
-                    trigger: "manual",
-                    placement: "bottom-start",
-                  });
-                },
-                onUpdate(props) {
-                  component.updateProps(props);
-                  popup[0].setProps({
-                    getReferenceClientRect: props.clientRect,
-                  });
-                },
-                onKeyDown(props) {
-                  if (props.event.key === "Escape") {
-                    popup[0].hide();
-                    return true;
-                  }
-                  return component.ref?.onKeyDown(props);
-                },
-                onExit() {
-                  popup[0].destroy();
-                  component.destroy();
-                },
-              };
-            },
-          },
-        }),
-      ],
-      content: this.value,
-      onUpdate: () => {
-        // HTML
-        this.$emit("input", this.editor.getHTML());
-
-        // JSON
-        // this.$emit("input", this.editor.getJSON());
-      },
-    });
+    this.createEditor();
   },
   computed: {
     powerKey: function() {
@@ -681,9 +604,95 @@ export default {
       }
       this.editor.commands.setContent(this.value, false);
     },
+    // This resets the editor history. Might need to refactor if start to notice performance issues.
+    currentId: function() {
+      this.editor.destroy();
+      this.createEditor();
+    },
   },
 
   methods: {
+    createEditor() {
+      this.editor = new Editor({
+        extensions: [
+          StarterKit,
+          Typography,
+          Highlight,
+          Image,
+          TaskList,
+          TaskItem,
+          Link,
+          CustomUnderline,
+          TextAlign.configure({
+            types: ["heading", "paragraph"],
+          }),
+          Commands.configure({
+            suggestion: {
+              items: (query) => {
+                return commandsListArray.array.filter((item) => item.title.toLowerCase().startsWith(query.toLowerCase()));
+              },
+              render: () => {
+                let component;
+                let popup;
+                return {
+                  addImage() {
+                    const url = window.prompt("URL");
+
+                    if (url) {
+                      this.editor
+                        .chain()
+                        .focus()
+                        .setImage({ src: url })
+                        .run();
+                    }
+                  },
+                  onStart: (props) => {
+                    component = new VueRenderer(CommandsList, {
+                      parent: this,
+                      propsData: props,
+                    });
+                    popup = tippy("body", {
+                      getReferenceClientRect: props.clientRect,
+                      appendTo: () => document.body,
+                      content: component.element,
+                      showOnCreate: true,
+                      interactive: true,
+                      trigger: "manual",
+                      placement: "bottom-start",
+                    });
+                  },
+                  onUpdate(props) {
+                    component.updateProps(props);
+                    popup[0].setProps({
+                      getReferenceClientRect: props.clientRect,
+                    });
+                  },
+                  onKeyDown(props) {
+                    if (props.event.key === "Escape") {
+                      popup[0].hide();
+                      return true;
+                    }
+                    return component.ref?.onKeyDown(props);
+                  },
+                  onExit() {
+                    popup[0].destroy();
+                    component.destroy();
+                  },
+                };
+              },
+            },
+          }),
+        ],
+        content: this.value,
+        onUpdate: () => {
+          // HTML
+          this.$emit("input", this.editor.getHTML());
+
+          // JSON
+          // this.$emit("input", this.editor.getJSON());
+        },
+      });
+    },
     focus: function() {
       this.editor.chain().focus();
     },

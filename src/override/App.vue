@@ -117,13 +117,13 @@ export default {
       return noteIndex;
     },
   },
-  mounted() {
+  created() {
     let today = new Date();
     chrome.storage.local.get("newTab", (res) => {
       if (!res.newTab) this.init(res); // If very first load
       this.newTab = res.newTab;
 
-      // Load Settings
+      /////// Load Settings
       //View Trash
       this.newTab.settings.viewTrash = false;
 

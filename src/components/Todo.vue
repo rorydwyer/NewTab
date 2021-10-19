@@ -77,14 +77,25 @@ export default {
       this.recentTodo = false;
     },
 
-    addTodo: function() {
+    addTodo: function(e) {
       if (this.todos.newText.length > 0) {
         this.todos.newId++;
-        this.todos.collection.push({
-          id: this.todos.newId,
-          content: this.todos.newText,
-          edit: false,
-        });
+
+        if (e.shiftKey) {
+          // Add to top of to do list
+          this.todos.collection.unshift({
+            id: this.todos.newId,
+            content: this.todos.newText,
+            edit: false,
+          });
+        } else {
+          // Add to bottom of to do list
+          this.todos.collection.push({
+            id: this.todos.newId,
+            content: this.todos.newText,
+            edit: false,
+          });
+        }
 
         this.todos.newText = "";
         this.recentTodo = true;

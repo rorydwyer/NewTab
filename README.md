@@ -5,6 +5,9 @@ Replace your new tab with a productive and clean dashboard featuring a markdown 
 
 It removes the preview window, syntax symbols of markdown, and all other unnecessary distractions. Instead, # NewTab provides a live preview while you’re writing to help you focus on the content itself.
 
+## Get \# NewTab
+Install from Chrome Store: https://chrome.google.com/webstore/detail/newtab/fpmfnjdkdiihflfolajcipeldbicolap
+
 ---------------------
 ## Install
 1. Clone the rep.
